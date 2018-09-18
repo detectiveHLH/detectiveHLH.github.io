@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","width":300,"display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="原料新鲜的IntelliJ IDEA、一双手、以及电脑一台。 搭建框架新建项目打开IDE，点击File -&amp;gt; New Project。在左侧的列表中的选择Maven项目，点击Next。 填写GroupId和ArtifactId什么是GroupId和ArtifactId？大家可以参考一下google出来的定义，可以参考一下。">
+<meta name="keywords" content="Java,SpringBoot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你从零开始搭建SpringBoot后端项目框架">
+<meta property="og:url" content="https://detectivehlh.github.io/java/newSprintBootStarter/index.html">
+<meta property="og:site_name" content="detectiveHLH&#39;s blog">
+<meta property="og:description" content="原料新鲜的IntelliJ IDEA、一双手、以及电脑一台。 搭建框架新建项目打开IDE，点击File -&amp;gt; New Project。在左侧的列表中的选择Maven项目，点击Next。 填写GroupId和ArtifactId什么是GroupId和ArtifactId？大家可以参考一下google出来的定义，可以参考一下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-18T12:47:53.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手教你从零开始搭建SpringBoot后端项目框架">
+<meta name="twitter:description" content="原料新鲜的IntelliJ IDEA、一双手、以及电脑一台。 搭建框架新建项目打开IDE，点击File -&amp;gt; New Project。在左侧的列表中的选择Maven项目，点击Next。 填写GroupId和ArtifactId什么是GroupId和ArtifactId？大家可以参考一下google出来的定义，可以参考一下。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://detectivehlh.github.io/java/newSprintBootStarter/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>手把手教你从零开始搭建SpringBoot后端项目框架 | detectiveHLH's blog</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=124888966"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '124888966');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">detectiveHLH's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">不想弹好吉他的撸铁狗，都不是好的程序员</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/java/newSprintBootStarter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lunhao Hu">
+      <meta itemprop="description" content="优化永无止境，做人要有追求">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="detectiveHLH's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">手把手教你从零开始搭建SpringBoot后端项目框架
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-18 17:22:54 / 修改时间：20:47:53" itemprop="dateCreated datePublished" datetime="2018-09-18T17:22:54+08:00">2018-09-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/java/newSprintBootStarter/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/java/newSprintBootStarter/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/java/newSprintBootStarter/" class="leancloud_visitors" data-flag-title="手把手教你从零开始搭建SpringBoot后端项目框架">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h1><p>新鲜的IntelliJ IDEA、一双手、以及电脑一台。</p>
+<h1 id="搭建框架"><a href="#搭建框架" class="headerlink" title="搭建框架"></a>搭建框架</h1><h2 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h2><p>打开IDE，点击File -&gt; New Project。在左侧的列表中的选择Maven项目，点击Next。</p>
+<h2 id="填写GroupId和ArtifactId"><a href="#填写GroupId和ArtifactId" class="headerlink" title="填写GroupId和ArtifactId"></a>填写GroupId和ArtifactId</h2><p>什么是GroupId和ArtifactId？大家可以参考一下google出来的定义，可以参考一下。</p>
+<a id="more"></a>
+<blockquote>
+<p>GroupID是项目组织唯一的标识符，实际对应JAVA的包的结构，是main目录里java的目录结构。</p>
+<p>ArtifactID就是项目的唯一的标识符，实际对应项目的名称，就是项目根目录的名称</p>
+</blockquote>
+<p>简单理解一下，可以理解为GroupId就是你的Github账号，而ArtifactId就是你的具体某个项目，例如这个例子的源码，SpringBootDemo，<a href="https://github.com/detectiveHLH/springbootdemo" target="_blank" rel="noopener">detectiveHLH/springbootdemo</a><br><a href="https://github.com/detectiveHLH/springbootdemo" target="_blank" rel="noopener">detectiveHLH</a>就是GroupId，而ArtifactId就是后面的项目名称。</p>
+<p>所以，这里应该填写如下（仅供参考）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GroupId: com.detectivehlh.test</span><br><span class="line">ArtifactId: parent</span><br></pre></td></tr></table></figure></p>
+<p>test为项目的名称。ArtifactId代表父类，所以就写parent了。点击Next。</p>
+<h2 id="设置Project-Name和Project-Location"><a href="#设置Project-Name和Project-Location" class="headerlink" title="设置Project Name和Project Location"></a>设置Project Name和Project Location</h2><p>ProjectName就写项目的名称就好。Project Location就是项目在你本地的真实路径。填好之后，点击Next。</p>
+<p>然后可以看到IDE已经新建好了项目。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── pom.xml</span><br><span class="line">├── src</span><br><span class="line">│   ├── main</span><br><span class="line">│   │   ├── java</span><br><span class="line">│   │   └── resources</span><br><span class="line">│   └── test</span><br><span class="line">│       └── java</span><br><span class="line">└── test.iml</span><br></pre></td></tr></table></figure></p>
+<p>然后右下角会弹出Maven projects need to be imported，选择右边的Enable Auto-Imported.然后删除src目录。</p>
+<h2 id="新建模块"><a href="#新建模块" class="headerlink" title="新建模块"></a>新建模块</h2><p>本次项目的框架一共有四层结构，也可以说是有四个模块。分别是api、core、data、domain.我们从底层开始，自底向上开始构建模块。</p>
+<h3 id="domain"><a href="#domain" class="headerlink" title="domain"></a>domain</h3><p>存放实体类</p>
+<p>点击File -&gt; New -&gt; Module，在左侧的列表中选择Maven，点击Next。在ArtifactId处填 domain，一路Next。</p>
+<h3 id="data模块"><a href="#data模块" class="headerlink" title="data模块"></a>data模块</h3><p>主要是做一些对数据库的操作</p>
+<p>点击File -&gt; New -&gt; Module，在左侧的列表中选择Maven，点击Next。在ArtifactId处填 data，一路Next。在模块中其实是存在相互依赖关系的。<br>data模块依赖domain模块的实体。所以要在data文件的配置文件中实现对domain的依赖。</p>
+<p>打开data目录中的pom.xml文件。在<artifactid>下，添加如下代码。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.detectivehlh.test<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>domain<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></artifactid></p>
+<h3 id="core模块"><a href="#core模块" class="headerlink" title="core模块"></a>core模块</h3><p>后端主要的业务逻辑都会在core模块中。</p>
+<p>点击File -&gt; New -&gt; Module，在左侧的列表中选择Maven，点击Next。在ArtifactId处填 core，一路Next。同上，此处也需要配置依赖关系。<br>core模块的中的service会依赖data模块中的数据。</p>
+<p>打开core目录下的pom.xml文件。在<artifactid>下，添加如下代码。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.detectivehlh.test<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>data<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></artifactid></p>
+<h3 id="api模块"><a href="#api模块" class="headerlink" title="api模块"></a>api模块</h3><p>主要是存放供前端调用的接口。</p>
+<p>点击File -&gt; New -&gt; Module，在左侧的列表中选择Maven，点击Next。在ArtifactId处填 api，一路Next。此处的api模块依赖core中的service服务。</p>
+<p>打开api目录下的pom.xml文件。在<artifactid>下，添加如下代码。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.detectivehlh.test<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></artifactid></p>
+<h2 id="让项目”走两步”"><a href="#让项目”走两步”" class="headerlink" title="让项目”走两步”"></a>让项目”走两步”</h2><p>到此，框架算是搭建好了，下一步就是要让项目”走两步”来看看。此时的项目的目录如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── api</span><br><span class="line">│   ├── api.iml</span><br><span class="line">│   ├── pom.xml</span><br><span class="line">│   └── src</span><br><span class="line">│       ├── main</span><br><span class="line">│       │   ├── java</span><br><span class="line">│       │   └── resources</span><br><span class="line">│       └── test</span><br><span class="line">│           └── java</span><br><span class="line">├── core</span><br><span class="line">│   ├── pom.xml</span><br><span class="line">│   └── src</span><br><span class="line">│       ├── main</span><br><span class="line">│       │   ├── java</span><br><span class="line">│       │   └── resources</span><br><span class="line">│       └── test</span><br><span class="line">│           └── java</span><br><span class="line">├── data</span><br><span class="line">│   ├── pom.xml</span><br><span class="line">│   └── src</span><br><span class="line">│       ├── main</span><br><span class="line">│       │   ├── java</span><br><span class="line">│       │   └── resources</span><br><span class="line">│       └── test</span><br><span class="line">│           └── java</span><br><span class="line">├── domain</span><br><span class="line">│   ├── pom.xml</span><br><span class="line">│   └── src</span><br><span class="line">│       ├── main</span><br><span class="line">│       │   ├── java</span><br><span class="line">│       │   └── resources</span><br><span class="line">│       └── test</span><br><span class="line">│           └── java</span><br><span class="line">├── pom.xml</span><br><span class="line">└── test.iml</span><br></pre></td></tr></table></figure></p>
+<p>定位到/api/src/main/java，在java目录下新建package，名字为你之前定义的groupid再加上模块名，举个例子。我这的名字就应该为<strong>com.detectivehlh.test.api</strong>，然后<br>在该包下新建名为Application的class。然后将代码替换成如下代码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.api;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时会报错，是因为springboot的各项依赖，都还没有引入项目的dependences。打开根目录下的pom.xml文件，添加如下依赖。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.4.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span> <span class="comment">&lt;!-- lookup parent from repository --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后打开api目录下的pom.xml文件。在dependencies标签中添加如下依赖。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-autoconfigure<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>此时Application中就不会报错了。然后就可以启动项目了。打开Application这个类，在SpringBootApplication注解下有个绿色的启动键，点击即可启动项目。之后可在右上方启动。</p>
+<p>启动之后，打开<a href="http://localhost:8080，如果页面显示" target="_blank" rel="noopener">http://localhost:8080，如果页面显示</a></p>
+<blockquote>
+<p>Whitelabel Error Page<br>  This application has no explicit mapping for /error, so you are seeing this as a fallback.</p>
+<p>Tue Sep 18 19:01:11 CST 2018<br>    There was an unexpected error (type=Not Found, status=404).<br>    No message available</p>
+</blockquote>
+<p>那么一个简单的springboot应用就可以启动成功了。</p>
+<h1 id="实现controller层"><a href="#实现controller层" class="headerlink" title="实现controller层"></a>实现controller层</h1><p>在<strong>com.detectivehlh.test.api</strong>包下，新建一个名为controller的包。然后新建名为HelloController的class。<br>将其全部替换为如下代码(包名根据你的项目命名自行修改)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.api.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello, SpringBoot"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重新启动项目，访问<a href="http://localhost:8080/hello，就可以看到页面显示如下信息。" target="_blank" rel="noopener">http://localhost:8080/hello，就可以看到页面显示如下信息。</a></p>
+<blockquote>
+<p>Hello, SpringBoot</p>
+</blockquote>
+<p>@RestController注解比较适用于Restful风格的API，如果接口只关心数据，不做server render，就可以使用@RestController注解。<br>如果接口需要返回模版页面，则需要使用@Controller注解。</p>
+<p>@GetMapping注解，是将HTTP Get请求映射到我们自定义的hello方法上。</p>
+<h1 id="实现service层"><a href="#实现service层" class="headerlink" title="实现service层"></a>实现service层</h1><h2 id="新建CoreConfiguration"><a href="#新建CoreConfiguration" class="headerlink" title="新建CoreConfiguration"></a>新建CoreConfiguration</h2><p>定位到/core/src/main/java，在java目录下新建名为<strong>com.detectivehlh.test.core</strong>的包。然后在该包新建名为CoreConfiguration的Class。<br>将其全部替换为如下代码(包名根据你的项目命名自行修改)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.core;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.ComponentScan;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> detectiveHLH</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/09/13</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoreConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h2><p>此时会报错，同样是因为依赖没有引入。在core的pom.xml文件中的dependencies标签中添加如下依赖。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-context<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.0.5.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>稍等片刻，就不会有报错提示了。</p>
+<h2 id="新建Interface"><a href="#新建Interface" class="headerlink" title="新建Interface"></a>新建Interface</h2><p>在com.detectivehlh.test.core包下新建一个名为service的包。在service包下新建一个Class，<br>名字为HelloService，类型选择Interface。然后修改代码如下(包名根据你的项目命名自行修改)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.core.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HelloService</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">sayHello</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="新建实现类"><a href="#新建实现类" class="headerlink" title="新建实现类"></a>新建实现类</h2><p>在service目录下新建名为impl的包。然后在impl下新建名为HelloServiceImpl的类。修改代码如下(包名根据你的项目命名自行修改)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.core.service.impl;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.core.service.HelloService;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloServiceImpl</span> <span class="keyword">implements</span> <span class="title">HelloService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello, SpringBoot"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="调用实现类"><a href="#调用实现类" class="headerlink" title="调用实现类"></a>调用实现类</h2><p>修改HelloController中的 hello 方法的代码如下(包名根据你的项目命名自行修改)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.api.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.core.service.HelloService;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * RestController</span></span><br><span class="line"><span class="comment"> * 定义为Restful风格的API控制器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> HelloService helloService;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> helloService.sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时helloService会报错，这是因为我们没有将HelloService这个添加到Bean容器中来。修改Application类代码如下(包名根据你的项目命名自行修改)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.api;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.core.CoreConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Import;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@Import</span>(CoreConfiguration.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时再访问<a href="http://localhost:8080/hello，就可以看到如下正常的输出了。" target="_blank" rel="noopener">http://localhost:8080/hello，就可以看到如下正常的输出了。</a></p>
+<blockquote>
+<p>Hello, SpringBoot</p>
+</blockquote>
+<h1 id="打通数据库"><a href="#打通数据库" class="headerlink" title="打通数据库"></a>打通数据库</h1><p>实现了简单的service，下一步就是要连接数据库。假设现在在你本地已经有了mysql服务。有名为test的数据库，该数据库下有名为user_role的表。表结构如下。</p>
+<h2 id="数据库表名和表数据"><a href="#数据库表名和表数据" class="headerlink" title="数据库表名和表数据"></a>数据库表名和表数据</h2><table>
+<thead>
+<tr>
+<th>column_name</th>
+<th>column_value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>用户id</td>
+</tr>
+<tr>
+<td>name</td>
+<td>用户名</td>
+</tr>
+</tbody>
+</table>
+<p>并且有了数据</p>
+<table>
+<thead>
+<tr>
+<th>column_name</th>
+<th>column_value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>name</td>
+</tr>
+<tr>
+<td>1</td>
+<td>detectiveHLH</td>
+</tr>
+</tbody>
+</table>
+<h2 id="新建实体类"><a href="#新建实体类" class="headerlink" title="新建实体类"></a>新建实体类</h2><p>定位到/domain/src/main/java，在java目录下新建名为com.detectivehlh.test.domain的包。在该包下新建entity包。<br>在entity下新建名为BaseEntity的抽象类。修改代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.domain.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseEntity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> createdAt;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String createdBy;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> updatedAt;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String updatedBy;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getCreatedAt</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> createdAt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCreatedAt</span><span class="params">(<span class="keyword">long</span> createdAt)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.createdAt = createdAt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getCreatedBy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> createdBy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCreatedBy</span><span class="params">(String createdBy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.createdBy = createdBy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getUpdatedAt</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> updatedAt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUpdatedAt</span><span class="params">(<span class="keyword">long</span> updatedAt)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.updatedAt = updatedAt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUpdatedBy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> updatedBy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUpdatedBy</span><span class="params">(String updatedBy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.updatedBy = updatedBy;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在entity下新建名为UserRole的类。代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.domain.entity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRole</span> <span class="keyword">extends</span> <span class="title">BaseEntity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="新建dao层"><a href="#新建dao层" class="headerlink" title="新建dao层"></a>新建dao层</h2><p>实现与数据库交互的mapper。</p>
+<p>定位到/data/src/main/java，在java目录下新建名为com.detectivehlh.test.data的包。在该包下新建名为dao的包和名为<br>DataConfiguration的类。然后在dao包下新建名为UserRoleMapper的类。DataConfiguration代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.mybatis.spring.annotation.MapperScan;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.ComponentScan;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> duzhengkang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/6/25</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@ComponentScan</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@MapperScan</span>(<span class="string">"com.detectivehlh.test.data.dao"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将UserRoleMapper的代码修改为如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.data.dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.domain.entity.UserRole;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Mapper;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Param;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserRoleMapper</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询所有的用户角色</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">List&lt;UserRole&gt; <span class="title">all</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时代码会报错，同样的依赖原因。打开根目录下的pom.xml文件。添加如下依赖。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.10<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.pagehelper<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>pagehelper-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.5<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.0.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>添加如上依赖，稍等片刻，就不会报错了。但是此时运行项目依旧会报错。是因为我们引入了mybatis但是却没有配置文件。以及没有将mapper注入到容器中去。</p>
+<p>修改Application中的代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.api;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.core.CoreConfiguration;</span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.data.DataConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Import;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@Import</span>(&#123;CoreConfiguration.class, DataConfiguration.class&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>mapper就被注入到容器中去了。下一步需要添加配置文件。定位到/api/src/main/resources，新建application.yaml文件。<br>修改代码如下。<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  application:</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">test</span></span><br><span class="line"><span class="comment"># 数据库配置</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="number">9687</span><span class="string">Luohongwei</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true</span></span><br><span class="line"><span class="comment"># mapper文件配置</span></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line"><span class="attr">  mapper-locations:</span> <span class="attr">classpath:mapper/*.xml</span></span><br><span class="line"><span class="attr">  configuration:</span></span><br><span class="line"><span class="attr">    log-impl:</span> <span class="string">org.apache.ibatis.logging.stdout.StdOutImpl</span></span><br></pre></td></tr></table></figure></p>
+<p>修改完毕后，启动项目，访问<a href="http://localhost:8080/hello，就可以看到正常输出了。" target="_blank" rel="noopener">http://localhost:8080/hello，就可以看到正常输出了。</a></p>
+<h2 id="实现mapper"><a href="#实现mapper" class="headerlink" title="实现mapper"></a>实现mapper</h2><p>定位到/data/src/main/resources，新建名为mapper的包。在mapper包下新建名为UserRoleMapper的xml文件。修改代码如下。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="meta">&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"</span></span><br><span class="line"><span class="meta">        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"com.detectivehlh.test.data.dao.UserRoleMapper"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--用于与数据库字段作一一对应--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">"userRoleMap"</span> <span class="attr">type</span>=<span class="string">"com.detectivehlh.test.domain.entity.UserRole"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">"id"</span> <span class="attr">property</span>=<span class="string">"id"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">result</span> <span class="attr">column</span>=<span class="string">"name"</span> <span class="attr">property</span>=<span class="string">"name"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--查询下方列出的所有列--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">sql</span> <span class="attr">id</span>=<span class="string">"allColumns"</span>&gt;</span></span><br><span class="line">        id, name</span><br><span class="line">    <span class="tag">&lt;/<span class="name">sql</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--定义表名--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">sql</span> <span class="attr">id</span>=<span class="string">"tableName"</span>&gt;</span></span><br><span class="line">        user_role</span><br><span class="line">    <span class="tag">&lt;/<span class="name">sql</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"all"</span> <span class="attr">resultMap</span>=<span class="string">"userRoleMap"</span>&gt;</span></span><br><span class="line">        SELECT</span><br><span class="line">        <span class="tag">&lt;<span class="name">include</span> <span class="attr">refid</span>=<span class="string">"allColumns"</span>/&gt;</span></span><br><span class="line">        FROM</span><br><span class="line">        <span class="tag">&lt;<span class="name">include</span> <span class="attr">refid</span>=<span class="string">"tableName"</span>/&gt;</span></span><br><span class="line">        ORDER BY id DESC</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>一定注意namespace是否准确。</p>
+<h2 id="调用mapper"><a href="#调用mapper" class="headerlink" title="调用mapper"></a>调用mapper</h2><p>修改实现类HelloServiceImpl代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.springbootdemo.core.service.impl;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.springbootdemo.core.service.HelloService;</span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.springbootdemo.data.dao.UserRoleMapper;</span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.springbootdemo.domain.entity.UserRole;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloServiceImpl</span> <span class="keyword">implements</span> <span class="title">HelloService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserRoleMapper userRoleMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;UserRole&gt; <span class="title">createToken</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">        List&lt;UserRole&gt; data = userRoleMapper.all();</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时会报错，是因为实现类中的返回类型已经变成了List<userrole>，而接口中的返回值还是String类型的。所以只需要修改HelloService代码如下即可。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.core.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.domain.entity.UserRole;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HelloService</span> </span>&#123;</span><br><span class="line">    <span class="function">List&lt;UserRole&gt; <span class="title">sayHello</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></userrole></p>
+<p>让我们回到controller中，我们发现在HelloController中也有报错。这个错误同样也是因为返回类型不一致的原因，修改代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.api.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.core.service.HelloService;</span><br><span class="line"><span class="keyword">import</span> com.detectivehlh.test.domain.entity.UserRole;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * RestController</span></span><br><span class="line"><span class="comment"> * 定义为Restful风格的API控制器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> HelloService helloService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;UserRole&gt; <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> helloService.sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后启动项目，访问<a href="http://localhost:8080/hello。就可以看到，接口返回了user_role表中的所有数据。" target="_blank" rel="noopener">http://localhost:8080/hello。就可以看到，接口返回了user_role表中的所有数据。</a><br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"createdAt"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"createdBy"</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="attr">"updatedAt"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"updatedBy"</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Tom"</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>此时虽然能够正常访问，但是会在控制台报如下警告。</p>
+<blockquote>
+<p>Tue Sep 18 20:40:22 CST 2018 WARN: Establishing SSL connection without server’s identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn’t set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to ‘false’. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.</p>
+</blockquote>
+<p>在com.detectivehlh.test.api包下新建config包，在config包中新建DbConfig文件。代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.detectivehlh.test.api.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.druid.pool.DruidDataSource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.context.properties.ConfigurationProperties;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.jdbc.core.JdbcTemplate;</span><br><span class="line"><span class="keyword">import</span> org.springframework.jdbc.datasource.DataSourceTransactionManager;</span><br><span class="line"><span class="keyword">import</span> org.springframework.transaction.PlatformTransactionManager;</span><br><span class="line"><span class="keyword">import</span> org.springframework.transaction.annotation.EnableTransactionManagement;</span><br><span class="line"><span class="keyword">import</span> javax.sql.DataSource;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * DbConfig</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> detectiveHLH</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018-07-27 10:35</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConfigurationProperties</span></span><br><span class="line"><span class="meta">@EnableTransactionManagement</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DbConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConfigurationProperties</span>(<span class="string">"spring.datasource"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">        DruidDataSource dataSource = <span class="keyword">new</span> DruidDataSource();</span><br><span class="line">        <span class="keyword">return</span> dataSource;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> JdbcTemplate <span class="title">jdbcTemplate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> JdbcTemplate(dataSource());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> PlatformTransactionManager <span class="title">transactionManager</span><span class="params">()</span></span>&#123;</span><br><span class="line">        DataSourceTransactionManager dataSourceTransactionManager = <span class="keyword">new</span> DataSourceTransactionManager(dataSource());</span><br><span class="line">        <span class="keyword">return</span> dataSourceTransactionManager;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重启启动项目，访问接口时就不会有警告了。</p>
+<p>最后的代码目录结构如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── api</span><br><span class="line">│   ├── api.iml</span><br><span class="line">│   ├── pom.xml</span><br><span class="line">│   ├── src</span><br><span class="line">│   │   ├── main</span><br><span class="line">│   │   │   ├── java</span><br><span class="line">│   │   │   │   └── com</span><br><span class="line">│   │   │   │       └── detectivehlh</span><br><span class="line">│   │   │   │           └── test</span><br><span class="line">│   │   │   │               └── api</span><br><span class="line">│   │   │   │                   ├── Application.java</span><br><span class="line">│   │   │   │                   ├── config</span><br><span class="line">│   │   │   │                   │   └── DbConfig.java</span><br><span class="line">│   │   │   │                   └── controller</span><br><span class="line">│   │   │   │                       └── HelloController.java</span><br><span class="line">│   │   │   └── resources</span><br><span class="line">│   │   │       └── application.yml</span><br><span class="line">│   │   └── test</span><br><span class="line">│   │       └── java</span><br><span class="line">│   └── target</span><br><span class="line">│       ├── classes</span><br><span class="line">│       │   ├── application.yml</span><br><span class="line">│       │   └── com</span><br><span class="line">│       │       └── detectivehlh</span><br><span class="line">│       │           └── test</span><br><span class="line">│       │               └── api</span><br><span class="line">│       │                   ├── Application.class</span><br><span class="line">│       │                   ├── config</span><br><span class="line">│       │                   │   └── DbConfig.class</span><br><span class="line">│       │                   └── controller</span><br><span class="line">│       │                       └── HelloController.class</span><br><span class="line">│       └── generated-sources</span><br><span class="line">│           └── annotations</span><br><span class="line">├── core</span><br><span class="line">│   ├── pom.xml</span><br><span class="line">│   ├── src</span><br><span class="line">│   │   ├── main</span><br><span class="line">│   │   │   ├── java</span><br><span class="line">│   │   │   │   └── com</span><br><span class="line">│   │   │   │       └── detectivehlh</span><br><span class="line">│   │   │   │           └── test</span><br><span class="line">│   │   │   │               └── core</span><br><span class="line">│   │   │   │                   ├── CoreConfiguration.java</span><br><span class="line">│   │   │   │                   └── service</span><br><span class="line">│   │   │   │                       ├── HelloService.java</span><br><span class="line">│   │   │   │                       └── impl</span><br><span class="line">│   │   │   │                           └── HelloServiceImpl.java</span><br><span class="line">│   │   │   └── resources</span><br><span class="line">│   │   └── test</span><br><span class="line">│   │       └── java</span><br><span class="line">│   └── target</span><br><span class="line">│       ├── classes</span><br><span class="line">│       │   └── com</span><br><span class="line">│       │       └── detectivehlh</span><br><span class="line">│       │           └── test</span><br><span class="line">│       │               └── core</span><br><span class="line">│       │                   ├── CoreConfiguration.class</span><br><span class="line">│       │                   └── service</span><br><span class="line">│       │                       ├── HelloService.class</span><br><span class="line">│       │                       └── impl</span><br><span class="line">│       │                           └── HelloServiceImpl.class</span><br><span class="line">│       └── generated-sources</span><br><span class="line">│           └── annotations</span><br><span class="line">├── data</span><br><span class="line">│   ├── pom.xml</span><br><span class="line">│   ├── src</span><br><span class="line">│   │   ├── main</span><br><span class="line">│   │   │   ├── java</span><br><span class="line">│   │   │   │   └── com</span><br><span class="line">│   │   │   │       └── detectivehlh</span><br><span class="line">│   │   │   │           └── test</span><br><span class="line">│   │   │   │               └── data</span><br><span class="line">│   │   │   │                   ├── DataConfiguration.java</span><br><span class="line">│   │   │   │                   └── dao</span><br><span class="line">│   │   │   │                       └── UserRoleMapper.java</span><br><span class="line">│   │   │   └── resources</span><br><span class="line">│   │   │       └── mapper</span><br><span class="line">│   │   │           └── UserRoleMapper.xml</span><br><span class="line">│   │   └── test</span><br><span class="line">│   │       └── java</span><br><span class="line">│   └── target</span><br><span class="line">│       ├── classes</span><br><span class="line">│       │   ├── com</span><br><span class="line">│       │   │   └── detectivehlh</span><br><span class="line">│       │   │       └── test</span><br><span class="line">│       │   │           └── data</span><br><span class="line">│       │   │               ├── DataConfiguration.class</span><br><span class="line">│       │   │               └── dao</span><br><span class="line">│       │   │                   └── UserRoleMapper.class</span><br><span class="line">│       │   └── mapper</span><br><span class="line">│       │       └── UserRoleMapper.xml</span><br><span class="line">│       └── generated-sources</span><br><span class="line">│           └── annotations</span><br><span class="line">├── domain</span><br><span class="line">│   ├── pom.xml</span><br><span class="line">│   ├── src</span><br><span class="line">│   │   ├── main</span><br><span class="line">│   │   │   ├── java</span><br><span class="line">│   │   │   │   └── com</span><br><span class="line">│   │   │   │       └── detectivehlh</span><br><span class="line">│   │   │   │           └── test</span><br><span class="line">│   │   │   │               └── domain</span><br><span class="line">│   │   │   │                   └── entity</span><br><span class="line">│   │   │   │                       ├── BaseEntity.java</span><br><span class="line">│   │   │   │                       └── UserRole.java</span><br><span class="line">│   │   │   └── resources</span><br><span class="line">│   │   └── test</span><br><span class="line">│   │       └── java</span><br><span class="line">│   └── target</span><br><span class="line">│       ├── classes</span><br><span class="line">│       │   └── com</span><br><span class="line">│       │       └── detectivehlh</span><br><span class="line">│       │           └── test</span><br><span class="line">│       │               └── domain</span><br><span class="line">│       │                   └── entity</span><br><span class="line">│       │                       ├── BaseEntity.class</span><br><span class="line">│       │                       └── UserRole.class</span><br><span class="line">│       └── generated-sources</span><br><span class="line">│           └── annotations</span><br><span class="line">├── pom.xml</span><br><span class="line">└── test.iml</span><br></pre></td></tr></table></figure></p>
+<h1 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h1><p>写的比较详细，如果有不对的地方，大佬尽管怼。本项目的源码在 <a href="https://github.com/detectiveHLH/springbootdemo" target="_blank" rel="noopener">这里</a></p>
+<p>个人博客在 <a href="https://detectivehlh.github.io./" target="_blank" rel="noopener">这里</a></p>
+<p>Github在 <a href="https://github.com/detectiveHLH" target="_blank" rel="noopener">这里</a>，欢迎star或follow。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/mysql/mysqlAuthenticationCanNotBeLoaded/" rel="next" title="Authentication plugin 'caching_sha2_password' cannot be loaded">
+                <i class="fa fa-chevron-left"></i> Authentication plugin 'caching_sha2_password' cannot be loaded
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="Lunhao Hu" />
+            
+              <p class="site-author-name" itemprop="name">Lunhao Hu</p>
+              <p class="site-description motion-element" itemprop="description">优化永无止境，做人要有追求</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/detectiveHLH" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原料"><span class="nav-number">1.</span> <span class="nav-text">原料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搭建框架"><span class="nav-number">2.</span> <span class="nav-text">搭建框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建项目"><span class="nav-number">2.1.</span> <span class="nav-text">新建项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#填写GroupId和ArtifactId"><span class="nav-number">2.2.</span> <span class="nav-text">填写GroupId和ArtifactId</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置Project-Name和Project-Location"><span class="nav-number">2.3.</span> <span class="nav-text">设置Project Name和Project Location</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建模块"><span class="nav-number">2.4.</span> <span class="nav-text">新建模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#domain"><span class="nav-number">2.4.1.</span> <span class="nav-text">domain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data模块"><span class="nav-number">2.4.2.</span> <span class="nav-text">data模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#core模块"><span class="nav-number">2.4.3.</span> <span class="nav-text">core模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#api模块"><span class="nav-number">2.4.4.</span> <span class="nav-text">api模块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#让项目”走两步”"><span class="nav-number">2.5.</span> <span class="nav-text">让项目”走两步”</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现controller层"><span class="nav-number">3.</span> <span class="nav-text">实现controller层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现service层"><span class="nav-number">4.</span> <span class="nav-text">实现service层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建CoreConfiguration"><span class="nav-number">4.1.</span> <span class="nav-text">新建CoreConfiguration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入依赖"><span class="nav-number">4.2.</span> <span class="nav-text">引入依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建Interface"><span class="nav-number">4.3.</span> <span class="nav-text">新建Interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建实现类"><span class="nav-number">4.4.</span> <span class="nav-text">新建实现类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用实现类"><span class="nav-number">4.5.</span> <span class="nav-text">调用实现类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#打通数据库"><span class="nav-number">5.</span> <span class="nav-text">打通数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库表名和表数据"><span class="nav-number">5.1.</span> <span class="nav-text">数据库表名和表数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建实体类"><span class="nav-number">5.2.</span> <span class="nav-text">新建实体类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建dao层"><span class="nav-number">5.3.</span> <span class="nav-text">新建dao层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现mapper"><span class="nav-number">5.4.</span> <span class="nav-text">实现mapper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用mapper"><span class="nav-number">5.5.</span> <span class="nav-text">调用mapper</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写在后面"><span class="nav-number">6.</span> <span class="nav-text">写在后面</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lunhao Hu</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1537262574000',
+            owner: 'detectiveHLH',
+            repo: 'detectiveHLH.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b',
+            
+                client_id: 'e07655d9c13124115cb8'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz",
+                'X-LC-Key': "w9colOCMhD54kJr6lybpWuoy",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+</body>
+</html>

@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","width":300,"display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="注册测试号注册的地址在 这里 要进行微信公众号的开发，那就需要一个本地的开发环境来进行开发。而微信测试号就正好提供了这样的一个development环境。每个微信号只能对应一个测试号，但是每个测试号可以开发多个微信公众号项目。微信号与测试号是一一对应的关系，而测试号与开发项目是一对多的关系。进入之后会看到页面里面有以下几个大块。  测试号信息 接口配置信息 JS接口安全域名 测试号二维码 模板消息">
+<meta name="keywords" content="微信开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="注册微信开发测试号">
+<meta property="og:url" content="https://detectivehlh.github.io/wechat/注册微信开发测试号/index.html">
+<meta property="og:site_name" content="detectiveHLH&#39;s blog">
+<meta property="og:description" content="注册测试号注册的地址在 这里 要进行微信公众号的开发，那就需要一个本地的开发环境来进行开发。而微信测试号就正好提供了这样的一个development环境。每个微信号只能对应一个测试号，但是每个测试号可以开发多个微信公众号项目。微信号与测试号是一一对应的关系，而测试号与开发项目是一对多的关系。进入之后会看到页面里面有以下几个大块。  测试号信息 接口配置信息 JS接口安全域名 测试号二维码 模板消息">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://detectivehlh.github.io/img/5.jpg">
+<meta property="og:image" content="https://detectivehlh.github.io/img/4.jpeg">
+<meta property="og:updated_time" content="2018-09-14T08:21:45.472Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="注册微信开发测试号">
+<meta name="twitter:description" content="注册测试号注册的地址在 这里 要进行微信公众号的开发，那就需要一个本地的开发环境来进行开发。而微信测试号就正好提供了这样的一个development环境。每个微信号只能对应一个测试号，但是每个测试号可以开发多个微信公众号项目。微信号与测试号是一一对应的关系，而测试号与开发项目是一对多的关系。进入之后会看到页面里面有以下几个大块。  测试号信息 接口配置信息 JS接口安全域名 测试号二维码 模板消息">
+<meta name="twitter:image" content="https://detectivehlh.github.io/img/5.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://detectivehlh.github.io/wechat/注册微信开发测试号/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>注册微信开发测试号 | detectiveHLH's blog</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=124888966"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '124888966');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">detectiveHLH's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">不想弹好吉他的撸铁狗，都不是好的程序员</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/wechat/注册微信开发测试号/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lunhao Hu">
+      <meta itemprop="description" content="优化永无止境，做人要有追求">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="detectiveHLH's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">注册微信开发测试号
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-01 15:28:04" itemprop="dateCreated datePublished" datetime="2018-08-01T15:28:04+08:00">2018-08-01</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/微信/" itemprop="url" rel="index"><span itemprop="name">微信</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/wechat/注册微信开发测试号/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/wechat/注册微信开发测试号/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/wechat/注册微信开发测试号/" class="leancloud_visitors" data-flag-title="注册微信开发测试号">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="注册测试号"><a href="#注册测试号" class="headerlink" title="注册测试号"></a>注册测试号</h2><p>注册的地址在 <a href="https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login" target="_blank" rel="noopener">这里</a></p>
+<p>要进行微信公众号的开发，那就需要一个本地的开发环境来进行开发。而微信测试号就正好提供了这样的一个development环境。每个微信号只能对应一个测试号，但是每个测试号可以开发多个微信公众号项目。微信号与测试号是一一对应的关系，而测试号与开发项目是一对多的关系。进入之后会看到页面里面有以下几个大块。</p>
+<ol>
+<li>测试号信息</li>
+<li>接口配置信息</li>
+<li>JS接口安全域名</li>
+<li>测试号二维码</li>
+<li>模板消息接口</li>
+<li>体验接口权限表</li>
+</ol>
+<p>下面针对每个点介绍一下具体是干嘛的。</p>
+<a id="more"></a>
+<h2 id="测试号信息"><a href="#测试号信息" class="headerlink" title="测试号信息"></a>测试号信息</h2><p>包含了appId、appsecret。像之前说的，可以理解为你的账号和密码。每个测试号有一个唯一的appID和appsecret。通俗一点就是说，他们对应的就是唯一的账号和密码，而且不能修改。</p>
+<h2 id="接口配置信息"><a href="#接口配置信息" class="headerlink" title="接口配置信息"></a>接口配置信息</h2><ol>
+<li><p>URL:</p>
+<p> URL就是你正在开发的项目的后端的服务器中微信验证服务器资源有效性的接口。前面这句话读起来可能有些绕口。通俗一点理解：微信要知道访问它资源是不是这个当前测试号。同时，也让你确定，这个请求是来自微信。这样一来，就可以相互确认身份。只有确认是当前测试号发起的请求，才会放行。那么问题来了，如何验证呢？这个时候Token就有用了。</p>
+<p> 微信会对配置的URL（也就是你的后端服务器的鉴权接口）发起http GET请求，下面是鉴权接口的代码，这里用koa当作例子。顺便安利一波koa中巨(自)好(己)用(写)的中间件 <a href="https://github.com/detectiveHLH/koa2-response" target="_blank" rel="noopener">koa2-response</a>。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sha1 = <span class="built_in">require</span>(<span class="string">'sha1'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 验证服务器资源</span></span><br><span class="line">exports.verification = <span class="function">(<span class="params">ctx, next</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> token = <span class="string">'你自己的Token'</span>;</span><br><span class="line">  <span class="keyword">const</span> &#123; signature, nonce, timestamp, echostr &#125; = ctx.query;</span><br><span class="line">  <span class="keyword">const</span> str = [token, timestamp, nonce].sort().join(<span class="string">''</span>);</span><br><span class="line">  <span class="keyword">const</span> sha = sha1(str);</span><br><span class="line">  <span class="keyword">if</span> (signature === sha) &#123;</span><br><span class="line">     ctx.body = <span class="built_in">String</span>(echostr);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 说到验证服务器资源的时候可能有些人会有疑问。开发不是在本地开发吗？微信的服务器怎么能够访问我的本地服务器呢？</p>
+<p> 如果要在本地开发的话，就需要使用 <a href="https://ngrok.com/" target="_blank" rel="noopener">ngrok</a> ，这个是用来实现内网穿透的。意思就是把你的局域网服务器ip映射到公网上。让局域网外部的服务器可以访问你的服务器资源。下载地址在 <a href="https://ngrok.com/download" target="_blank" rel="noopener">这里</a>。下载下来之后解压，就会得到一个名字叫ngrok的可执行文件。用命令行进入可执行的文件所在的目录。执行以下代码。</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./ngrok http localhost:3000</span><br></pre></td></tr></table></figure>
+<p> 3000是端口号，根据你自己的项目端口号来。就可以看到如下返回，此时你的局域网服务器就可以接受微信的GET请求了。一旦配置成功后，就可以Ctrl + C杀掉这个进程了。一直开着可能会有安全隐患。</p>
+</li>
+<li><p>Token:</p>
+<p> Token是自定义的一个字符串。可以理解为对称加密中的公钥。在服务器中的Token需要跟测试号中的配置保持一致。</p>
+</li>
+</ol>
+<h2 id="JS接口安全域名"><a href="#JS接口安全域名" class="headerlink" title="JS接口安全域名"></a>JS接口安全域名</h2><p>关于微信JS接口安全域名，大概的意思就是你要在特定的域名下的某个路由，才能使用微信的js-sdk，使用js-sdk可以干嘛呢，微信的官方描述如下。</p>
+<blockquote>
+<p>微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。</p>
+<p> 通过使用微信JS-SDK，网页开发者可借助微信高效地使用拍照、选图、语音、位置等手机系统的能力，同时可以直接使用微信分享、扫一扫等微信特有的能力，为微信用户提供更优质的网页体验。</p>
+</blockquote>
+<p>具体的接入流程可以参考我的另一篇文章, <a href="./wechat-js-sdk.md">如何正确的接入微信JS-SDK</a>。在这需要设置一个域名，以便在开发的时候来使用微信的js-sdk。当然在本地开发时，一般都用的localhost，除非你在开发时一直使用内网穿透。所以在JS接口安全域名下我们可以使用局域网的ip，前提是已经验证了服务器资源。</p>
+<h2 id="测试号二维码"><a href="#测试号二维码" class="headerlink" title="测试号二维码"></a>测试号二维码</h2><p>这里会有一个你的测试号码二维码。如果要使用的话，需要扫码关注公众号才能进行开发。右侧则是已经关注了该测试号的用户，最多100个。关注后，该测试号会出现在订阅号的列表中。</p>
+<h2 id="模板消息接口"><a href="#模板消息接口" class="headerlink" title="模板消息接口"></a>模板消息接口</h2><p>什么是模板消息？微信的官方文档如下。</p>
+<blockquote>
+<p>模板消息仅用于公众号向用户发送重要的服务通知，只能用于符合其要求的服务场景中，如信用卡刷卡通知，商品购买成功通知等。不支持广告等营销类消息以及其它所有可能对用户造成骚扰的消息。</p>
+</blockquote>
+<p>其使用规则如下：</p>
+<blockquote>
+<ol>
+<li>所有服务号都可以在功能-&gt;添加功能插件处看到申请模板消息功能的入口，但只有认证后的服务号才可以申请模板消息的使用权限并获得该权限；</li>
+<li>需要选择公众账号服务所处的2个行业，每月可更改1次所选行业；</li>
+<li>在所选择行业的模板库中选用已有的模板进行调用；</li>
+<li>每个账号可以同时使用25个模板。</li>
+<li>当前每个账号的模板消息的日调用上限为10万次，单个模板没有特殊限制。【2014年11月18日将接口调用频率从默认的日1万次提升为日10万次，可在MP登录后的开发者中心查看】。当账号粉丝数超过10W/100W/1000W时，模板消息的日调用上限会相应提升，以公众号MP后台开发者中心页面中标明的数字为准。</li>
+</ol>
+</blockquote>
+<p>下面举个具体的例子，来源于微信的官方文档。我们想要发送模板消息，就必须要在测试号中新建模板消息。点击模板消息接口中的<em>新增测试模板</em>接口。点击之后就会看到如下的Modal框。<br><img src="../../img/5.jpg" alt="avatar"></p>
+<p>模板标题可以随便取，模板内容例子如下。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;first.DATA&#125;&#125;</span><br><span class="line">商品名称：&#123;&#123;keyword1.DATA&#125;&#125;</span><br><span class="line">面试时间：&#123;&#123;keyword2.DATA&#125;&#125;</span><br><span class="line">面试地点：&#123;&#123;keyword3.DATA&#125;&#125;</span><br><span class="line">&#123;&#123;remark.DATA&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>新建成功之后，就可以在模板消息接口的中的列表看到。然后我们需要往下面的URL发送POST请求。URL如下。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:<span class="comment">//api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN</span></span><br></pre></td></tr></table></figure></p>
+<p>POST的完整数据如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"touser"</span>: <span class="string">"OPENID"</span>,</span><br><span class="line">  <span class="string">"template_id"</span>: <span class="string">"ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY"</span>,</span><br><span class="line">  <span class="string">"url"</span>:<span class="string">"http://weixin.qq.com/download"</span>,  </span><br><span class="line">  <span class="string">"miniprogram"</span>: &#123;</span><br><span class="line">    <span class="string">"appid"</span>: <span class="string">"xiaochengxuappid12345"</span>,</span><br><span class="line">    <span class="string">"pagepath"</span>: <span class="string">"index?foo=bar"</span>,</span><br><span class="line">  &#125;,          </span><br><span class="line">  <span class="string">"data"</span>: &#123;</span><br><span class="line">    <span class="string">"first"</span>: &#123;</span><br><span class="line">      <span class="string">"value"</span>: <span class="string">"恭喜你购买成功！"</span>,</span><br><span class="line">      <span class="string">"color"</span>: <span class="string">"#173177"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"keyword1"</span>: &#123;</span><br><span class="line">      <span class="string">"value"</span>: <span class="string">"巧克力"</span>,</span><br><span class="line">      <span class="string">"color"</span>: <span class="string">"#173177"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"keyword2"</span>: &#123;</span><br><span class="line">      <span class="string">"value"</span>: <span class="string">"39.8元"</span>,</span><br><span class="line">      <span class="string">"color"</span>: <span class="string">"#173177"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"keyword3"</span>: &#123;</span><br><span class="line">      <span class="string">"value"</span>: <span class="string">"2014年9月22日"</span>,</span><br><span class="line">      <span class="string">"color"</span>: <span class="string">"#173177"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"remark"</span>: &#123;</span><br><span class="line">      <span class="string">"value"</span>: <span class="string">"欢迎再次购买！"</span>,</span><br><span class="line">      <span class="string">"color"</span>: <span class="string">"#173177"</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>向上面的URL发送POST请求，特定的用户就会在测试号中看到如下的消息提示。特定的用户就是touser字段中OPENID所代表的用户。如果用户没有关注该测试号，则不会收到该模板消息。template_id则填写我们之前新建的模板消息的id即可。</p>
+<p><img src="../../img/4.jpeg" alt="avatar"></p>
+<p>在文档中，在此处给出了如下提示。</p>
+<blockquote>
+<p>注：url和miniprogram都是非必填字段，若都不传则模板无跳转；若都传，会优先跳转至小程序。开发者可根据实际需要选择其中一种跳转方式即可。当用户的微信客户端版本不支持跳小程序时，将会跳转至url。</p>
+</blockquote>
+<p>POST数据中，url和miniprogram可填不填，只是会对模板的跳转有影响，不影响模板消息的内容发送。</p>
+<h2 id="体验接口权限表"><a href="#体验接口权限表" class="headerlink" title="体验接口权限表"></a>体验接口权限表</h2><p>在这个部分，用表格的形式，列出了我们能够使用的接口，以及该接口的权限。例如，获取access_token每日的调用次数，上限为2000。该部分分为三个大块。</p>
+<ul>
+<li><p>对话服务</p>
+<ol>
+<li>基础支持 </li>
+<li>接受消息</li>
+<li>发送消息</li>
+<li>用户管理</li>
+<li>推广支持</li>
+<li>界面丰富</li>
+<li>素材管理</li>
+</ol>
+</li>
+<li><p>功能服务</p>
+<ol>
+<li>智能接口</li>
+<li>设备功能</li>
+<li>多客服</li>
+</ol>
+</li>
+<li><p>网页服务</p>
+<ol>
+<li>网页账号</li>
+<li>基础接口</li>
+<li>分享接口</li>
+<li>图像接口</li>
+<li>音频接口</li>
+<li>智能接口</li>
+<li>设备信息</li>
+<li>地理位置</li>
+<li>节目操作</li>
+</ol>
+</li>
+</ul>
+<p>我主要解释一下网页服务中的网页账号接口。点开后，就可以看到可以修改一个叫授权回调域名的字段。什么叫做授权回调。</p>
+<p>了解微信鉴权的老铁应该知道，如果想要获取微信中的用户的信息，必须要经过微信的OAuth2.0网页授权，微信会鉴定是否有获取用户信息的权限，如果有的话，就会带上一个免登陆code，将code拼接到我们传的redirect_uri后，再进行重定向。而redirect_uri必须是在这配置的域名下的页面，否则回调不成功，也不能获取用户的数据。</p>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>微信的测试号接入，关键的步骤其实是在第二个接口配置信息中，只要正确的验证了服务器资源，就基本上已经成功了。</p>
+<p>如何接入微信的JS-SDK: <a href="./wechat-js-sdk.md">如何正确的接入微信JS-SDK</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/微信开发/" rel="tag"># 微信开发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/frontend/html2canvas关于图片不能正常截取的原因/" rel="next" title="html2canvas关于图片不能正常截取">
+                <i class="fa fa-chevron-left"></i> html2canvas关于图片不能正常截取
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/devtools/安利两个好用的chrome插件/" rel="prev" title="安利几个好用的chrome插件">
+                安利几个好用的chrome插件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="Lunhao Hu" />
+            
+              <p class="site-author-name" itemprop="name">Lunhao Hu</p>
+              <p class="site-description motion-element" itemprop="description">优化永无止境，做人要有追求</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/detectiveHLH" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#注册测试号"><span class="nav-number">1.</span> <span class="nav-text">注册测试号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试号信息"><span class="nav-number">2.</span> <span class="nav-text">测试号信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口配置信息"><span class="nav-number">3.</span> <span class="nav-text">接口配置信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS接口安全域名"><span class="nav-number">4.</span> <span class="nav-text">JS接口安全域名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试号二维码"><span class="nav-number">5.</span> <span class="nav-text">测试号二维码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板消息接口"><span class="nav-number">6.</span> <span class="nav-text">模板消息接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#体验接口权限表"><span class="nav-number">7.</span> <span class="nav-text">体验接口权限表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在后面"><span class="nav-number">8.</span> <span class="nav-text">写在后面</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lunhao Hu</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1533108484000',
+            owner: 'detectiveHLH',
+            repo: 'detectiveHLH.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b',
+            
+                client_id: 'e07655d9c13124115cb8'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz",
+                'X-LC-Key': "w9colOCMhD54kJr6lybpWuoy",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+</body>
+</html>
