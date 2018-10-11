@@ -108,24 +108,25 @@
 
 
 
-  <meta name="description" content="优化永无止境，做人要有追求">
-<meta name="keywords" content="博客">
+  <meta name="description" content="单元测试在刚开始接触开发时，我对单元测试持中立态度，既不支持也不反对。初期大部分都使用node开发，且开发应用体积都很小。除了开发应用小，还有就是开发的周期太短，需求变更十分频繁，敏捷开发的迭代周期也十分短。经常在下一个迭代就有可能需要对现有的代码进行重构。这样依赖，在前期根本就没有时间来关注单元测试这一块。 那个时候也看过很多关于单元测试的文章，也包括TDD(Test-Driven Develo">
+<meta name="keywords" content="单元测试">
 <meta property="og:type" content="website">
-<meta property="og:title" content="detectiveHLH&#39;s blog">
-<meta property="og:url" content="https://detectivehlh.github.io/tags/中间件/index.html">
+<meta property="og:title" content="SpringBoot中使用Junit和Mockito进行单元测试">
+<meta property="og:url" content="https://detectivehlh.github.io/draft/junit-mockito-unit-test.html">
 <meta property="og:site_name" content="detectiveHLH&#39;s blog">
-<meta property="og:description" content="优化永无止境，做人要有追求">
+<meta property="og:description" content="单元测试在刚开始接触开发时，我对单元测试持中立态度，既不支持也不反对。初期大部分都使用node开发，且开发应用体积都很小。除了开发应用小，还有就是开发的周期太短，需求变更十分频繁，敏捷开发的迭代周期也十分短。经常在下一个迭代就有可能需要对现有的代码进行重构。这样依赖，在前期根本就没有时间来关注单元测试这一块。 那个时候也看过很多关于单元测试的文章，也包括TDD(Test-Driven Develo">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-26T11:40:11.246Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="detectiveHLH&#39;s blog">
-<meta name="twitter:description" content="优化永无止境，做人要有追求">
+<meta name="twitter:title" content="SpringBoot中使用Junit和Mockito进行单元测试">
+<meta name="twitter:description" content="单元测试在刚开始接触开发时，我对单元测试持中立态度，既不支持也不反对。初期大部分都使用node开发，且开发应用体积都很小。除了开发应用小，还有就是开发的周期太短，需求变更十分频繁，敏捷开发的迭代周期也十分短。经常在下一个迭代就有可能需要对现有的代码进行重构。这样依赖，在前期根本就没有时间来关注单元测试这一块。 那个时候也看过很多关于单元测试的文章，也包括TDD(Test-Driven Develo">
 
 
 
 
 
 
-  <link rel="canonical" href="https://detectivehlh.github.io/tags/中间件/"/>
+  <link rel="canonical" href="https://detectivehlh.github.io/draft/junit-mockito-unit-test.html"/>
 
 
 
@@ -135,7 +136,7 @@
   };
 </script>
 
-  <title>标签: 中间件 | detectiveHLH's blog</title>
+  <title>SpringBoot中使用Junit和Mockito进行单元测试 | detectiveHLH's blog</title>
   
 
 
@@ -191,7 +192,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -248,7 +249,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
@@ -323,114 +324,68 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">SpringBoot中使用Junit和Mockito进行单元测试</h1>
+
+<div class="post-meta">
   
   
-  
-  <div class="post-block tag">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>中间件<small>标签</small>
-        </h1>
-      </div>
+
+
+</div>
+
+</header>
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/frontend/为hexo博客添加基于gitment评论功能/" itemprop="url">
-              
-                <span itemprop="name">为hexo博客添加基于gitment评论功能</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-20T17:51:27+08:00"
-              content="2018-07-20" >
-          07-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/backend/对koa2-response实现真正的中间件调用/" itemprop="url">
-              
-                <span itemprop="name">对koa2-response实现真正的中间件调用</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-19T17:40:10+08:00"
-              content="2018-07-19" >
-          07-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
       
+      <div class="post-body">
         
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
         
-            <a class="post-title-link" href="/backend/Koa中更方便简单发送响应的方式/" itemprop="url">
-              
-                <span itemprop="name">Koa中更方便简单发送响应的方式</span>
-              
-            </a>
-        
-      </h2>
+          <h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><p>在刚开始接触开发时，我对单元测试持中立态度，既不支持也不反对。初期大部分都使用node开发，且开发应用体积都很小。<br>除了开发应用小，还有就是开发的周期太短，需求变更十分频繁，敏捷开发的迭代周期也十分短。经常在下一个迭代就有可能需要对现有的代码进行重构。<br>这样依赖，在前期根本就没有时间来关注单元测试这一块。</p>
+<p>那个时候也看过很多关于单元测试的文章，也包括TDD(Test-Driven Development)。是由极限编程倡导的，先写测试程序，然后再实现业务代码。<br>在上面的那种情况下，看到了居然要先写测试代码，表示很不能理解，这样会大大的增加开发的工作量。</p>
+<p>随着开发语言、开发应用体积的变化，渐渐的领悟到了测试的作用。以前我对于测试的理解就是，后端实现的每一个模块的每一个函数都需要单元测试。<br>其实不然，例如Java Spring中，在项目开发中，所有的用户接口都会有测试来帮我们测试，会写好相对应的测试用例。我只需要关注我的核心业务Service层面的所有Service接口都必须要通过测试用例就ok。<br>从极限编程、测试驱动开发和单元测试以及JUnit的创造者Kent Beck本人对于单元测试的态度就可以看出一些问题。多余的测试代码会显得不那么有必要，而且反而会拖慢开发的进度。</p>
+<p>在核心代码层上加了单测之后，后期不论是因为需求变动还是代码重构要对核心代码进行修改，修改之后只要通过了测试用例，就代表我们重构的代码没有改变整体的逻辑。</p>
+<h2 id="对CURD进行基础的单元测试"><a href="#对CURD进行基础的单元测试" class="headerlink" title="对CURD进行基础的单元测试"></a>对CURD进行基础的单元测试</h2><h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><p>首先需要引入单元测试需要的依赖。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.12<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mockito<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mockito-all<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.10.19<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.5.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="加入被测试对象"><a href="#加入被测试对象" class="headerlink" title="加入被测试对象"></a>加入被测试对象</h3><p>例如，现在已经有一个名为UserConfigService的类，名为UserConfigMapper的mapper。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@InjectMocks</span></span><br><span class="line"><span class="keyword">private</span> UserConfigService userConfigService = <span class="keyword">new</span> UserConfigServiceImpl();</span><br></pre></td></tr></table></figure></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>. <a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Test-driven_development</a></p>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-13T11:29:10+08:00"
-              content="2018-07-13" >
-          07-13
-        </time>
+        
       </div>
-
-    </header>
-  </article>
-
-
+      
+      
       
     </div>
+    
 
+
+
+    
+    
+    
   </div>
-  
-  
-  
-
-  
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -451,8 +406,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -574,6 +538,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单元测试"><span class="nav-number">1.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对CURD进行基础的单元测试"><span class="nav-number">2.</span> <span class="nav-text">对CURD进行基础的单元测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引入依赖"><span class="nav-number">2.1.</span> <span class="nav-text">引入依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加入被测试对象"><span class="nav-number">2.2.</span> <span class="nav-text">加入被测试对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -718,6 +698,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
 
   
 
@@ -747,6 +731,30 @@
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1537947339000',
+            owner: 'detectiveHLH',
+            repo: 'detectiveHLH.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b',
+            
+                client_id: 'e07655d9c13124115cb8'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 
