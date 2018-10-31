@@ -108,25 +108,25 @@
 
 
 
-  <meta name="description" content="前言几个月之前，因为项目上开发的必要，接触到了微信开发。前前后后做了大概有3、4个微信公众号开发的项目了。刚开始看的时候云里雾里。坎坎坷坷的，自己趟了很久的坑。终于是把微信开发鉴权这一套流程跑通了。都是一些自己的理解。有说的不对的地方，欢迎打脸。  要进行微信开发，首先你需要微信开发者工具，因为涉及到微信鉴权的链接，都只能在微信端打开。要想进行开发测试，就只能在微信专用的开发者工具中开发。开发者工">
-<meta name="keywords" content="微信开发,微信鉴权">
+  <meta name="description" content="前言自从入坑WebAssembly以来，躺了很多坑，也浏览了很多资料，都没有看到很多能够直接在前端项目中使用WebAssembly的例子。即使有，我自己按照介绍的步骤一步一步来，也会报各种错误，官方的文档也写的比较模糊。于是，就决定自己撸一个，让React项目能够直接的借助Webpack，在代码中引入已经编译好的C++模块。 写一个C语言模块123int add(int a, int b) &amp;#1">
+<meta name="keywords" content="WebAssembly,React">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在项目中接入微信鉴权流程">
-<meta property="og:url" content="https://detectivehlh.github.io/wechat/在项目中接入微信鉴权流程/index.html">
+<meta property="og:title" content="如何在React项目中直接使用WebAssembly">
+<meta property="og:url" content="https://detectivehlh.github.io/frontend/useWasmInReactProject/index.html">
 <meta property="og:site_name" content="detectiveHLH&#39;s blog">
-<meta property="og:description" content="前言几个月之前，因为项目上开发的必要，接触到了微信开发。前前后后做了大概有3、4个微信公众号开发的项目了。刚开始看的时候云里雾里。坎坎坷坷的，自己趟了很久的坑。终于是把微信开发鉴权这一套流程跑通了。都是一些自己的理解。有说的不对的地方，欢迎打脸。  要进行微信开发，首先你需要微信开发者工具，因为涉及到微信鉴权的链接，都只能在微信端打开。要想进行开发测试，就只能在微信专用的开发者工具中开发。开发者工">
+<meta property="og:description" content="前言自从入坑WebAssembly以来，躺了很多坑，也浏览了很多资料，都没有看到很多能够直接在前端项目中使用WebAssembly的例子。即使有，我自己按照介绍的步骤一步一步来，也会报各种错误，官方的文档也写的比较模糊。于是，就决定自己撸一个，让React项目能够直接的借助Webpack，在代码中引入已经编译好的C++模块。 写一个C语言模块123int add(int a, int b) &amp;#1">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-14T08:21:45.472Z">
+<meta property="og:updated_time" content="2018-10-31T01:23:16.003Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在项目中接入微信鉴权流程">
-<meta name="twitter:description" content="前言几个月之前，因为项目上开发的必要，接触到了微信开发。前前后后做了大概有3、4个微信公众号开发的项目了。刚开始看的时候云里雾里。坎坎坷坷的，自己趟了很久的坑。终于是把微信开发鉴权这一套流程跑通了。都是一些自己的理解。有说的不对的地方，欢迎打脸。  要进行微信开发，首先你需要微信开发者工具，因为涉及到微信鉴权的链接，都只能在微信端打开。要想进行开发测试，就只能在微信专用的开发者工具中开发。开发者工">
+<meta name="twitter:title" content="如何在React项目中直接使用WebAssembly">
+<meta name="twitter:description" content="前言自从入坑WebAssembly以来，躺了很多坑，也浏览了很多资料，都没有看到很多能够直接在前端项目中使用WebAssembly的例子。即使有，我自己按照介绍的步骤一步一步来，也会报各种错误，官方的文档也写的比较模糊。于是，就决定自己撸一个，让React项目能够直接的借助Webpack，在代码中引入已经编译好的C++模块。 写一个C语言模块123int add(int a, int b) &amp;#1">
 
 
 
 
 
 
-  <link rel="canonical" href="https://detectivehlh.github.io/wechat/在项目中接入微信鉴权流程/"/>
+  <link rel="canonical" href="https://detectivehlh.github.io/frontend/useWasmInReactProject/"/>
 
 
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>在项目中接入微信鉴权流程 | detectiveHLH's blog</title>
+  <title>如何在React项目中直接使用WebAssembly | detectiveHLH's blog</title>
   
 
 
@@ -318,7 +318,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/wechat/在项目中接入微信鉴权流程/">
+    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/frontend/useWasmInReactProject/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lunhao Hu">
@@ -335,7 +335,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">在项目中接入微信鉴权流程
+          <h1 class="post-title" itemprop="name headline">如何在React项目中直接使用WebAssembly
               
             
           </h1>
@@ -360,7 +360,7 @@
                 
               
 
-              <time title="创建时间：2018-07-24 14:30:21" itemprop="dateCreated datePublished" datetime="2018-07-24T14:30:21+08:00">2018-07-24</time>
+              <time title="创建时间：2018-10-30 16:18:40" itemprop="dateCreated datePublished" datetime="2018-10-30T16:18:40+08:00">2018-10-30</time>
             
 
             
@@ -377,7 +377,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2018-10-31 09:23:16" itemprop="dateModified" datetime="2018-10-31T09:23:16+08:00">2018-10-31</time>
               
             
           </span>
@@ -394,7 +394,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/微信/" itemprop="url" rel="index"><span itemprop="name">微信</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端/" itemprop="url" rel="index"><span itemprop="name">前端</span></a></span>
 
                 
                 
@@ -409,8 +409,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/wechat/在项目中接入微信鉴权流程/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/wechat/在项目中接入微信鉴权流程/" itemprop="commentsCount"></span>
+                <a href="/frontend/useWasmInReactProject/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/frontend/useWasmInReactProject/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -418,7 +418,7 @@
 
           
           
-             <span id="/wechat/在项目中接入微信鉴权流程/" class="leancloud_visitors" data-flag-title="在项目中接入微信鉴权流程">
+             <span id="/frontend/useWasmInReactProject/" class="leancloud_visitors" data-flag-title="如何在React项目中直接使用WebAssembly">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -449,11 +449,22 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>几个月之前，因为项目上开发的必要，接触到了微信开发。前前后后做了大概有3、4个微信公众号开发的项目了。刚开始看的时候云里雾里。坎坎坷坷的，自己趟了很久的坑。终于是把微信开发鉴权这一套流程跑通了。都是一些自己的理解。有说的不对的地方，欢迎打脸。</p>
-<hr>
-<p>要进行微信开发，首先你需要微信开发者工具，因为涉及到微信鉴权的链接，都只能在微信端打开。要想进行开发测试，就只能在微信专用的开发者工具中开发。开发者工具支持Windows 64、Windows 32、Mac，目前的版本是V1.10。打开后，用你的微信扫码登陆，就可以进行开发了。此时会有两个选项，小程序项目、公众号网页项目。在微信开发者工具里面，你可以像在chrome里面调试前端项目一样调试微信项目。</p>
-<p>想要下载链接的同学看 <a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank" rel="noopener">这里</a></p>
-<h2 id="注册微信开发测试号"><a href="#注册微信开发测试号" class="headerlink" title="注册微信开发测试号"></a>注册微信开发测试号</h2>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>自从入坑WebAssembly以来，躺了很多坑，也浏览了很多资料，都没有看到很多能够直接在前端项目中使用WebAssembly的例子。即使有，我自己按照介绍的步骤一步一步来，<br>也会报各种错误，官方的文档也写的比较模糊。于是，就决定自己撸一个，让React项目能够直接的借助Webpack，在代码中引入已经编译好的C++模块。</p>
+<h2 id="写一个C语言模块"><a href="#写一个C语言模块" class="headerlink" title="写一个C语言模块"></a>写一个C语言模块</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int add(int a, int b) &#123;</span><br><span class="line">  return a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="使用emscripten对C模块进行编译"><a href="#使用emscripten对C模块进行编译" class="headerlink" title="使用emscripten对C模块进行编译"></a>使用emscripten对C模块进行编译</h2><p>执行以下代码对上面的<code>add.c</code>文件进行编译。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emcc add.c -Os -s WASM=1 -s SIDE_MODULE=1 -o add.wasm</span><br></pre></td></tr></table></figure></p>
+<p><code>-Os</code>代码我的模块需要优化，<code>-s WASM=1</code>代表我需要Wasm的第一个版本，<code>-s SIDE_MODULE=1</code>代表我不需要多余的代码，就只要这一个模块。<code>-o add.wasm</code>表示我的输出文件为<code>add.wasm</code>。然后就可以看到在与<code>add.c</code>同级的目录下生成了<code>add.wasm</code>。然后把<code>add.wasm</code>放到<code>public</code>目录下。</p>
+<h2 id="新建一个react项目"><a href="#新建一个react项目" class="headerlink" title="新建一个react项目"></a>新建一个react项目</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npx create-react-app my-project</span><br><span class="line"><span class="built_in">cd</span> my-project</span><br><span class="line">yarn install</span><br><span class="line">yarn start</span><br></pre></td></tr></table></figure>
+<p>执行完上述的命令，一个简单的react项目就在你本地的3000端口启动了。</p>
+<h2 id="获取webpack控制权"><a href="#获取webpack控制权" class="headerlink" title="获取webpack控制权"></a>获取webpack控制权</h2><p>然后再执行以下命令。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn run eject</span><br></pre></td></tr></table></figure></p>
+<p>运行之后就可以看到webpack的配置文件了。</p>
+<h2 id="安装loader和fetch"><a href="#安装loader和fetch" class="headerlink" title="安装loader和fetch"></a>安装loader和fetch</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add wasm-loader &amp;&amp; yarn add node-fetch</span><br></pre></td></tr></table></figure>
+<h2 id="更新webpack配置文件"><a href="#更新webpack配置文件" class="headerlink" title="更新webpack配置文件"></a>更新webpack配置文件</h2><p>找到webpack配置文件，在相应的位置添加如下配置。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    test: <span class="regexp">/\.wasm$/</span>,</span><br><span class="line">    type: <span class="string">'javascript/auto'</span>,</span><br><span class="line">    loaders: [<span class="string">'wasm-loader'</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="修改App-js文件"><a href="#修改App-js文件" class="headerlink" title="修改App.js文件"></a>修改App.js文件</h2><p>修改App.js。将其替换为如下代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123;Component&#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> logo <span class="keyword">from</span> <span class="string">'./logo.svg'</span>;</span><br><span class="line"><span class="keyword">import</span> fetch <span class="keyword">from</span> <span class="string">'node-fetch'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./App.css'</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    <span class="keyword">const</span> env = &#123;</span><br><span class="line">      memoryBase: <span class="number">0</span>,</span><br><span class="line">      tableBase: <span class="number">0</span>,</span><br><span class="line">      memory: <span class="keyword">new</span> WebAssembly.Memory(&#123;</span><br><span class="line">        initial: <span class="number">256</span></span><br><span class="line">      &#125;),</span><br><span class="line">      table: <span class="keyword">new</span> WebAssembly.Table(&#123;</span><br><span class="line">        initial: <span class="number">2</span>,</span><br><span class="line">        element: <span class="string">'anyfunc'</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    fetch(<span class="string">'http://localhost:3000/add.wasm'</span>).then(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> response.arrayBuffer();</span><br><span class="line">    &#125;).then(<span class="function">(<span class="params">bytes</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> WebAssembly.instantiate(bytes, &#123;<span class="attr">env</span>: env&#125;)</span><br><span class="line">    &#125;).then(<span class="function">(<span class="params">instance</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(instance.instance.exports.add(<span class="number">20</span>, <span class="number">29</span>))</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div className=<span class="string">"App"</span>&gt;</span><br><span class="line">        &lt;header className=<span class="string">"App-header"</span>&gt;</span><br><span class="line">          &lt;img src=&#123;logo&#125; className=<span class="string">"App-logo"</span> alt=<span class="string">"logo"</span>/&gt;</span><br><span class="line">          &lt;p&gt;</span><br><span class="line">            Edit &lt;code&gt;src/App.js&lt;<span class="regexp">/code&gt; and save to reload.</span></span><br><span class="line"><span class="regexp">          &lt;/</span>p&gt;</span><br><span class="line">          &lt;a</span><br><span class="line">            className=<span class="string">"App-link"</span></span><br><span class="line">            href=<span class="string">"https://reactjs.org"</span></span><br><span class="line">            target=<span class="string">"_blank"</span></span><br><span class="line">            rel=<span class="string">"noopener noreferrer"</span></span><br><span class="line">          &gt;</span><br><span class="line">            Learn React</span><br><span class="line">          &lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>header&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default App;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>执行以下命令启动项目。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn start</span><br></pre></td></tr></table></figure></p>
+<p>然后就可以在控制台中看到输出的49，是直接调用的我们用C语言写的add函数。</p>
+<h2 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h2><p>完整的项目代码在<a href="https://github.com/detectiveHLH/webassembly-in-react" target="_blank" rel="noopener">这里</a>，欢迎Star。</p>
+
       
     </div>
 
@@ -473,9 +484,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/微信开发/" rel="tag"># 微信开发</a>
+            <a href="/tags/WebAssembly/" rel="tag"># WebAssembly</a>
           
-            <a href="/tags/微信鉴权/" rel="tag"># 微信鉴权</a>
+            <a href="/tags/React/" rel="tag"># React</a>
           
         </div>
       
@@ -488,8 +499,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/frontend/为hexo博客添加基于gitment评论功能/" rel="next" title="为hexo博客添加基于gitment评论功能">
-                <i class="fa fa-chevron-left"></i> 为hexo博客添加基于gitment评论功能
+              <a href="/frontend/webAssembly/" rel="next" title="webAssembly">
+                <i class="fa fa-chevron-left"></i> webAssembly
               </a>
             
           </div>
@@ -497,10 +508,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/frontend/vue中使用Autoprefixer/" rel="prev" title="在vue中使用Autoprefixed">
-                在vue中使用Autoprefixed <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -700,7 +707,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册微信开发测试号"><span class="nav-number">2.</span> <span class="nav-text">注册微信开发测试号</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写一个C语言模块"><span class="nav-number">2.</span> <span class="nav-text">写一个C语言模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用emscripten对C模块进行编译"><span class="nav-number">3.</span> <span class="nav-text">使用emscripten对C模块进行编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建一个react项目"><span class="nav-number">4.</span> <span class="nav-text">新建一个react项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取webpack控制权"><span class="nav-number">5.</span> <span class="nav-text">获取webpack控制权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装loader和fetch"><span class="nav-number">6.</span> <span class="nav-text">安装loader和fetch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新webpack配置文件"><span class="nav-number">7.</span> <span class="nav-text">更新webpack配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改App-js文件"><span class="nav-number">8.</span> <span class="nav-text">修改App.js文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行"><span class="nav-number">9.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#举个例子"><span class="nav-number">10.</span> <span class="nav-text">举个例子</span></a></li></ol></div>
             
 
           </div>
@@ -887,7 +894,7 @@
       <script type="text/javascript">
       function renderGitment(){
         var gitment = new Gitmint({
-            id: '1532413821000',
+            id: '1540887520000',
             owner: 'detectiveHLH',
             repo: 'detectiveHLH.github.io',
             
