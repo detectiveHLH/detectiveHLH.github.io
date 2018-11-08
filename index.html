@@ -318,7 +318,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/frontend/useWasmInReactProject/">
+    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/frontend/gettingStartOfWebAssembly/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lunhao Hu">
@@ -337,8 +337,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/frontend/useWasmInReactProject/" itemprop="url">
-                  如何在React项目中直接使用WebAssembly
+                <a class="post-title-link" href="/frontend/gettingStartOfWebAssembly/" itemprop="url">
+                  WebAssembly完全入门——了解wasm的前世今身
                 </a>
               
             
@@ -364,7 +364,7 @@
                 
               
 
-              <time title="创建时间：2018-10-30 16:18:40" itemprop="dateCreated datePublished" datetime="2018-10-30T16:18:40+08:00">2018-10-30</time>
+              <time title="创建时间：2018-11-07 15:47:06" itemprop="dateCreated datePublished" datetime="2018-11-07T15:47:06+08:00">2018-11-07</time>
             
 
             
@@ -381,7 +381,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-01 11:21:18" itemprop="dateModified" datetime="2018-11-01T11:21:18+08:00">2018-11-01</time>
+                <time title="修改时间：2018-11-08 14:22:19" itemprop="dateModified" datetime="2018-11-08T14:22:19+08:00">2018-11-08</time>
               
             
           </span>
@@ -412,7 +412,7 @@
 
           
           
-             <span id="/frontend/useWasmInReactProject/" class="leancloud_visitors" data-flag-title="如何在React项目中直接使用WebAssembly">
+             <span id="/frontend/gettingStartOfWebAssembly/" class="leancloud_visitors" data-flag-title="WebAssembly完全入门——了解wasm的前世今身">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -444,197 +444,11 @@
 
       
         
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>自从入坑WebAssembly以来，躺了很多坑，也浏览了很多资料，都没有看到很多能够直接在前端项目中使用WebAssembly的例子。即使有，我自己按照介绍的步骤一步一步来，<br>也会报各种错误，官方的文档也写的比较模糊。于是，就决定自己撸一个，让React项目能够直接的借助Webpack，在代码中引入已经编译好的C++模块。</p>
-<h2 id="写一个C语言模块"><a href="#写一个C语言模块" class="headerlink" title="写一个C语言模块"></a>写一个C语言模块</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int add(int a, int b) &#123;</span><br><span class="line">  return a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>接触WebAssembly之后，在google上看了很多资料。感觉对WebAssembly的使用、介绍、意义都说的比较模糊和笼统。感觉看了之后收获没有达到预期，要么是文章中的例子自己去实操不能成功，要么就是不知所云、一脸蒙蔽。本着业务催生技术的态度，这边文章就诞生了。前部分主要是对WebAssembly的背景做一些介绍，WebAssembly是怎么出现的，优势在哪儿。如果想直接开始撸代码试试效果，可以直接跳到最后一个<a href="#WebAssembly实操">板块</a>。</p>
+<h2 id="WebAssembly是什么？"><a href="#WebAssembly是什么？" class="headerlink" title="WebAssembly是什么？"></a>WebAssembly是什么？</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>首先我们给它下个定义。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/frontend/useWasmInReactProject/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/frontend/webAssembly/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lunhao Hu">
-      <meta itemprop="description" content="优化永无止境，做人要有追求">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="detectiveHLH's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/frontend/webAssembly/" itemprop="url">
-                  初探WebAssembly
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-10-20 19:06:57" itemprop="dateCreated datePublished" datetime="2018-10-20T19:06:57+08:00">2018-10-20</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-01 11:15:28" itemprop="dateModified" datetime="2018-11-01T11:15:28+08:00">2018-11-01</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端/" itemprop="url" rel="index"><span itemprop="name">前端</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/frontend/webAssembly/" class="leancloud_visitors" data-flag-title="初探WebAssembly">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数：</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h2><p> 参加完2018年上海的QCon大会，想到了会议中来自Microsoft的朱力旻大佬讲的WebAssembly，感触颇深。<br> 我之前完全没有了解过WebAssembly，之前没有了解的原因也很简单，没有什么实际的应用场景，但工欲善其事，必先利其器。<br> 抱着这样的想法，便开始入坑WebAssembly。</p>
-<h2 id="2-Why-WebAssembly"><a href="#2-Why-WebAssembly" class="headerlink" title="2.Why WebAssembly"></a>2.Why WebAssembly</h2><h3 id="2-1-javascript的背景"><a href="#2-1-javascript的背景" class="headerlink" title="2.1 javascript的背景"></a>2.1 javascript的背景</h3><p>JavaScript这门由Brendan Eich花了10天创造出来的语言，在如今收到了广泛的应用，同时也因为其缺陷遭受到了业界的一些诟病。的确，这门被仓促的创造出来的语言有很多缺陷。毕竟JavaScript结合了函数式编程和面向对象编程，在JavaScript之前的参考极少。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/frontend/webAssembly/#more" rel="contents">
+            <a class="btn" href="/frontend/gettingStartOfWebAssembly/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -3537,7 +3351,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3609,7 +3423,7 @@
                     
                       
                     
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
