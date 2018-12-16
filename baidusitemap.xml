@@ -5,7 +5,7 @@
     
   <url>
     <loc>https://detectivehlh.github.io/frontend/add-router-saga-in-create-react-app/</loc>
-    <lastmod>2018-12-16T14:20:27.009Z</lastmod>
+    <lastmod>2018-12-16T14:35:59.418Z</lastmod>
     <data>
         <display>
         <title>从无到有-在create-react-app基础上接入react-router、redux-saga</title>
@@ -96,6 +96,26 @@
     
     
   <url>
+    <loc>https://detectivehlh.github.io/wechat/%E6%B3%A8%E5%86%8C%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E5%8F%B7/</loc>
+    <lastmod>2018-09-14T08:21:45.472Z</lastmod>
+    <data>
+        <display>
+        <title>注册微信开发测试号</title>
+        <pubTime>2018-08-01T07:28:04.000Z</pubTime>
+        
+        <tag>微信开发</tag>
+         
+         
+           
+             
+              <breadCrumb title="微信" url="https://detectivehlh.github.io/categories/%E5%BE%AE%E4%BF%A1/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://detectivehlh.github.io/wechat/%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E6%8E%A5%E5%85%A5%E5%BE%AE%E4%BF%A1%E9%89%B4%E6%9D%83%E6%B5%81%E7%A8%8B/</loc>
     <lastmod>2018-09-14T08:21:45.472Z</lastmod>
     <data>
@@ -118,20 +138,17 @@
 
     
   <url>
-    <loc>https://detectivehlh.github.io/wechat/%E6%B3%A8%E5%86%8C%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E5%8F%B7/</loc>
-    <lastmod>2018-09-14T08:21:45.472Z</lastmod>
+    <loc>https://detectivehlh.github.io/mysql/mysqlAuthenticationCanNotBeLoaded/</loc>
+    <lastmod>2018-09-14T08:21:45.471Z</lastmod>
     <data>
         <display>
-        <title>注册微信开发测试号</title>
-        <pubTime>2018-08-01T07:28:04.000Z</pubTime>
+        <title>Authentication plugin 'caching_sha2_password' cannot be loaded</title>
+        <pubTime>2018-09-03T07:23:20.000Z</pubTime>
         
-        <tag>微信开发</tag>
+        <tag>mysql</tag>
          
          
            
-             
-              <breadCrumb title="微信" url="https://detectivehlh.github.io/categories/%E5%BE%AE%E4%BF%A1/"/>
-          
         </display>
     </data>
     </url>
@@ -160,23 +177,6 @@
 
     
   <url>
-    <loc>https://detectivehlh.github.io/mysql/mysqlAuthenticationCanNotBeLoaded/</loc>
-    <lastmod>2018-09-14T08:21:45.471Z</lastmod>
-    <data>
-        <display>
-        <title>Authentication plugin 'caching_sha2_password' cannot be loaded</title>
-        <pubTime>2018-09-03T07:23:20.000Z</pubTime>
-        
-        <tag>mysql</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://detectivehlh.github.io/wechat/wechat-js-sdk/</loc>
     <lastmod>2018-09-14T08:21:45.471Z</lastmod>
     <data>
@@ -192,26 +192,6 @@
            
              
               <breadCrumb title="微信" url="https://detectivehlh.github.io/categories/%E5%BE%AE%E4%BF%A1/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://detectivehlh.github.io/frontend/vue%E4%B8%AD%E4%BD%BF%E7%94%A8Autoprefixer/</loc>
-    <lastmod>2018-09-14T08:21:45.470Z</lastmod>
-    <data>
-        <display>
-        <title>在vue中使用Autoprefixed</title>
-        <pubTime>2018-07-26T12:56:46.000Z</pubTime>
-        
-        <tag>浏览器兼容</tag>
-         
-         
-           
-             
-              <breadCrumb title="Vue" url="https://detectivehlh.github.io/categories/Vue/"/>
           
         </display>
     </data>
@@ -259,17 +239,19 @@
 
     
   <url>
-    <loc>https://detectivehlh.github.io/frontend/html2canvas%E5%85%B3%E4%BA%8E%E5%9B%BE%E7%89%87%E4%B8%8D%E8%83%BD%E6%AD%A3%E5%B8%B8%E6%88%AA%E5%8F%96%E7%9A%84%E5%8E%9F%E5%9B%A0/</loc>
+    <loc>https://detectivehlh.github.io/frontend/vue%E4%B8%AD%E4%BD%BF%E7%94%A8Autoprefixer/</loc>
     <lastmod>2018-09-14T08:21:45.470Z</lastmod>
     <data>
         <display>
-        <title>html2canvas关于图片不能正常截取</title>
-        <pubTime>2018-07-30T14:25:37.000Z</pubTime>
+        <title>在vue中使用Autoprefixed</title>
+        <pubTime>2018-07-26T12:56:46.000Z</pubTime>
         
+        <tag>浏览器兼容</tag>
+         
          
            
              
-              <breadCrumb title="canvs" url="https://detectivehlh.github.io/categories/canvs/"/>
+              <breadCrumb title="Vue" url="https://detectivehlh.github.io/categories/Vue/"/>
           
         </display>
     </data>
@@ -290,6 +272,24 @@
            
              
               <breadCrumb title="前端" url="https://detectivehlh.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://detectivehlh.github.io/frontend/html2canvas%E5%85%B3%E4%BA%8E%E5%9B%BE%E7%89%87%E4%B8%8D%E8%83%BD%E6%AD%A3%E5%B8%B8%E6%88%AA%E5%8F%96%E7%9A%84%E5%8E%9F%E5%9B%A0/</loc>
+    <lastmod>2018-09-14T08:21:45.470Z</lastmod>
+    <data>
+        <display>
+        <title>html2canvas关于图片不能正常截取</title>
+        <pubTime>2018-07-30T14:25:37.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="canvs" url="https://detectivehlh.github.io/categories/canvs/"/>
           
         </display>
     </data>
@@ -319,6 +319,24 @@
 
     
   <url>
+    <loc>https://detectivehlh.github.io/devtools/%E5%AE%89%E5%88%A9%E4%B8%A4%E4%B8%AA%E5%A5%BD%E7%94%A8%E7%9A%84chrome%E6%8F%92%E4%BB%B6/</loc>
+    <lastmod>2018-09-14T08:21:45.469Z</lastmod>
+    <data>
+        <display>
+        <title>安利几个好用的chrome插件</title>
+        <pubTime>2018-08-01T09:09:07.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="插件" url="https://detectivehlh.github.io/categories/%E6%8F%92%E4%BB%B6/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://detectivehlh.github.io/backend/Koa%E4%B8%AD%E6%9B%B4%E6%96%B9%E4%BE%BF%E7%AE%80%E5%8D%95%E5%8F%91%E9%80%81%E5%93%8D%E5%BA%94%E7%9A%84%E6%96%B9%E5%BC%8F/</loc>
     <lastmod>2018-09-14T08:21:45.469Z</lastmod>
     <data>
@@ -334,24 +352,6 @@
            
              
               <breadCrumb title="Node.js" url="https://detectivehlh.github.io/categories/Node-js/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://detectivehlh.github.io/devtools/%E5%AE%89%E5%88%A9%E4%B8%A4%E4%B8%AA%E5%A5%BD%E7%94%A8%E7%9A%84chrome%E6%8F%92%E4%BB%B6/</loc>
-    <lastmod>2018-09-14T08:21:45.469Z</lastmod>
-    <data>
-        <display>
-        <title>安利几个好用的chrome插件</title>
-        <pubTime>2018-08-01T09:09:07.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="插件" url="https://detectivehlh.github.io/categories/%E6%8F%92%E4%BB%B6/"/>
           
         </display>
     </data>
