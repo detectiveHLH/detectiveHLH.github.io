@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","width":300,"display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。 这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就是，实现一个日志记录的工具类，然后在需要记录日志的接口中，添加一行代码。由这个日志工具类去判断此时应">
+<meta name="keywords" content="Aop,反射,日志">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志">
+<meta property="og:url" content="https://detectivehlh.github.io/java/spring-aop-log/index.html">
+<meta property="og:site_name" content="detectiveHLH&#39;s blog">
+<meta property="og:description" content="前言不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。 这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就是，实现一个日志记录的工具类，然后在需要记录日志的接口中，添加一行代码。由这个日志工具类去判断此时应">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://detectivehlh.github.io/images/post/java/request.png">
+<meta property="og:updated_time" content="2019-02-11T02:08:03.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志">
+<meta name="twitter:description" content="前言不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。 这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就是，实现一个日志记录的工具类，然后在需要记录日志的接口中，添加一行代码。由这个日志工具类去判断此时应">
+<meta name="twitter:image" content="https://detectivehlh.github.io/images/post/java/request.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://detectivehlh.github.io/java/spring-aop-log/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志 | detectiveHLH's blog</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=124888966"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '124888966');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">detectiveHLH's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">不想弹好吉他的撸铁狗，都不是好的程序员</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/java/spring-aop-log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lunhao Hu">
+      <meta itemprop="description" content="优化永无止境，做人要有追求">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="detectiveHLH's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-30 15:07:14" itemprop="dateCreated datePublished" datetime="2019-01-30T15:07:14+08:00">2019-01-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-11 10:08:03" itemprop="dateModified" datetime="2019-02-11T10:08:03+08:00">2019-02-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/java/spring-aop-log/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/java/spring-aop-log/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/java/spring-aop-log/" class="leancloud_visitors" data-flag-title="手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。</p>
+<p>这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就是，实现一个日志记录的工具类，然后在需要记录日志的接口中，添加一行代码。由这个日志工具类去判断此时应该处理哪些参数。</p>
+<p>但是这样有很大的问题。如果需要记日志的接口数量非常多，先不讨论这个工具类中需要做多少的类型判断，仅仅是给所有接口添加这样一行代码在我个人看来都是不能接受的行为。首先，这样对代码的侵入性太大。其次，后期万一有改动，维护的人将会十分难受。想象一下，全局搜索相同的代码，再一一进行修改。</p>
+<p>所以我放弃了这个略显原始的方法。我最终采用了Aop的方式，采取拦截的请求的方式，来记录日志。但是即使采用这个方法，仍然面临一个问题，那就是如何处理大量的参数。以及如何对应到每一个接口上。</p>
+<p>我最终没有拦截所有的controller，而是自定义了一个日志注解。所有打上了这个注解的方法，将会记录日志。同时，注解中会带有类型，来为当前的接口指定特定的日志内容以及参数。</p>
+<p>那么如何从众多可能的参数中，为当前的日志指定对应的参数呢。我的解决方案是维护一个参数类，里面列举了所有需要记录在日志中的参数名。然后在拦截请求时，通过反射，获取到该请求的request和response中的所有参数和值，如果该参数存在于我维护的param类中，则将对应的值赋值进去。</p>
+<p>然后在请求结束后，将模板中的所有预留的参数全部用赋了值的参数替换掉。这样一来，在不大量的侵入业务的前提下，满足了需求，同时也保证了代码的可维护性。</p>
+<p>下面我将会把详细的实现过程列举出来。</p>
+<h2 id="开始操作前"><a href="#开始操作前" class="headerlink" title="开始操作前"></a>开始操作前</h2><p>文章结尾我会给出这个demo项目的所有源码。所以不想看过程的兄台可移步到末尾，直接看源码。（听说和源码搭配，看文章更美味…）</p>
+<h2 id="开始操作"><a href="#开始操作" class="headerlink" title="开始操作"></a>开始操作</h2><h3 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h3><p>大家可以参考我之前写的另一篇文章，<a href="https://detectivehlh.github.io./java/newSprintBootStarter/" target="_blank" rel="noopener">手把手教你从零开始搭建SpringBoot后端项目框架</a>。只要能请求简单的接口就可以了。本项目的依赖如下。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.1.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.aspectj<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aspectjrt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.aspectj<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aspectjweaver<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.18.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>cn.hutool<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hutool-all<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.1.14<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="新建Aop类"><a href="#新建Aop类" class="headerlink" title="新建Aop类"></a>新建Aop类</h3><p>新建<code>LogAspect</code>类。代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Aspect;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Pointcut;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * LogAspect</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-01-30 16:21</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LogAspect</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 定义切入点</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Pointcut</span>(<span class="string">"@annotation(spring.aop.log.demo.api.util.Log)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operationLog</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 新增结果返回后触发</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> point</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> returnValue</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@AfterReturning</span>(returning = <span class="string">"returnValue"</span>, pointcut = <span class="string">"operationLog() &amp;&amp; @annotation(log)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAfterReturning</span><span class="params">(JoinPoint point, Object returnValue, Log log)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"test"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>Pointcut</code>中传入了一个注解，表示凡是打上了这个注解的方法，都会触发由<code>Pointcut</code>修饰的<code>operationLog</code>函数。而<code>AfterReturning</code>则是在请求返回之后触发。</p>
+<h3 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h3><p>上一步提到了自定义注解，这个自定义注解将打在controller的每个方法上。新建一个<code>annotation</code>的类。代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Log</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-01-30 16:19</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Log &#123;</span><br><span class="line">    <span class="function">String <span class="title">type</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>Target</code>和<code>Retention</code>都属于元注解。共有4种，分别是<code>@Retention</code>、<code>@Target</code>、<code>@Document</code>、<code>@Inherited</code>。</p>
+<p><code>Target</code>注解说明了该Annotation所修饰的范围。可以传入很多类型，参数为<code>ElementType</code>。例如<code>TYPE</code>，用于描述类、接口或者枚举类；<code>FIELD</code>用于描述属性；<code>METHOD</code>用于描述方法；<code>PARAMETER</code>用于描述参数；<code>CONSTRUCTOR</code>用于描述构造函数；<code>LOCAL_VARIABLE</code>用于描述局部变量；<code>ANNOTATION_TYPE</code>用于描述注解；<code>PACKAGE</code>用于描述包等。</p>
+<p><code>Retention</code>注解定义了该Annotation被保留的时间长短。参数为<code>RetentionPolicy</code>。例如<code>SOURCE</code>表示只在源码中存在，不会在编译后的class文件存在；<code>CLASS</code>是该注解的默认选项。 即存在于源码，也存在于编译后的class文件，但不会被加载到虚拟机中去；<code>RUNTIME</code>存在于源码、class文件以及虚拟机中，通俗一点讲就是可以在运行的时候通过反射获取到。</p>
+<h3 id="加上普通注解"><a href="#加上普通注解" class="headerlink" title="加上普通注解"></a>加上普通注解</h3><p>给需要记录日志的接口加上<code>Log</code>注解。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"><span class="keyword">import</span> spring.aop.log.demo.api.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * HelloController</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-01-30 15:52</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Log</span></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"test/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">(@PathVariable(name = <span class="string">"id"</span>)</span> Integer id) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello"</span> + id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>加上之后，每一次调用<code>test/{id}</code>这个接口，都会触发拦截器中的<code>doAfterReturning</code>方法中的代码。</p>
+<h3 id="加上带类型注解"><a href="#加上带类型注解" class="headerlink" title="加上带类型注解"></a>加上带类型注解</h3><p>上面介绍了记录普通日志的方法，接下来要介绍记录特定日志的方法。什么特定日志呢，就是每个接口要记录的信息不同。为了实现这个，我们需要实现一个操作类型的枚举类。代码如下。</p>
+<h4 id="操作类型模板枚举"><a href="#操作类型模板枚举" class="headerlink" title="操作类型模板枚举"></a>操作类型模板枚举</h4><p>新建一个枚举类<code>Type</code>。代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.util;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Type</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-01-30 17:12</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Type &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 操作类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    WARNING(<span class="string">"警告"</span>, <span class="string">"因被其他玩家举报，警告玩家"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String type;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 执行操作</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String operation;</span><br><span class="line"></span><br><span class="line">    Type(String type, String operation) &#123;</span><br><span class="line">        <span class="keyword">this</span>.type = type;</span><br><span class="line">        <span class="keyword">this</span>.operation = operation;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getType</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> type; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getOperation</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> operation; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="给注解加上类型"><a href="#给注解加上类型" class="headerlink" title="给注解加上类型"></a>给注解加上类型</h4><p>给上面的controller中的注解加上type。代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"><span class="keyword">import</span> spring.aop.log.demo.api.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * HelloController</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-01-30 15:52</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Log</span>(type = <span class="string">"WARNING"</span>)</span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"test/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">(@PathVariable(name = <span class="string">"id"</span>)</span> Integer id) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello"</span> + id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改aop类"><a href="#修改aop类" class="headerlink" title="修改aop类"></a>修改aop类</h4><p>将aop类中的<code>doAfterReturning</code>为如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AfterReturning</span>(returning = <span class="string">"returnValue"</span>, pointcut = <span class="string">"operationLog() &amp;&amp; @annotation(log)"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doAfterReturning</span><span class="params">(JoinPoint point, Object returnValue, Log log)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 注解中的类型</span></span><br><span class="line">    String enumKey = log.type();</span><br><span class="line">    System.out.println(Type.valueOf(enumKey).getOperation());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>加上之后，每一次调用加了<code>@Log(type = &quot;WARNING&quot;)</code>这个注解的接口，都会打印这个接口所指定的日志。例如上述代码就会打印出如下代码。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因被其他玩家举报，警告玩家</span><br></pre></td></tr></table></figure></p>
+<h4 id="获取aop拦截的请求参数"><a href="#获取aop拦截的请求参数" class="headerlink" title="获取aop拦截的请求参数"></a>获取aop拦截的请求参数</h4><p>为每个接口指定一个日志并不困难，只需要为每个接口指定一个类型即可。但是大家应该也注意到了，一个接口日志，只记录<code>因被其他玩家举报，警告玩家</code>这样的信息没有任何意义。</p>
+<p>记录日志的人倒不觉得，而最后去查看日志的人就要吾日三省吾身了，被谁举报了？因为什么举报了？我警告的谁？</p>
+<p>这样的日志做了太多的无用功，根本没有办法在出现问题之后溯源。所以我们下一步的操作就是给每个接口加上特定的参数。那么大家可能会有问题，如果每个接口的参数几乎都不一样，那这个工具类岂不是要传入很多参数，要怎么实现呢，甚至还要组织参数，这样会大量的侵入业务代码，并且会大量的增加冗余代码。</p>
+<p>大家可能会想到，实现一个记录日志的方法，在要记日志的接口中调用，把参数传进去。如果类型很多的话，参数也会随之增多，每个接口的参数都不一样。处理起来十分麻烦，而且对业务的侵入性太高。几乎每个地方都要嵌入日志相关代码。一旦涉及到修改，将会变得十分难维护。</p>
+<p>所以我直接利用反射获取aop拦截到的请求中的所有参数，如果我的参数类（所有要记录的参数）里面有请求中的参数，那么我就将参数的值写入参数类中。最后将日志模版中参数预留字段替换成请求中的参数。</p>
+<p>流程图如下所示。</p>
+<p><img src="/images/post/java/request.png" alt="request" title="request"></p>
+<h4 id="新建参数类"><a href="#新建参数类" class="headerlink" title="新建参数类"></a>新建参数类</h4><p>新建一个类<code>Param</code>，其中包含所有在操作日志中，可能会出现的参数。为什么要这么做？因为每个接口需要的参数都有可能完全不一样，与其去维护大量的判断逻辑，还不如<code>贪心</code>一点，直接传入所有的可能参数。当然后期如果有新的参数需要记录，则需要修改代码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Param</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-01-30 17:14</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Param</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 所有可能参数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String workOrderNumber;</span><br><span class="line">    <span class="keyword">private</span> String userId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改模板"><a href="#修改模板" class="headerlink" title="修改模板"></a>修改模板</h4><p>将模板枚举类中的<code>WARNING</code>修改为如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WARNING(<span class="string">"警告"</span>, <span class="string">"因 工单号 [(%workOrderNumber)] /举报 ID [(%id)] 警告玩家 [(%userId)]"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>其中的参数，就是要在aop拦截阶段获取并且替换掉的参数。</p>
+<h4 id="修改controller"><a href="#修改controller" class="headerlink" title="修改controller"></a>修改controller</h4><p>我们给之前的controller加上上述模板中国呢的参数。部分代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Log</span>(type = <span class="string">"WARNING"</span>)</span><br><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"test/&#123;id&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        @PathVariable(name = <span class="string">"id"</span>)</span> Integer id,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"workOrderNumber"</span>)</span> String workOrderNumber,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"userId"</span>)</span> String userId,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"name"</span>)</span> String name</span></span><br><span class="line"><span class="function">) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello"</span> + id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="通过反射获取请求的参数"><a href="#通过反射获取请求的参数" class="headerlink" title="通过反射获取请求的参数"></a>通过反射获取请求的参数</h3><p>在此处分两种情况，一种是简单参数类型，另外一种是复杂参数类型，也就是参数中带了请求DTO的情况。</p>
+<h3 id="获取简单参数类型"><a href="#获取简单参数类型" class="headerlink" title="获取简单参数类型"></a>获取简单参数类型</h3><p>给aop类添加几个私有变量。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 请求中的所有参数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> Object[] args;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 请求中的所有参数名</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> String[] paramNames;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 参数类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> Param params;</span><br></pre></td></tr></table></figure></p>
+<p>然后将<code>doAfterReturning</code>中的代码改成如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 获取请求详情</span></span><br><span class="line">    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();</span><br><span class="line">    HttpServletRequest request = attributes.getRequest();</span><br><span class="line">    HttpServletResponse response = attributes.getResponse();</span><br><span class="line">    <span class="comment">// 获取所有请求参数</span></span><br><span class="line">    Signature signature = point.getSignature();</span><br><span class="line">    MethodSignature methodSignature = (MethodSignature) signature;</span><br><span class="line">    <span class="keyword">this</span>.paramNames = methodSignature.getParameterNames();</span><br><span class="line">    <span class="keyword">this</span>.args = point.getArgs();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实例化参数类</span></span><br><span class="line">    <span class="keyword">this</span>.params = <span class="keyword">new</span> Param();</span><br><span class="line">    <span class="comment">// 注解中的类型</span></span><br><span class="line">    String enumKey = log.type();</span><br><span class="line">    String logDetail = Type.valueOf(enumKey).getOperation();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从请求传入参数中获取数据</span></span><br><span class="line">    <span class="keyword">this</span>.getRequestParam();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    System.out.println(e.getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>首先要做的就是拦截打上了自定义注解的请求。我们可以获取到请求的详情，以及请求中的所有的参数名，以及参数。下面我们就来实现上述代码中的<code>getRequestParam</code>方法。</p>
+<h4 id="getRequestParam"><a href="#getRequestParam" class="headerlink" title="getRequestParam"></a>getRequestParam</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取拦截的请求中的参数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> point</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getRequestParam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 获取简单参数类型</span></span><br><span class="line">    <span class="keyword">this</span>.getSimpleParam();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="getSimpleParam"><a href="#getSimpleParam" class="headerlink" title="getSimpleParam"></a>getSimpleParam</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取简单参数类型的值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getSimpleParam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 遍历请求中的参数名</span></span><br><span class="line">    <span class="keyword">for</span> (String reqParam : <span class="keyword">this</span>.paramNames) &#123;</span><br><span class="line">        <span class="comment">// 判断该参数在参数类中是否存在</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isExist(reqParam)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.setRequestParamValueIntoParam(reqParam);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码中，遍历请求所传入的参数名，然后我们实现<code>isExist</code>方法， 来判断这个参数在我们的<code>Param</code>类中是否存在，如果存在我们就再调用<code>setRequestParamValueIntoParam</code>方法，将这个参数名所对应的参数值写入到<code>Param</code>类的实例中。</p>
+<h4 id="isExist"><a href="#isExist" class="headerlink" title="isExist"></a>isExist</h4><p><code>isExist</code>的代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 判断该参数在参数类中是否存在（是否是需要记录的参数）</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> targetClass</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> name</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">Boolean <span class="title">isExist</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> exist = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        String key = <span class="keyword">this</span>.setFirstLetterUpperCase(name);</span><br><span class="line">        Method targetClassGetMethod = <span class="keyword">this</span>.params.getClass().getMethod(<span class="string">"get"</span> + key);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">        exist = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> exist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在上面我们也提到过，在编译的时候会加上getter和setter，所以参数名的首字母都会变成大写，所以我们需要自己实现一个<code>setFirstLetterUpperCase</code>方法，来将我们传入的参数名的首字母变成大写。</p>
+<h4 id="setFirstLetterUpperCase"><a href="#setFirstLetterUpperCase" class="headerlink" title="setFirstLetterUpperCase"></a>setFirstLetterUpperCase</h4><p>代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将字符串的首字母大写</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> str</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">setFirstLetterUpperCase</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (str == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str.substring(<span class="number">0</span>, <span class="number">1</span>).toUpperCase() + str.substring(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="setRequestParamValueIntoParam"><a href="#setRequestParamValueIntoParam" class="headerlink" title="setRequestParamValueIntoParam"></a>setRequestParamValueIntoParam</h4><p>代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 从参数中获取</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> paramName</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setRequestParamValueIntoParam</span><span class="params">(String paramName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> index = ArrayUtil.indexOf(<span class="keyword">this</span>.paramNames, paramName);</span><br><span class="line">    <span class="keyword">if</span> (index != -<span class="number">1</span>) &#123;</span><br><span class="line">        String value = String.valueOf(<span class="keyword">this</span>.args[index]);</span><br><span class="line">        <span class="keyword">this</span>.setParam(<span class="keyword">this</span>.params, paramName, value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>ArrayUtil</code>是<code>hutool</code>中的一个工具函数。用来判断在一个元素在数组中的下标。</p>
+<h4 id="setParam"><a href="#setParam" class="headerlink" title="setParam"></a>setParam</h4><p>代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将数据写入参数类的实例中</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> targetClass</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">setParam</span><span class="params">(T targetClass, String key, String value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Method targetClassParamSetMethod = targetClass.getClass().getMethod(<span class="string">"set"</span> + <span class="keyword">this</span>.setFirstLetterUpperCase(key), String.class);</span><br><span class="line">        targetClassParamSetMethod.invoke(targetClass, value);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>该函数使用反射的方法，获取该参数的set方法，将<code>Param</code>类中对应的参数设置成传入的值。</p>
+<h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><p>启动项目，并且请求controller中的方法。并且传入定义好的参数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:8080/test/8?workOrderNumber=3231732&amp;userId=748327843&amp;name=testName</span><br></pre></td></tr></table></figure></p>
+<p>该<code>GET</code>请求总共传入了4个参数，分别是<code>id</code>,<code>workOrderNumber</code>,<code>userId</code>, <code>name</code>。大家可以看到，在<code>Param</code>类中并没有定义<code>name</code>这个字段。这是特意加了一个不需要记录的参数，来验证我们接口的健壮性的。</p>
+<p>运行之后，可以看到控制台打印的信息如下。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Param(id=8, workOrderNumber=3231732, userId=748327843)</span><br></pre></td></tr></table></figure></p>
+<p>我们想让aop记录的参数全部记录到<code>Param</code>类中的实例中，而传入了意料之外的参数也没有让程序崩溃。接下里我们只需要将这些参数，将之前定义好的模板的参数预留字段替换掉即可。</p>
+<h4 id="替换参数"><a href="#替换参数" class="headerlink" title="替换参数"></a>替换参数</h4><p>在<code>doAfterReturning</code>中的<code>getRequestParam</code>函数后，加入以下代码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!logDetail.isEmpty()) &#123;</span><br><span class="line">    <span class="comment">// 将模板中的参数全部替换掉</span></span><br><span class="line">    logDetail = <span class="keyword">this</span>.replaceParam(logDetail);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(logDetail);</span><br></pre></td></tr></table></figure></p>
+<p>下面我们实现<code>replaceParam</code>方法。</p>
+<h4 id="replaceParam"><a href="#replaceParam" class="headerlink" title="replaceParam"></a>replaceParam</h4><p>代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将模板中的预留字段全部替换为拦截到的参数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> template</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">replaceParam</span><span class="params">(String template)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将模板中的需要替换的参数转化成map</span></span><br><span class="line">    Map&lt;String, String&gt; paramsMap = <span class="keyword">this</span>.convertToMap(template);</span><br><span class="line">    <span class="keyword">for</span> (String key : paramsMap.keySet()) &#123;</span><br><span class="line">        template = template.replace(<span class="string">"%"</span> + key, paramsMap.get(key)).replace(<span class="string">"("</span>, <span class="string">""</span>).replace(<span class="string">")"</span>, <span class="string">""</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> template;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>convertToMap</code>方法将模板中的所有预留字段全部提取出来，当作一个Map的Key。</p>
+<h4 id="convertToMap"><a href="#convertToMap" class="headerlink" title="convertToMap"></a>convertToMap</h4><p>代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将模板中的参数转换成map的key-value形式</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> template</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Map&lt;String, String&gt; <span class="title">convertToMap</span><span class="params">(String template)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    String[] arr = template.split(<span class="string">"\\("</span>);</span><br><span class="line">    <span class="keyword">for</span> (String s : arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (s.contains(<span class="string">"%"</span>)) &#123;</span><br><span class="line">            String key = s.substring(s.indexOf(<span class="string">"%"</span>), s.indexOf(<span class="string">")"</span>)).replace(<span class="string">"%"</span>, <span class="string">""</span>).replace(<span class="string">")"</span>, <span class="string">""</span>).replace(<span class="string">"-"</span>, <span class="string">""</span>).replace(<span class="string">"]"</span>, <span class="string">""</span>);</span><br><span class="line">            String value = <span class="keyword">this</span>.getParam(<span class="keyword">this</span>.params, key);</span><br><span class="line">            map.put(key, <span class="string">"null"</span>.equals(value) ? <span class="string">"(空)"</span> : value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中的<code>getParam</code>方法，类似于<code>setParam</code>，也是利用反射的方法，通过传入的Class和Key，获取对应的值。</p>
+<h4 id="getParam"><a href="#getParam" class="headerlink" title="getParam"></a>getParam</h4><p>代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 通过反射获取传入的类中对应key的值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> targetClass</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">String <span class="title">getParam</span><span class="params">(T targetClass, String key)</span> </span>&#123;</span><br><span class="line">    String value = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Method targetClassParamGetMethod = targetClass.getClass().getMethod(<span class="string">"get"</span> + <span class="keyword">this</span>.setFirstLetterUpperCase(key));</span><br><span class="line">        value = String.valueOf(targetClassParamGetMethod.invoke(targetClass));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="再次运行"><a href="#再次运行" class="headerlink" title="再次运行"></a>再次运行</h4><p>再次请求上述的url，则可以看到控制台的输出如下。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因 工单号 [3231732] /举报 ID [8] 警告玩家 [748327843]</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，我们需要记录的所有的参数，都被正确的替换了。而不需要记录的参数，同样也没有对程序造成影响。</p>
+<p>让我们试试传入不传入非必选参数，会是什么样。修改controller如下，把workOrderNumber改成非必须按参数。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Log</span>(type = <span class="string">"WARNING"</span>)</span><br><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"test/&#123;id&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        @PathVariable(name = <span class="string">"id"</span>)</span> Integer id,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"workOrderNumber"</span>, required = <span class="keyword">false</span>)</span> String workOrderNumber,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"userId"</span>)</span> String userId,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"name"</span>)</span> String name</span></span><br><span class="line"><span class="function">) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello"</span> + id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>请求如下url。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:8080/<span class="built_in">test</span>/8?userId=748327843&amp;name=testName</span><br></pre></td></tr></table></figure></p>
+<p>然后可以看到，控制台的输出如下。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因 工单号 [空] /举报 ID [8] 警告玩家 [748327843]</span><br></pre></td></tr></table></figure></p>
+<p>并不会影响程序的正常运行。</p>
+<h3 id="获取复杂参数类型"><a href="#获取复杂参数类型" class="headerlink" title="获取复杂参数类型"></a>获取复杂参数类型</h3><p>接下来要介绍的是如何记录复杂参数类型的日志。其实，大致的思路是不变的。我们看传入的类中的参数，有没有需要记录的。有的话就按照上面记录简单参数的方法来替换记录参数。</p>
+<h4 id="定义测试复杂类型"><a href="#定义测试复杂类型" class="headerlink" title="定义测试复杂类型"></a>定义测试复杂类型</h4><p>新建<code>TestDTO</code>。代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * TestDto</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-02-01 15:02</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDTO</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改Param"><a href="#修改Param" class="headerlink" title="修改Param"></a>修改Param</h4><p>将上面的所有的参数全部添加到<code>Param</code>类中，全部定义成字符串类型。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Param</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-01-30 17:14</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Param</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 所有可能参数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String age;</span><br><span class="line">    <span class="keyword">private</span> String workOrderNumber;</span><br><span class="line">    <span class="keyword">private</span> String userId;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改模板-1"><a href="#修改模板-1" class="headerlink" title="修改模板"></a>修改模板</h4><p>将<code>WARNING</code>模板修改如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 操作类型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">WARNING(<span class="string">"警告"</span>, <span class="string">"因 工单号 [(%workOrderNumber)] /举报 ID [(%id)] 警告玩家 [(%userId)], 游戏名 [(%name)], 年龄 [(%age)]"</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改controller-1"><a href="#修改controller-1" class="headerlink" title="修改controller"></a>修改controller</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Log</span>(type = <span class="string">"WARNING"</span>)</span><br><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"test/&#123;id&#125;"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        @PathVariable(name = <span class="string">"id"</span>)</span> Integer id,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"workOrderNumber"</span>, required = <span class="keyword">false</span>)</span> String workOrderNumber,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"userId"</span>)</span> String userId,</span></span><br><span class="line"><span class="function">        @RequestBody TestDTO testDTO</span></span><br><span class="line"><span class="function">) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello"</span> + id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="修改getRequestParam"><a href="#修改getRequestParam" class="headerlink" title="修改getRequestParam"></a>修改getRequestParam</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取拦截的请求中的参数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> point</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getRequestParam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 获取简单参数类型</span></span><br><span class="line">    <span class="keyword">this</span>.getSimpleParam();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取复杂参数类型</span></span><br><span class="line">    <span class="keyword">this</span>.getComplexParam();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来实现<code>getComplexParam</code>方法。</p>
+<h4 id="getComplexParam"><a href="#getComplexParam" class="headerlink" title="getComplexParam"></a>getComplexParam</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取复杂参数类型的值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getComplexParam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Object arg : <span class="keyword">this</span>.args) &#123;</span><br><span class="line">        <span class="comment">// 跳过简单类型的值</span></span><br><span class="line">        <span class="keyword">if</span> (arg != <span class="keyword">null</span> &amp;&amp; !<span class="keyword">this</span>.isBasicType(arg)) &#123;</span><br><span class="line">           <span class="keyword">this</span>.getFieldsParam(arg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="getFieldsParam"><a href="#getFieldsParam" class="headerlink" title="getFieldsParam"></a>getFieldsParam</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 遍历一个复杂类型，获取值并赋值给param</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> target</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">getFieldsParam</span><span class="params">(T target)</span> </span>&#123;</span><br><span class="line">    Field[] fields = target.getClass().getDeclaredFields();</span><br><span class="line">    <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">        String paramName = field.getName();</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isExist(paramName)) &#123;</span><br><span class="line">            String value = <span class="keyword">this</span>.getParam(target, paramName);</span><br><span class="line">            <span class="keyword">this</span>.setParam(<span class="keyword">this</span>.params, paramName, value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="运行-1"><a href="#运行-1" class="headerlink" title="运行"></a>运行</h4><p>启动项目。使用postman对上面的url发起POST请求。请求body中带上<code>TestDTO</code>中的参数。请求成功返回后就会看到控制台输出如下。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因 工单号 [空] /举报 ID [8] 警告玩家 [748327843], 游戏名 [tom], 年龄 [12]</span><br></pre></td></tr></table></figure></p>
+<p>然后就可以根据需求，将上面的日志记录到相应的地方。</p>
+<p>到这可能有些哥们就觉得行了，万事具备，只欠东风。但其实这样的实现方式，还存在几个问题。</p>
+<p>比如，如果请求失败了怎么办？请求失败，在需求上将，是根本不需要记录操作日志的，但是即使请求失败也会有返回值，就代表日志也会成功的记录。这就给后期查看日志带来了很大的困扰。</p>
+<p>再比如，如果我需要的参数在返回值中怎么办？如果你没有用统一的生成唯一id的服务，就会遇到这个问题。就比如我需要往数据库中插入一条新的数据，我需要得到数据库自增id，而我们的日志拦截只拦截了请求中的参数。所以这就是我们接下来要解决的问题。</p>
+<h3 id="判断请求是否成功"><a href="#判断请求是否成功" class="headerlink" title="判断请求是否成功"></a>判断请求是否成功</h3><p>实现<code>success</code>函数，代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 根据http状态码判断请求是否成功</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> response</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Boolean <span class="title">success</span><span class="params">(HttpServletResponse response)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> response.getStatus() == <span class="number">200</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后将<code>getRequestParam</code>之后的所有操作，包括<code>getRequestParam</code>本身，用<code>success</code>包裹起来。如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">this</span>.success(response)) &#123;</span><br><span class="line">    <span class="comment">// 从请求传入参数中获取数据</span></span><br><span class="line">    <span class="keyword">this</span>.getRequestParam();</span><br><span class="line">    <span class="keyword">if</span> (!logDetail.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">// 将模板中的参数全部替换掉</span></span><br><span class="line">        logDetail = <span class="keyword">this</span>.replaceParam(logDetail);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样一来，就可以保证只有在请求成功的前提下，才会记录日志。</p>
+<h3 id="通过反射获取返回的参数"><a href="#通过反射获取返回的参数" class="headerlink" title="通过反射获取返回的参数"></a>通过反射获取返回的参数</h3><h4 id="新建Result类"><a href="#新建Result类" class="headerlink" title="新建Result类"></a>新建Result类</h4><p>在一个项目中，我们用一个类来统一返回值。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spring.aop.log.demo.api.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Result</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Lunhao Hu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-02-01 16:47</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Result</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String email;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="修改controller-2"><a href="#修改controller-2" class="headerlink" title="修改controller"></a>修改controller</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Log</span>(type = <span class="string">"WARNING"</span>)</span><br><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"test"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> Result <span class="title">test</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        @RequestParam(name = <span class="string">"workOrderNumber"</span>, required = <span class="keyword">false</span>)</span> String workOrderNumber,</span></span><br><span class="line"><span class="function">        @<span class="title">RequestParam</span><span class="params">(name = <span class="string">"userId"</span>)</span> String userId,</span></span><br><span class="line"><span class="function">        @RequestBody TestDTO testDTO</span></span><br><span class="line"><span class="function">) </span>&#123;</span><br><span class="line">    Result result = <span class="keyword">new</span> Result();</span><br><span class="line">    result.setId(<span class="number">1</span>);</span><br><span class="line">    result.setAge(testDTO.getAge());</span><br><span class="line">    result.setName(testDTO.getName());</span><br><span class="line">    result.setEmail(testDTO.getEmail());</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="运行-2"><a href="#运行-2" class="headerlink" title="运行"></a>运行</h4><p>启动项目，发起POST请求会发现，返回值如下。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"id"</span>: 1,</span><br><span class="line">    <span class="string">"name"</span>: <span class="string">"tom"</span>,</span><br><span class="line">    <span class="string">"age"</span>: 12,</span><br><span class="line">    <span class="string">"email"</span>: <span class="string">"test@test.com"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>而控制台的输出如下。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因 工单号 [39424] /举报 ID [空] 警告玩家 [748327843], 游戏名 [tom], 年龄 [12]</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，<code>id</code>没有被获取到。所以我们还需要添加一个函数，从返回值中获取id的数据。</p>
+<h4 id="getResponseParam"><a href="#getResponseParam" class="headerlink" title="getResponseParam"></a>getResponseParam</h4><p>在<code>getRequestParam</code>后，添加方法<code>getResponseParam</code>，直接调用之前写好的函数。代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 从返回值从获取数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getResponseParam</span><span class="params">(Object value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.getFieldsParam(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="运行-3"><a href="#运行-3" class="headerlink" title="运行"></a>运行</h4><p>再次发起POST请求，可以发现控制台的输出如下。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因 工单号 [39424] /举报 ID [1] 警告玩家 [748327843], 游戏名 [tom], 年龄 [12]</span><br></pre></td></tr></table></figure></p>
+<p>一旦得到了这条信息，我们就可以把它记录到任何我们想记录的地方。</p>
+<h2 id="项目源码地址"><a href="#项目源码地址" class="headerlink" title="项目源码地址"></a>项目源码地址</h2><p>想要参考源码的大佬请戳 <a href="https://github.com/detectiveHLH/spring-aop-log-demo" target="_blank" rel="noopener">-&gt;这里&lt;-</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
+          
+            <a href="/tags/Aop/" rel="tag"># Aop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/java/redis-template-cache/" rel="next" title="在Java中使用redisTemplate操作缓存">
+                <i class="fa fa-chevron-left"></i> 在Java中使用redisTemplate操作缓存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="Lunhao Hu" />
+            
+              <p class="site-author-name" itemprop="name">Lunhao Hu</p>
+              <p class="site-description motion-element" itemprop="description">优化永无止境，做人要有追求</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/detectiveHLH" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始操作前"><span class="nav-number">2.</span> <span class="nav-text">开始操作前</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始操作"><span class="nav-number">3.</span> <span class="nav-text">开始操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新建项目"><span class="nav-number">3.1.</span> <span class="nav-text">新建项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建Aop类"><span class="nav-number">3.2.</span> <span class="nav-text">新建Aop类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义注解"><span class="nav-number">3.3.</span> <span class="nav-text">自定义注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加上普通注解"><span class="nav-number">3.4.</span> <span class="nav-text">加上普通注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加上带类型注解"><span class="nav-number">3.5.</span> <span class="nav-text">加上带类型注解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#操作类型模板枚举"><span class="nav-number">3.5.1.</span> <span class="nav-text">操作类型模板枚举</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#给注解加上类型"><span class="nav-number">3.5.2.</span> <span class="nav-text">给注解加上类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改aop类"><span class="nav-number">3.5.3.</span> <span class="nav-text">修改aop类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取aop拦截的请求参数"><span class="nav-number">3.5.4.</span> <span class="nav-text">获取aop拦截的请求参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#新建参数类"><span class="nav-number">3.5.5.</span> <span class="nav-text">新建参数类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改模板"><span class="nav-number">3.5.6.</span> <span class="nav-text">修改模板</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改controller"><span class="nav-number">3.5.7.</span> <span class="nav-text">修改controller</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过反射获取请求的参数"><span class="nav-number">3.6.</span> <span class="nav-text">通过反射获取请求的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取简单参数类型"><span class="nav-number">3.7.</span> <span class="nav-text">获取简单参数类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#getRequestParam"><span class="nav-number">3.7.1.</span> <span class="nav-text">getRequestParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getSimpleParam"><span class="nav-number">3.7.2.</span> <span class="nav-text">getSimpleParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#isExist"><span class="nav-number">3.7.3.</span> <span class="nav-text">isExist</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setFirstLetterUpperCase"><span class="nav-number">3.7.4.</span> <span class="nav-text">setFirstLetterUpperCase</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setRequestParamValueIntoParam"><span class="nav-number">3.7.5.</span> <span class="nav-text">setRequestParamValueIntoParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setParam"><span class="nav-number">3.7.6.</span> <span class="nav-text">setParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行"><span class="nav-number">3.7.7.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#替换参数"><span class="nav-number">3.7.8.</span> <span class="nav-text">替换参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#replaceParam"><span class="nav-number">3.7.9.</span> <span class="nav-text">replaceParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#convertToMap"><span class="nav-number">3.7.10.</span> <span class="nav-text">convertToMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getParam"><span class="nav-number">3.7.11.</span> <span class="nav-text">getParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#再次运行"><span class="nav-number">3.7.12.</span> <span class="nav-text">再次运行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取复杂参数类型"><span class="nav-number">3.8.</span> <span class="nav-text">获取复杂参数类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义测试复杂类型"><span class="nav-number">3.8.1.</span> <span class="nav-text">定义测试复杂类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改Param"><span class="nav-number">3.8.2.</span> <span class="nav-text">修改Param</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改模板-1"><span class="nav-number">3.8.3.</span> <span class="nav-text">修改模板</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改controller-1"><span class="nav-number">3.8.4.</span> <span class="nav-text">修改controller</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改getRequestParam"><span class="nav-number">3.8.5.</span> <span class="nav-text">修改getRequestParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getComplexParam"><span class="nav-number">3.8.6.</span> <span class="nav-text">getComplexParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getFieldsParam"><span class="nav-number">3.8.7.</span> <span class="nav-text">getFieldsParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行-1"><span class="nav-number">3.8.8.</span> <span class="nav-text">运行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断请求是否成功"><span class="nav-number">3.9.</span> <span class="nav-text">判断请求是否成功</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过反射获取返回的参数"><span class="nav-number">3.10.</span> <span class="nav-text">通过反射获取返回的参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建Result类"><span class="nav-number">3.10.1.</span> <span class="nav-text">新建Result类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改controller-2"><span class="nav-number">3.10.2.</span> <span class="nav-text">修改controller</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行-2"><span class="nav-number">3.10.3.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getResponseParam"><span class="nav-number">3.10.4.</span> <span class="nav-text">getResponseParam</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行-3"><span class="nav-number">3.10.5.</span> <span class="nav-text">运行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目源码地址"><span class="nav-number">4.</span> <span class="nav-text">项目源码地址</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lunhao Hu</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1548832034000',
+            owner: 'detectiveHLH',
+            repo: 'detectiveHLH.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b',
+            
+                client_id: 'e07655d9c13124115cb8'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz",
+                'X-LC-Key': "w9colOCMhD54kJr6lybpWuoy",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
