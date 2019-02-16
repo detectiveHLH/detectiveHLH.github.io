@@ -108,25 +108,32 @@
 
 
 
-  <meta name="description" content="Github传送门 koa2-response 背景 最近做了很多node的后台项目，写了很多接口，但是发现随着接口的慢慢增多，需要写越来越来越多类似于下面这种代码。 123456789ctx.body = &amp;#123;    data: &amp;#123;        name: &apos;test&apos;    &amp;#125;,    status: &amp;#123;        code: 0,        m">
-<meta name="keywords" content="koa,中间件">
+  <meta name="description" content="前言其实18年之前写过一篇关于chrome插件的文章，里面安利了4个chrome插件。鉴于这已经是9102年了，之前觉得好用的chrome插件跟新了解到的比起来，还是差了那么点味道。所以决定再更新一波，顺便补上之前漏掉的几个插件。 运用有效的有用的插件，会让我们的工作在一个相对舒适的状态，工作起来更加的流畅。 Toby-不直观算我输大家可以将Toby当成加强版的书签栏，大家可以分类把常去的网站收藏">
+<meta name="keywords" content="博客">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Koa中更方便简单发送响应的方式">
-<meta property="og:url" content="https://detectivehlh.github.io/backend/Koa中更方便简单发送响应的方式/index.html">
+<meta property="og:title" content="什么？你竟然还没有用这几个chrome插件？">
+<meta property="og:url" content="https://detectivehlh.github.io/devtools/useful-chrome-extension/index.html">
 <meta property="og:site_name" content="detectiveHLH&#39;s blog">
-<meta property="og:description" content="Github传送门 koa2-response 背景 最近做了很多node的后台项目，写了很多接口，但是发现随着接口的慢慢增多，需要写越来越来越多类似于下面这种代码。 123456789ctx.body = &amp;#123;    data: &amp;#123;        name: &apos;test&apos;    &amp;#125;,    status: &amp;#123;        code: 0,        m">
+<meta property="og:description" content="前言其实18年之前写过一篇关于chrome插件的文章，里面安利了4个chrome插件。鉴于这已经是9102年了，之前觉得好用的chrome插件跟新了解到的比起来，还是差了那么点味道。所以决定再更新一波，顺便补上之前漏掉的几个插件。 运用有效的有用的插件，会让我们的工作在一个相对舒适的状态，工作起来更加的流畅。 Toby-不直观算我输大家可以将Toby当成加强版的书签栏，大家可以分类把常去的网站收藏">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-14T08:21:45.469Z">
+<meta property="og:image" content="https://detectivehlh.github.io/images/post/devtools/toby.png">
+<meta property="og:image" content="https://detectivehlh.github.io/images/post/devtools/todoist.png">
+<meta property="og:image" content="https://detectivehlh.github.io/images/post/devtools/recover-closed-tab.png">
+<meta property="og:image" content="https://detectivehlh.github.io/images/post/devtools/saladict.png">
+<meta property="og:image" content="https://detectivehlh.github.io/images/post/devtools/crx-mouse.png">
+<meta property="og:image" content="https://detectivehlh.github.io/images/post/devtools/octotree.png">
+<meta property="og:updated_time" content="2019-02-16T10:08:36.299Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Koa中更方便简单发送响应的方式">
-<meta name="twitter:description" content="Github传送门 koa2-response 背景 最近做了很多node的后台项目，写了很多接口，但是发现随着接口的慢慢增多，需要写越来越来越多类似于下面这种代码。 123456789ctx.body = &amp;#123;    data: &amp;#123;        name: &apos;test&apos;    &amp;#125;,    status: &amp;#123;        code: 0,        m">
+<meta name="twitter:title" content="什么？你竟然还没有用这几个chrome插件？">
+<meta name="twitter:description" content="前言其实18年之前写过一篇关于chrome插件的文章，里面安利了4个chrome插件。鉴于这已经是9102年了，之前觉得好用的chrome插件跟新了解到的比起来，还是差了那么点味道。所以决定再更新一波，顺便补上之前漏掉的几个插件。 运用有效的有用的插件，会让我们的工作在一个相对舒适的状态，工作起来更加的流畅。 Toby-不直观算我输大家可以将Toby当成加强版的书签栏，大家可以分类把常去的网站收藏">
+<meta name="twitter:image" content="https://detectivehlh.github.io/images/post/devtools/toby.png">
 
 
 
 
 
 
-  <link rel="canonical" href="https://detectivehlh.github.io/backend/Koa中更方便简单发送响应的方式/"/>
+  <link rel="canonical" href="https://detectivehlh.github.io/devtools/useful-chrome-extension/"/>
 
 
 
@@ -136,7 +143,7 @@
   };
 </script>
 
-  <title>Koa中更方便简单发送响应的方式 | detectiveHLH's blog</title>
+  <title>什么？你竟然还没有用这几个chrome插件？ | detectiveHLH's blog</title>
   
 
 
@@ -318,7 +325,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/backend/Koa中更方便简单发送响应的方式/">
+    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/devtools/useful-chrome-extension/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lunhao Hu">
@@ -335,7 +342,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Koa中更方便简单发送响应的方式
+          <h1 class="post-title" itemprop="name headline">什么？你竟然还没有用这几个chrome插件？
               
             
           </h1>
@@ -360,7 +367,7 @@
                 
               
 
-              <time title="创建时间：2018-07-13 11:29:10" itemprop="dateCreated datePublished" datetime="2018-07-13T11:29:10+08:00">2018-07-13</time>
+              <time title="创建时间：2019-02-12 16:12:47" itemprop="dateCreated datePublished" datetime="2019-02-12T16:12:47+08:00">2019-02-12</time>
             
 
             
@@ -377,7 +384,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-16 18:08:36" itemprop="dateModified" datetime="2019-02-16T18:08:36+08:00">2019-02-16</time>
               
             
           </span>
@@ -394,7 +401,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Node-js/" itemprop="url" rel="index"><span itemprop="name">Node.js</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/插件/" itemprop="url" rel="index"><span itemprop="name">插件</span></a></span>
 
                 
                 
@@ -409,8 +416,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/backend/Koa中更方便简单发送响应的方式/#comments" itemprop="discussionUrl">
-                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/backend/Koa中更方便简单发送响应的方式/" itemprop="commentsCount"></span>
+                <a href="/devtools/useful-chrome-extension/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/devtools/useful-chrome-extension/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -418,7 +425,7 @@
 
           
           
-             <span id="/backend/Koa中更方便简单发送响应的方式/" class="leancloud_visitors" data-flag-title="Koa中更方便简单发送响应的方式">
+             <span id="/devtools/useful-chrome-extension/" class="leancloud_visitors" data-flag-title="什么？你竟然还没有用这几个chrome插件？">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -449,21 +456,38 @@
       
 
       
-        <p>Github传送门 <a href="https://github.com/detectiveHLH/koa2-response" target="_blank" rel="noopener">koa2-response</a></p>
-<p><strong>背景</strong></p>
-<p>最近做了很多node的后台项目，写了很多接口，但是发现随着接口的慢慢增多，需要写越来越来越多类似于下面这种代码。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ctx.body = &#123;</span><br><span class="line">    data: &#123;</span><br><span class="line">        name: <span class="string">'test'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    status: &#123;</span><br><span class="line">        code: <span class="number">0</span>,</span><br><span class="line">        message: success</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其实18年之前写过一篇关于chrome插件的文章，里面安利了4个chrome插件。鉴于这已经是9102年了，之前觉得好用的chrome插件跟新了解到的比起来，还是差了那么点味道。所以决定再更新一波，顺便补上之前漏掉的几个插件。</p>
+<p>运用有效的有用的插件，会让我们的工作在一个相对舒适的状态，工作起来更加的流畅。</p>
+<h2 id="Toby-不直观算我输"><a href="#Toby-不直观算我输" class="headerlink" title="Toby-不直观算我输"></a>Toby-不直观算我输</h2><p>大家可以将Toby当成加强版的书签栏，大家可以分类把常去的网站收藏起来，还可以正对每个分类打上对应的tag，在右上角进行筛选。</p>
 <a id="more"></a>
-<p>写成这样还好，至少做到了所有接口返回的格式统一，如果没有在这方面做规范，那么后台的接口返回不统一，将会给前端带来很多的问题。</p>
-<p>而且每个接口都要写这么一大堆的代码。感觉是个特别麻烦的事。</p>
-<p>所以koa2-response就这么诞生了。其实在写这篇文章之前，我已经在我的项目里面用了一段时间了，方便了我们的操作。</p>
-<p><strong>安装</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install koa2-response</span><br></pre></td></tr></table></figure>
-<p><strong>用法</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> koa = <span class="built_in">require</span>(<span class="string">'koa'</span>);</span><br><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)();</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> koa();</span><br><span class="line"><span class="keyword">const</span> response = <span class="built_in">require</span>(<span class="string">'koa2-response'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> code = &#123;</span><br><span class="line">  UNKNOWN_ERROR: [<span class="number">1</span>, <span class="string">'Sorry, you seem to have encountered some unknown errors.'</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">router</span><br><span class="line">  .get(<span class="string">'/'</span>, (ctx, next) =&gt; &#123;</span><br><span class="line">    response.success(ctx, &#123;</span><br><span class="line">      name: <span class="string">'test'</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  .get(<span class="string">'/error_test'</span>, (ctx, next) =&gt; &#123;</span><br><span class="line">    response.error(ctx, code.UNKNOWN_ERROR);</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">app.use(router.routes());</span><br><span class="line">app.use(router.allowedMethods());</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
-<p>就这样很简单的就可以统一后端的返回数据，这个方法让我在项目中节约了很多时间。这个中间件还是在持续更新中，现在已经有的方法是response.success和response.error。我打算继续更新一个方法叫response.throw，这可以让后台自定义返回的http状态码以及错误信息。例如，用户没有权限，http的状态码就应该是401，而不应该是我们自定义的code了。</p>
-<p><strong>写在后面</strong></p>
-<p>大家如果有更好的解决方案，希望不吝赐教。</p>
+<p>当你打开了很多要用的网站，但是不得不关闭电脑时，toby可以一次性将目前打开的所有的网页全部存下来，下次再打开浏览器时，直接恢复就可以了。</p>
+<p><img src="/images/post/devtools/toby.png" alt="toby" title="toby"></p>
+<p>官网地址：<a href="https://www.gettoby.com/" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<p>安装地址：<a href="https://chrome.google.com/webstore/detail/toby-for-chrome/hddnkoipeenegfoeaoibdmnaalmgkpip?utm_source=chrome-ntp-icon" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<h2 id="todoist-忘了要做什么是不可能的"><a href="#todoist-忘了要做什么是不可能的" class="headerlink" title="todoist-忘了要做什么是不可能的"></a>todoist-忘了要做什么是不可能的</h2><p>如果你每天都太多的事情需要做，但是记性不太好，有些时候会把大部分需要做的事情忘记，那么你可能需要<code>todoist</code>。</p>
+<p>这是一个插件式的to-do-list。在App Store里面还有桌面版的todoist，登陆同样的账号就可以实现数据联动。</p>
+<p><img src="/images/post/devtools/todoist.png" alt="todoist" title="todoist"></p>
+<p>官网地址：<a href="https://todoist.com" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<p>安装地址：<a href="https://chrome.google.com/webstore/detail/todoist-to-do-list-and-ta/jldhpllghnbhlbpcmnajkpdmadaolakh?utm_source=chrome-ntp-icon" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<h2 id="recover-close-tab-再也不翻历史记录"><a href="#recover-close-tab-再也不翻历史记录" class="headerlink" title="recover close tab-再也不翻历史记录"></a>recover close tab-再也不翻历史记录</h2><p>经常手残把需要用到的网页给关掉了？关掉了还不不知道网址？不知道网址还要去历史记录中找一遍？</p>
+<p>recover-close-tab就是为你准备的。它可以直接打开你最后一个关闭的网页。特别适合手残党。</p>
+<p><img src="/images/post/devtools/recover-closed-tab.png" alt="recover-closed-tab" title="recover-closed-tab"></p>
+<p>安装地址：<a href="https://chrome.google.com/webstore/detail/todoist-to-do-list-and-ta/jldhpllghnbhlbpcmnajkpdmadaolakh?utm_source=chrome-ntp-icon" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<h2 id="saladict-妈妈再也不用担心我看不懂英文文档"><a href="#saladict-妈妈再也不用担心我看不懂英文文档" class="headerlink" title="saladict-妈妈再也不用担心我看不懂英文文档"></a>saladict-妈妈再也不用担心我看不懂英文文档</h2><p>这是一款翻译用的插件。对一个需要翻译的句子或者单词，给出多种翻译工具的参考。</p>
+<p>有的时候这个翻译工具的翻译结果和另外一个工具的翻译结果是有一定的差别的，所以综合多个结果参考，才能更好的理解原文的意思。</p>
+<p><img src="/images/post/devtools/saladict.png" alt="saladict" title="saladict"></p>
+<p>官网地址：<a href="https://www.crimx.com/ext-saladict/" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<p>安装地址：<a href="https://chrome.google.com/webstore/detail/%E6%B2%99%E6%8B%89%E6%9F%A5%E8%AF%8D-%E8%81%9A%E5%90%88%E8%AF%8D%E5%85%B8%E5%88%92%E8%AF%8D%E7%BF%BB%E8%AF%91/cdonnmffkdaoajfknoeeecmchibpmkmg" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<h2 id="crx-mouse-这辈子不可能再点回退键"><a href="#crx-mouse-这辈子不可能再点回退键" class="headerlink" title="crx-mouse-这辈子不可能再点回退键"></a>crx-mouse-这辈子不可能再点回退键</h2><p>自从用了这个插件之后，我觉得再点击左上角的退回键是有多么的难受。</p>
+<p>利用这个鼠标手势插件，按住右键轻轻往左一滑，就可以回退到上个访问的网页。就像我之前说的，很流畅。</p>
+<p>还有很多其他的手势可以用，例如移动到左边的tab、移动到右边的tab、new一个tab、关闭当前tab、前进、后退、快速向下滑一页、快速向上滑一页等等，十分有用。</p>
+<p><img src="/images/post/devtools/crx-mouse.png" alt="crx-mouse" title="crx-mouse"></p>
+<p>官网地址：<a href="https://crxmouse.com/" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<p>安装地址：<a href="https://chrome.google.com/webstore/detail/crxmouse-chrome-gestures/jlgkpaicikihijadgifklkbpdajbkhjo?hl=zh-CN" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<h2 id="octotree-终于可以安静的看源码了"><a href="#octotree-终于可以安静的看源码了" class="headerlink" title="octotree-终于可以安静的看源码了"></a>octotree-终于可以安静的看源码了</h2><p>在github上看一些项目的源码的时候，回到上一级的体验很不好，有的时候要等很久，有的时候找文件也要很久。而这个插件可以像你的ide一样将整个项目的树形结构展示出来。</p>
+<p><img src="/images/post/devtools/octotree.png" alt="octotree" title="octotree"></p>
+<p>安装地址：<a href="https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc?hl=en-US" target="_blank" rel="noopener">–&gt;戳这&lt;–</a></p>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>欢迎各位大佬安利你们觉得好用的插件，大家可以一起分享交流，相互提升自己的”用户体验”。</p>
 
       
     </div>
@@ -482,14 +506,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/koa/" rel="tag"># koa</a>
-          
-            <a href="/tags/中间件/" rel="tag"># 中间件</a>
-          
-        </div>
-      
 
       
       
@@ -499,8 +515,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/frontend/js与css放置的位置问题/" rel="next" title="js与css放置的位置问题">
-                <i class="fa fa-chevron-left"></i> js与css放置的位置问题
+              <a href="/java/spring-aop-log/" rel="next" title="手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志">
+                <i class="fa fa-chevron-left"></i> 手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志
               </a>
             
           </div>
@@ -508,10 +524,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/backend/对koa2-response实现真正的中间件调用/" rel="prev" title="对koa2-response实现真正的中间件调用">
-                对koa2-response实现真正的中间件调用 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -563,8 +575,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -694,6 +715,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Toby-不直观算我输"><span class="nav-number">2.</span> <span class="nav-text">Toby-不直观算我输</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#todoist-忘了要做什么是不可能的"><span class="nav-number">3.</span> <span class="nav-text">todoist-忘了要做什么是不可能的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#recover-close-tab-再也不翻历史记录"><span class="nav-number">4.</span> <span class="nav-text">recover close tab-再也不翻历史记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#saladict-妈妈再也不用担心我看不懂英文文档"><span class="nav-number">5.</span> <span class="nav-text">saladict-妈妈再也不用担心我看不懂英文文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#crx-mouse-这辈子不可能再点回退键"><span class="nav-number">6.</span> <span class="nav-text">crx-mouse-这辈子不可能再点回退键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#octotree-终于可以安静的看源码了"><span class="nav-number">7.</span> <span class="nav-text">octotree-终于可以安静的看源码了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在后面"><span class="nav-number">8.</span> <span class="nav-text">写在后面</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -868,7 +905,7 @@
       <script type="text/javascript">
       function renderGitment(){
         var gitment = new Gitmint({
-            id: '1531452550000',
+            id: '1549959167000',
             owner: 'detectiveHLH',
             repo: 'detectiveHLH.github.io',
             
