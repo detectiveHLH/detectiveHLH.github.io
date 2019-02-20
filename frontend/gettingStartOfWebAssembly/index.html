@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
@@ -132,7 +132,7 @@
 
 
 
-  <link rel="canonical" href="https://detectivehlh.github.io/frontend/gettingStartOfWebAssembly/"/>
+  <link rel="canonical" href="https://detectivehlh.github.io/frontend/gettingStartOfWebAssembly/">
 
 
 
@@ -241,7 +241,7 @@
           
           <li class="menu-item menu-item-home">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
   </li>
         
         
@@ -249,7 +249,7 @@
           
           <li class="menu-item menu-item-about">
     <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
   </li>
         
         
@@ -257,7 +257,7 @@
           
           <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
   </li>
         
         
@@ -265,7 +265,7 @@
           
           <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
         
         
@@ -273,7 +273,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
 
       
@@ -389,7 +389,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -438,11 +438,10 @@
 
           
             <span class="post-meta-divider">|</span>
-            <span class="post-meta-item-icon"
-            >
+            <span class="post-meta-item-icon">
             <i class="fa fa-eye"></i>
              阅读次数： 
-            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
             </span>
           
 
@@ -469,12 +468,12 @@
 <p>WebAssembly 或者 wasm 是一个可移植、体积小、加载快并且兼容 Web 的全新格式</p>
 </blockquote>
 <h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>当然，我知道，即使你看了定义也不知道WebAssembly到底是什么东西。废话不多说，我们通过一个简单的例子来看看WebAssembly到底是什么。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/11/7/166ed3c3acfb3aad?w=1368&amp;h=868&amp;f=png&amp;s=245948" alt=""></p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/7/166ed3c3acfb3aad?w=1368&amp;h=868&amp;f=png&amp;s=245948" alt></p>
 <p>上图的左侧是用C++实现的求递归的函数。中间是十六进制的Binary Code。右侧是指令文本。可能有人就问，这跟WebAssembly有个屁的关系？其实，中间的十六进制的Binary Code就是WebAssembly。</p>
 <h3 id="编译目标"><a href="#编译目标" class="headerlink" title="编译目标"></a>编译目标</h3><p>大家可以看到，其可写性和可读性差到无法想象。那是因为WebAssembly不是用来给各位用手<strong>一行一行撸</strong>的代码，WebAssembly是一个<strong>编译目标</strong>。什么是编译目标？当我们写TypeScript的时候，Webpack最后打包生成的JavaScript文件就是编译目标。可能大家已经猜到了，上图的Binary就是左侧的C++代码经过编译器编译之后的结果。</p>
 <h2 id="WebAssembly的由来"><a href="#WebAssembly的由来" class="headerlink" title="WebAssembly的由来"></a>WebAssembly的由来</h2><h3 id="性能瓶颈"><a href="#性能瓶颈" class="headerlink" title="性能瓶颈"></a>性能瓶颈</h3><p>在业务需求越来越复杂的现在，前端的开发逻辑越来越复杂，相应的代码量随之变的越来越多。相应的，整个项目的起步的时间越来越长。在性能不好的电脑上，启动一个前端的项目甚至要花上十多秒。这些其实还好，说明前端越来越受到重视，越来越多的人开始进行前端的开发。</p>
 <p>但是除了逻辑复杂、代码量大，还有另一个原因是JavaScript这门语言本身的缺陷，JavaScript没有静态变量类型。这门解释型编程语言的作者Brendan Eich，仓促的创造了这门如果被广泛使用的语言，以至于JavaScript的发展史甚至在某种层面上变成了填坑史。为什么说没有静态类型会降低效率。这会涉及到一些JavaScript引擎的一些知识。</p>
-<h3 id="静态变量类型所带来的问题"><a href="#静态变量类型所带来的问题" class="headerlink" title="静态变量类型所带来的问题"></a>静态变量类型所带来的问题</h3><p><img src="https://user-gold-cdn.xitu.io/2018/11/7/166ed498c346cec4?w=1000&amp;h=605&amp;f=png&amp;s=123882" alt=""></p>
+<h3 id="静态变量类型所带来的问题"><a href="#静态变量类型所带来的问题" class="headerlink" title="静态变量类型所带来的问题"></a>静态变量类型所带来的问题</h3><p><img src="https://user-gold-cdn.xitu.io/2018/11/7/166ed498c346cec4?w=1000&amp;h=605&amp;f=png&amp;s=123882" alt></p>
 <p>这是Microsoft Edge浏览器的JavaScript引擎ChakraCore的结构。我们来看一看我们的JavaScript代码在引擎中会经历什么。</p>
 <ul>
 <li>JavaScript文件会被下载下来。</li>
@@ -488,8 +487,8 @@
 <p>为什么asm.js会有静态类型呢？因为像<code>0 | 0</code>这样的，代表这是一个Int的数据，而<code>+1.1</code>则代表这是一个Double的数据。</p>
 <h3 id="asm-js不能解决所有的问题"><a href="#asm-js不能解决所有的问题" class="headerlink" title="asm.js不能解决所有的问题"></a>asm.js不能解决所有的问题</h3><p>可能有人有疑问，这问题不是解决了吗？那为什么会有WebAssembly？WebAssembly又解决了什么问题？大家可以再看一下上面的ChakraCore的引擎结构。无论asm.js对静态类型的问题做的再好，它始终逃不过要经过Parser，要经过ByteCode Compiler，而这两步是JavaScript代码在引擎执行过程当中消耗时间最多的两步。而WebAssembly不用经过这两步。这就是WebAssembly比asm.js更快的原因。</p>
 <h3 id="WebAssembly横空出世"><a href="#WebAssembly横空出世" class="headerlink" title="WebAssembly横空出世"></a>WebAssembly横空出世</h3><p>所以在2015年，我们迎来了WebAssembly。WebAssembly是经过编译器编译之后的代码，体积小、起步快。在语法上完全脱离JavaScript，同时具有沙盒化的执行环境。WebAssembly同样的强制静态类型，是C/C++/Rust的编译目标。</p>
-<h2 id="WebAssembly的优势"><a href="#WebAssembly的优势" class="headerlink" title="WebAssembly的优势"></a>WebAssembly的优势</h2><h3 id="WebAssembly和asm-js性能对比"><a href="#WebAssembly和asm-js性能对比" class="headerlink" title="WebAssembly和asm.js性能对比"></a>WebAssembly和asm.js性能对比</h3><p>下面的图是Unity WebGL使用和不使用WebAssembly的起步时间对比的一个BenchMark，给大家当作一个参考。<br>可以看到，在FireFox中，WebAssembly和asm.js的性能差异达到了2倍，在Chrome中达到了3倍，在Edge中甚至达到了6倍。通过这些对比也可以从侧面看出，目前所有的主流浏览器都已经支持WebAssembly V1（Node  &gt;= 8.0.0）.<br><img src="https://user-gold-cdn.xitu.io/2018/11/8/166f14622827f306?w=1024&amp;h=706&amp;f=png&amp;s=65153" alt=""></p>
-<h3 id="与JavaScript做对比"><a href="#与JavaScript做对比" class="headerlink" title="与JavaScript做对比"></a>与JavaScript做对比</h3><p>我自己在一个用<code>create-react-app</code>新建的项目中，分别对比了WebAssembly版本和原生JavaScript版本的递归无优化的Fibonacci函数，下图是这两个函数在值是45、48、50的时候的性能对比。<br><img src="https://user-gold-cdn.xitu.io/2018/11/8/166f0fe7bc778c8c?w=1320&amp;h=864&amp;f=png&amp;s=250693" alt=""><br>看图说话，这就是WebAssembly与JavaScript很实际的一个性能对比。几乎稳定的是JavaScript的两倍。</p>
+<h2 id="WebAssembly的优势"><a href="#WebAssembly的优势" class="headerlink" title="WebAssembly的优势"></a>WebAssembly的优势</h2><h3 id="WebAssembly和asm-js性能对比"><a href="#WebAssembly和asm-js性能对比" class="headerlink" title="WebAssembly和asm.js性能对比"></a>WebAssembly和asm.js性能对比</h3><p>下面的图是Unity WebGL使用和不使用WebAssembly的起步时间对比的一个BenchMark，给大家当作一个参考。<br>可以看到，在FireFox中，WebAssembly和asm.js的性能差异达到了2倍，在Chrome中达到了3倍，在Edge中甚至达到了6倍。通过这些对比也可以从侧面看出，目前所有的主流浏览器都已经支持WebAssembly V1（Node  &gt;= 8.0.0）.<br><img src="https://user-gold-cdn.xitu.io/2018/11/8/166f14622827f306?w=1024&amp;h=706&amp;f=png&amp;s=65153" alt></p>
+<h3 id="与JavaScript做对比"><a href="#与JavaScript做对比" class="headerlink" title="与JavaScript做对比"></a>与JavaScript做对比</h3><p>我自己在一个用<code>create-react-app</code>新建的项目中，分别对比了WebAssembly版本和原生JavaScript版本的递归无优化的Fibonacci函数，下图是这两个函数在值是45、48、50的时候的性能对比。<br><img src="https://user-gold-cdn.xitu.io/2018/11/8/166f0fe7bc778c8c?w=1320&amp;h=864&amp;f=png&amp;s=250693" alt><br>看图说话，这就是WebAssembly与JavaScript很实际的一个性能对比。几乎稳定的是JavaScript的两倍。</p>
 <h2 id="WebAssembly在大型项目中的应用"><a href="#WebAssembly在大型项目中的应用" class="headerlink" title="WebAssembly在大型项目中的应用"></a>WebAssembly在大型项目中的应用</h2><p>在这里能够举的例子还是很多，比如AutoCAD、GoogleEarth、Unity、Unreal、PSPDKit、WebPack等等。拿其中几个来简单说一下。</p>
 <h3 id="AutoCAD"><a href="#AutoCAD" class="headerlink" title="AutoCAD"></a>AutoCAD</h3><p>这是一个用于画图的软件，在很长的一段时间是没有Web的版本的，原因有两个，其一，是Web的性能的确不能满足他们的需求。其二，在WebAssembly没有面世之前，AutoCAD是用C++实现的，要将其搬到Web上，就意味着要重写他们所有的代码，这代价十分的巨大。</p>
 <p>而在WebAssembly面世之后，AutoCAD得以利用编译器，将其沉淀了30多年的代码直接编译成WebAssembly，同时性能基于之前的普通Web应用得到了很大的提升。正是这些原因，得以让AutoCAD将其应用从Desktop搬到Web中。</p>
@@ -500,7 +499,7 @@
 <li>Unreal引擎的戳<a href="https://www.youtube.com/watch?v=TwuIRcpeUWE" target="_blank" rel="noopener">这里</a></li>
 </ul>
 <h2 id="WebAssembly要取代JavaScript？"><a href="#WebAssembly要取代JavaScript？" class="headerlink" title="WebAssembly要取代JavaScript？"></a>WebAssembly要取代JavaScript？</h2><p>答案是否定的，请看下图。</p>
-<p><img src="https://user-gold-cdn.xitu.io/2018/11/8/166f12bfd8a03f40?w=342&amp;h=654&amp;f=png&amp;s=43231" alt=""></p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/11/8/166f12bfd8a03f40?w=342&amp;h=654&amp;f=png&amp;s=43231" alt></p>
 <p>大家可以看到这是一个协作关系。WebAssembly是被设计成JavaScript的一个完善、补充，而不是一个替代品。WebAssembly将很多编程语言带到了Web中。但是JavaScript因其不可思议的能力，仍然将保留现有的地位。</p>
 <h2 id="什么时候使用WebAssembly？"><a href="#什么时候使用WebAssembly？" class="headerlink" title="什么时候使用WebAssembly？"></a>什么时候使用WebAssembly？</h2><p>说了这么多，我到底什么时候该使用它呢？总结下来，大部分情况分两个点。</p>
 <ul>
@@ -654,9 +653,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.jpeg"
-                alt="Lunhao Hu" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="Lunhao Hu">
             
               <p class="site-author-name" itemprop="name">Lunhao Hu</p>
               <p class="site-description motion-element" itemprop="description">优化永无止境，做人要有追求</p>
@@ -824,7 +821,7 @@
 
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
