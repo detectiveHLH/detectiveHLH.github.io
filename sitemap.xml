@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://detectivehlh.github.io/about/index.html</loc>
+    
+    <lastmod>2019-02-20T06:11:00.078Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://detectivehlh.github.io/java/newSprintBootStarter/</loc>
     
     <lastmod>2019-02-20T05:41:45.667Z</lastmod>
@@ -117,13 +124,6 @@
     <loc>https://detectivehlh.github.io/java/Web%E5%90%8E%E7%AB%AFresfulAPI%E6%A8%A1%E6%9D%BF/</loc>
     
     <lastmod>2019-02-20T05:40:17.621Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://detectivehlh.github.io/about/index.html</loc>
-    
-    <lastmod>2019-01-22T02:14:19.990Z</lastmod>
     
   </url>
   
