@@ -117,7 +117,7 @@
 <meta property="og:description" content="问题首先说说遇到了什么问题。首先有这么一个需求。需要前端根据后端传过来数据，动态的生成图片。图片中的文案、背景图片、用户头像全部都是通过后端的接口获取。但是使用 html2canvas 生成的canvas有些图片成功的在canvas里生成了。但是有些图片无论如何都显示不出来。 官方文档在项目里面操作了半天未果，google了半天未果。此时有些许绝望。突然想到了，为什么不去它的 官网 看看呢。于是乎">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://detectivehlh.github.io/img/post/frontend/canvas-limitations.jpg">
-<meta property="og:updated_time" content="2018-09-14T08:21:45.470Z">
+<meta property="og:updated_time" content="2019-02-20T05:41:45.646Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="html2canvas关于图片不能正常截取">
 <meta name="twitter:description" content="问题首先说说遇到了什么问题。首先有这么一个需求。需要前端根据后端传过来数据，动态的生成图片。图片中的文案、背景图片、用户头像全部都是通过后端的接口获取。但是使用 html2canvas 生成的canvas有些图片成功的在canvas里生成了。但是有些图片无论如何都显示不出来。 官方文档在项目里面操作了半天未果，google了半天未果。此时有些许绝望。突然想到了，为什么不去它的 官网 看看呢。于是乎">
@@ -379,7 +379,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -457,7 +457,6 @@
 <p>Limitations<br><br>All the images that the script uses need to reside under the same origin for it to be able to read them without the assistance of a proxy. Similarly, if you have other canvas elements on the page, which have been tainted with cross-origin content, they will become dirty and no longer readable by html2canvas.<br><br>The script doesn’t render plugin content such as Flash or Java applets.</p>
 </blockquote>
 <p>讲的啥呢，这里为英文不好的同学翻译一下。英语好的可以直接看上文。大概的意思就是在<a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener">html2canvas</a>里面，是使用脚本去操作的，也就是说使用脚本把html转换成canvas，但是有一个限制，那就是不能使用跨源的图片。如果使用了，<a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener">html2canvas</a>将不会读取资源。</p>
-<a id="more"></a>
 <p><img src="/img/post/frontend/canvas-limitations.jpg" alt="GitHub" title="GitHub,Social Coding"></p>
 <p>这也就是为什么转换出来的canvas有些图片一直是空白的原因。如果页面中有其他的canvas也使用了跨源的图片资源，<a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener">html2canvas</a>都不会去读取。</p>
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>对静态资源做一次转发并且在html2canvas的 <a href="https://html2canvas.hertzen.com/configuration" target="_blank" rel="noopener">配置</a> 里面允许加载跨源资源,就可以了。</p>
@@ -531,6 +530,47 @@
 
   
 
+
+
+<% if(theme.gitment.enable) { %>
+<div id="gitment_title" class="gitment_title"></div>
+<div id="container" style="display:none"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  const myTheme = {
+    render(state, instance) {
+      const container = document.createElement('div');
+      container.lang = "en-US";
+      container.className = 'gitment-container gitment-root-container';
+      container.appendChild(instance.renderHeader(state, instance));
+      container.appendChild(instance.renderEditor(state, instance));
+      container.appendChild(instance.renderComments(state, instance));
+      container.appendChild(instance.renderFooter(state, instance));
+      return container;
+    }
+  }
+
+  function showGitment() {
+    $("#gitment_title").attr("style", "display:none");
+    $("#container").attr("style", "").addClass("gitment_container");
+    var gitment = new Gitment({
+      id: decodeURI(window.location.pathname),
+      theme: myTheme,
+      owner: 'detectiveHLH',
+      repo: 'detectiveHLH.github.io',
+      oauth: {
+        client_id: 'e07655d9c13124115cb8',
+        client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b'
+      }
+    });
+    gitment.render('container');
+  }
+
+  showGitment();
+</script>
+<% } %>
 
 
         </div>

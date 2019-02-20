@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://detectivehlh.github.io/img/5.jpg">
 <meta property="og:image" content="https://detectivehlh.github.io/img/4.jpeg">
-<meta property="og:updated_time" content="2018-09-14T08:21:45.472Z">
+<meta property="og:updated_time" content="2019-02-20T05:41:45.648Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="注册微信开发测试号">
 <meta name="twitter:description" content="注册测试号注册的地址在 这里 要进行微信公众号的开发，那就需要一个本地的开发环境来进行开发。而微信测试号就正好提供了这样的一个development环境。每个微信号只能对应一个测试号，但是每个测试号可以开发多个微信公众号项目。微信号与测试号是一一对应的关系，而测试号与开发项目是一对多的关系。进入之后会看到页面里面有以下几个大块。  测试号信息 接口配置信息 JS接口安全域名 测试号二维码 模板消息">
@@ -380,7 +380,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -463,7 +463,6 @@
 <li>体验接口权限表</li>
 </ol>
 <p>下面针对每个点介绍一下具体是干嘛的。</p>
-<a id="more"></a>
 <h2 id="测试号信息"><a href="#测试号信息" class="headerlink" title="测试号信息"></a>测试号信息</h2><p>包含了appId、appsecret。像之前说的，可以理解为你的账号和密码。每个测试号有一个唯一的appID和appsecret。通俗一点就是说，他们对应的就是唯一的账号和密码，而且不能修改。</p>
 <h2 id="接口配置信息"><a href="#接口配置信息" class="headerlink" title="接口配置信息"></a>接口配置信息</h2><ol>
 <li><p>URL:</p>
@@ -625,6 +624,47 @@
 
   
 
+
+
+<% if(theme.gitment.enable) { %>
+<div id="gitment_title" class="gitment_title"></div>
+<div id="container" style="display:none"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  const myTheme = {
+    render(state, instance) {
+      const container = document.createElement('div');
+      container.lang = "en-US";
+      container.className = 'gitment-container gitment-root-container';
+      container.appendChild(instance.renderHeader(state, instance));
+      container.appendChild(instance.renderEditor(state, instance));
+      container.appendChild(instance.renderComments(state, instance));
+      container.appendChild(instance.renderFooter(state, instance));
+      return container;
+    }
+  }
+
+  function showGitment() {
+    $("#gitment_title").attr("style", "display:none");
+    $("#container").attr("style", "").addClass("gitment_container");
+    var gitment = new Gitment({
+      id: decodeURI(window.location.pathname),
+      theme: myTheme,
+      owner: 'detectiveHLH',
+      repo: 'detectiveHLH.github.io',
+      oauth: {
+        client_id: 'e07655d9c13124115cb8',
+        client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b'
+      }
+    });
+    gitment.render('container');
+  }
+
+  showGitment();
+</script>
+<% } %>
 
 
         </div>

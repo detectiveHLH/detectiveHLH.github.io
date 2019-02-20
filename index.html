@@ -381,7 +381,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-16 18:20:12" itemprop="dateModified" datetime="2019-02-16T18:20:12+08:00">2019-02-16</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -444,9 +444,10 @@
 
       
         
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其实18年之前写过一篇关于chrome插件的文章，里面安利了4个chrome插件。鉴于这已经是9102年了，之前觉得好用的chrome插件跟新了解到的比起来，还是差了那么点味道。所以决定再更新一波，顺便补上之前漏掉的几个插件。</p>
-<p>运用有效的有用的插件，会让我们的工作在一个相对舒适的状态，工作起来更加的流畅。</p>
-<h2 id="Toby-不直观算我输"><a href="#Toby-不直观算我输" class="headerlink" title="Toby-不直观算我输"></a>Toby-不直观算我输</h2><p>大家可以将Toby当成加强版的书签栏，大家可以分类把常去的网站收藏起来，还可以正对每个分类打上对应的tag，在右上角进行筛选。</p>
+          
+          前言其实18年之前写过一篇关于chrome插件的文章，里面安利了4个chrome插件。鉴于这已经是9102年了，之前觉得好用的chrome插件跟新了解到的比起来，还是差了那么点味道。所以决定再更新一波，顺便补上之前漏掉的几个插件。
+运用有效的有用的插件，会让我们的工作在一个相对舒适的状态，工作起来更
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/devtools/useful-chrome-extension/#more" rel="contents">
@@ -568,7 +569,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-11 10:15:40" itemprop="dateModified" datetime="2019-02-11T10:15:40+08:00">2019-02-11</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -631,11 +632,10 @@
 
       
         
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。</p>
-<p>这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就是，实现一个日志记录的工具类，然后在需要记录日志的接口中，添加一行代码。由这个日志工具类去判断此时应该处理哪些参数。</p>
-<p>但是这样有很大的问题。如果需要记日志的接口数量非常多，先不讨论这个工具类中需要做多少的类型判断，仅仅是给所有接口添加这样一行代码在我个人看来都是不能接受的行为。首先，这样对代码的侵入性太大。其次，后期万一有改动，维护的人将会十分难受。想象一下，全局搜索相同的代码，再一一进行修改。</p>
-<p>所以我放弃了这个略显原始的方法。我最终采用了Aop的方式，采取拦截的请求的方式，来记录日志。但是即使采用这个方法，仍然面临一个问题，那就是如何处理大量的参数。以及如何对应到每一个接口上。</p>
-<p>我最终没有拦截所有的controller，而是自定义了一个日志注解。所有打上了这个注解的方法，将会记录日志。同时，注解中会带有类型，来为当前的接口指定特定的日志内容以及参数。</p>
+          
+          前言不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。
+这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/java/spring-aop-log/#more" rel="contents">
@@ -757,7 +757,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-20 18:07:29" itemprop="dateModified" datetime="2019-01-20T18:07:29+08:00">2019-01-20</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -820,11 +820,10 @@
 
       
         
-          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在最近的项目中，有一个需求是对一个很大的数据库进行查询，数据量大概在几千万条。但同时对查询速度的要求也比较高。</p>
-<p>这个数据库之前在没有使用<a href="https://prestodb.io/" target="_blank" rel="noopener">Presto</a>的情况下，使用的是Hive，使用Hive进行一个简单的查询，速度可能在几分钟。当然几分钟也并不完全是跑SQL的时间，这里面包含发请求，查询数据并且返回数据的时间的总和。但是即使这样，这样的速度明显不能满足交互式的查询需求。</p>
-<p>我们的下一个解决方案就是Presto，在使用了Presto之后，查询速度降到了秒级。但是对于一个前端查询界面的交互式查询来说，十几秒仍然是一个不能接受的时间。</p>
-<p>虽然Presto相比Hive已经快了很多（FaceBook官方宣称的是10倍），但是对分页的支持不是很友好。我在使用的时候是自己在后端实现的分页。</p>
-<p>在这种情况下应用缓存实属无奈之举。讲道理，优化应从底层开始，自底而上。上层优化的方式和效率感觉都很有局限。</p>
+          
+          背景在最近的项目中，有一个需求是对一个很大的数据库进行查询，数据量大概在几千万条。但同时对查询速度的要求也比较高。
+这个数据库之前在没有使用Presto的情况下，使用的是Hive，使用Hive进行一个简单的查询，速度可能在几分钟。当然几分钟也并不完全是跑SQL的时间，这里面包含发请求，查询数据并且返
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/java/redis-template-cache/#more" rel="contents">
@@ -946,7 +945,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-16 22:35:59" itemprop="dateModified" datetime="2018-12-16T22:35:59+08:00">2018-12-16</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -1009,8 +1008,9 @@
 
       
         
-          <h2 id="搭建项目框架"><a href="#搭建项目框架" class="headerlink" title="搭建项目框架"></a>搭建项目框架</h2><h3 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h3><p>执行如下代码，用<code>create-react-app</code>来建立项目的基础框架，然后安装需要用到的依赖。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ npx create-react-app my-test-project</span><br><span class="line">$ <span class="built_in">cd</span> my-test-project</span><br><span class="line">$ yarn add react-router-dom react-redux prop-types redux redux-saga</span><br><span class="line">$ yarn start</span><br></pre></td></tr></table></figure></p>
-<p>完成后，应用启动在localhost的3000端口。</p>
+          
+          搭建项目框架新建项目执行如下代码，用create-react-app来建立项目的基础框架，然后安装需要用到的依赖。1234$ npx create-react-app my-test-project$ cd my-test-project$ yarn add react-router-dom rea
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/frontend/add-router-saga-in-create-react-app/#more" rel="contents">
@@ -1132,7 +1132,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-08 14:31:25" itemprop="dateModified" datetime="2018-11-08T14:31:25+08:00">2018-11-08</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -1195,8 +1195,9 @@
 
       
         
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>接触WebAssembly之后，在google上看了很多资料。感觉对WebAssembly的使用、介绍、意义都说的比较模糊和笼统。感觉看了之后收获没有达到预期，要么是文章中的例子自己去实操不能成功，要么就是不知所云、一脸蒙蔽。本着业务催生技术的态度，这边文章就诞生了。前部分主要是对WebAssembly的背景做一些介绍，WebAssembly是怎么出现的，优势在哪儿。如果想直接开始撸代码试试效果，可以直接跳到最后一个<a href="#WebAssembly实操">板块</a>。</p>
-<h2 id="WebAssembly是什么？"><a href="#WebAssembly是什么？" class="headerlink" title="WebAssembly是什么？"></a>WebAssembly是什么？</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>首先我们给它下个定义。</p>
+          
+          前言接触WebAssembly之后，在google上看了很多资料。感觉对WebAssembly的使用、介绍、意义都说的比较模糊和笼统。感觉看了之后收获没有达到预期，要么是文章中的例子自己去实操不能成功，要么就是不知所云、一脸蒙蔽。本着业务催生技术的态度，这边文章就诞生了。前部分主要是对WebAsse
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/frontend/gettingStartOfWebAssembly/#more" rel="contents">
@@ -1318,7 +1319,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-10-20 19:07:29" itemprop="dateModified" datetime="2018-10-20T19:07:29+08:00">2018-10-20</time>
+                <time title="修改时间：2019-02-20 13:40:17" itemprop="dateModified" datetime="2019-02-20T13:40:17+08:00">2019-02-20</time>
               
             
           </span>
@@ -1381,10 +1382,10 @@
 
       
         
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在实际的开发中，会有这样的场景。有一个微服务需要提供一个查询的服务，但是需要查询的数据库表的数据量十分庞大，查询所需要的时间很长。<br>此时就可以考虑在项目中加入缓存。</p>
-<h3 id="引入依赖"><a href="#引入依赖" class="headerlink" title="引入依赖"></a>引入依赖</h3><p>在maven项目中引入如下依赖。并且需要在本地安装redis。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;2.0.5.RELEASE&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
-<h3 id="配置redis"><a href="#配置redis" class="headerlink" title="配置redis"></a>配置redis</h3><p>在SpringBoot的配置文件中添加如下代码。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">redis:</span><br><span class="line">    host: 127.0.0.1</span><br><span class="line">    port: 6379</span><br><span class="line">    timeout: 5000</span><br><span class="line">    database: 0</span><br><span class="line">    jedis:</span><br><span class="line">      pool:</span><br><span class="line">        max-idle: 8</span><br><span class="line">        max-wait:</span><br><span class="line">        min-idle: 0</span><br></pre></td></tr></table></figure></p>
-<h3 id="添加redis配置文件"><a href="#添加redis配置文件" class="headerlink" title="添加redis配置文件"></a>添加redis配置文件</h3><p>新建名为RedisConfig的配置类。</p>
+          
+          前言在实际的开发中，会有这样的场景。有一个微服务需要提供一个查询的服务，但是需要查询的数据库表的数据量十分庞大，查询所需要的时间很长。此时就可以考虑在项目中加入缓存。
+引入依赖在maven项目中引入如下依赖。并且需要在本地安装redis。12345&lt;dependency&gt;    &lt;
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/java/addRedisInSpringBoot/#more" rel="contents">
@@ -1506,7 +1507,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-21 18:02:29" itemprop="dateModified" datetime="2018-09-21T18:02:29+08:00">2018-09-21</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -1569,9 +1570,11 @@
 
       
         
-          <h1 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h1><p>新鲜的IntelliJ IDEA、一双手、以及电脑一台。</p>
-<h1 id="搭建框架"><a href="#搭建框架" class="headerlink" title="搭建框架"></a>搭建框架</h1><h2 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h2><p>打开IDE，点击File -&gt; New Project。在左侧的列表中的选择Maven项目，点击Next。</p>
-<h2 id="填写GroupId和ArtifactId"><a href="#填写GroupId和ArtifactId" class="headerlink" title="填写GroupId和ArtifactId"></a>填写GroupId和ArtifactId</h2><p>什么是GroupId和ArtifactId？大家可以参考一下google出来的定义，可以参考一下。</p>
+          
+          原料新鲜的IntelliJ IDEA、一双手、以及电脑一台。
+搭建框架新建项目打开IDE，点击File -&gt; New Project。在左侧的列表中的选择Maven项目，点击Next。
+填写GroupId和ArtifactId什么是GroupId和ArtifactId？大家可以参考一下goog
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/java/newSprintBootStarter/#more" rel="contents">
@@ -1739,15 +1742,17 @@
       
         
           
-            <p>在mac上，通过dmg的方式安装了mysql，成功安装之后，在本地尝试连接数据库的时候会出现如下的错误。</p>
-<blockquote>
-<p>Authentication plugin ‘caching_sha2_password’ cannot be loaded: dlopen(/usr/local/mysql/lib/plugin/caching_sha2_password.so, 2): image not found</p>
-</blockquote>
-<p>出现这个错误是因为名字为caching_sha2_password的这个插件，没有被成功的加载，而安装的时候，采用默认加密的方式就是使用这个插件，就导致了本地连接不上。重新将密码加密的方式改为mysql_native_password就可以了。</p>
-<p>解决方案，通过命令行进行sql的控制台后，键入如下代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER &apos;你的用户名&apos;@&apos;你的ip地址&apos; IDENTIFIED WITH mysql_native_password BY &apos;你的密码&apos;;</span><br></pre></td></tr></table></figure></p>
-<p>重新连接，就可以在本地连接上数据了。</p>
+          在mac上，通过dmg的方式安装了mysql，成功安装之后，在本地尝试连接数据库的时候会出现如下的错误。
 
-          
+Authentication plugin ‘caching_sha2_password’ cannot be loaded: dlopen(/usr/local/mysql/lib/plug
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/mysql/mysqlAuthenticationCanNotBeLoaded/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1862,7 +1867,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:40:17" itemprop="dateModified" datetime="2019-02-20T13:40:17+08:00">2019-02-20</time>
               
             
           </span>
@@ -1925,9 +1930,10 @@
 
       
         
-          <h2 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h2><p>打开IntelliJ IDEA，我的版本是Version 2018.1.4。点击Create New Project。在左侧的列表中选择Maven。然后在右侧勾选Create from archetype。</p>
-<p>然后在右侧的列表中选择org.apache.maven.archetypes:maven-archetype-webapp。点击next。</p>
-<p>填写GroupId和ArtifactId。GroupId定义了项目属于哪个组织，例如，我们需要使用一个包，名字叫做fastjson，用户在项目中返回json数据的，是阿里的开源框架，被不少企业使用，是一个极其优秀的Json框架。它的groupId是com.alibaba，artifactId是fastjson。</p>
+          
+          初始化项目打开IntelliJ IDEA，我的版本是Version 2018.1.4。点击Create New Project。在左侧的列表中选择Maven。然后在右侧勾选Create from archetype。
+然后在右侧的列表中选择org.apache.maven.archetypes:ma
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/java/Web后端resfulAPI模板/#more" rel="contents">
@@ -2049,7 +2055,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-16 22:44:46" itemprop="dateModified" datetime="2018-12-16T22:44:46+08:00">2018-12-16</time>
+                <time title="修改时间：2019-02-20 13:40:17" itemprop="dateModified" datetime="2019-02-20T13:40:17+08:00">2019-02-20</time>
               
             
           </span>
@@ -2112,12 +2118,12 @@
 
       
         
-          <h2 id="微信JS-SDK的功能"><a href="#微信JS-SDK的功能" class="headerlink" title="微信JS-SDK的功能"></a>微信JS-SDK的功能</h2><p>如果你点进来，那么我相信你应该知道微信的JS-SDK可以用来做什么了。微信的官方文档描述如下。</p>
-<blockquote>
-<p>微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。</p>
-<p> 通过使用微信JS-SDK，网页开发者可借助微信高效地使用拍照、选图、语音、位置等手机系统的能力，同时可以直接使用微信分享、扫一扫等微信特有的能力，为微信用户提供更优质的网页体验。</p>
-</blockquote>
-<p>通过使用微信的JS-SDK，你可以让你网页在微信内调用拍照、语音、支付、位置、扫一扫这些只能在微信内使用的功能。进过下面的步骤，一步一步的配置，就可以让你正确的在项目中引入微信的JS-SDK。</p>
+          
+          微信JS-SDK的功能如果你点进来，那么我相信你应该知道微信的JS-SDK可以用来做什么了。微信的官方文档描述如下。
+
+微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。
+ 通过使用微信JS-SDK，网页开发者可借助微信高效地使用拍照、选图、语音、位置等手机系统的能力，同
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/wechat/wechat-js-sdk/#more" rel="contents">
@@ -2239,7 +2245,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -2302,17 +2308,10 @@
 
       
         
-          <h2 id="注册测试号"><a href="#注册测试号" class="headerlink" title="注册测试号"></a>注册测试号</h2><p>注册的地址在 <a href="https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login" target="_blank" rel="noopener">这里</a></p>
-<p>要进行微信公众号的开发，那就需要一个本地的开发环境来进行开发。而微信测试号就正好提供了这样的一个development环境。每个微信号只能对应一个测试号，但是每个测试号可以开发多个微信公众号项目。微信号与测试号是一一对应的关系，而测试号与开发项目是一对多的关系。进入之后会看到页面里面有以下几个大块。</p>
-<ol>
-<li>测试号信息</li>
-<li>接口配置信息</li>
-<li>JS接口安全域名</li>
-<li>测试号二维码</li>
-<li>模板消息接口</li>
-<li>体验接口权限表</li>
-</ol>
-<p>下面针对每个点介绍一下具体是干嘛的。</p>
+          
+          注册测试号注册的地址在 这里
+要进行微信公众号的开发，那就需要一个本地的开发环境来进行开发。而微信测试号就正好提供了这样的一个development环境。每个微信号只能对应一个测试号，但是每个测试号可以开发多个微信公众号项目。微信号与测试号是一一对应的关系，而测试号与开发项目是一对多的关系。进入之后
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/wechat/注册微信开发测试号/#more" rel="contents">
@@ -2434,7 +2433,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -2497,12 +2496,10 @@
 
       
         
-          <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>首先说说遇到了什么问题。首先有这么一个需求。需要前端根据后端传过来数据，动态的生成图片。图片中的文案、背景图片、用户头像全部都是通过后端的接口获取。但是使用 <a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener">html2canvas</a> 生成的canvas有些图片成功的在canvas里生成了。但是有些图片无论如何都显示不出来。</p>
-<h1 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h1><p>在项目里面操作了半天未果，google了半天未果。此时有些许绝望。突然想到了，为什么不去它的 <a href="https://html2canvas.hertzen.com/" target="_blank" rel="noopener">官网</a> 看看呢。于是乎我在官网上看到了下面的内容。</p>
-<blockquote>
-<p>Limitations<br><br>All the images that the script uses need to reside under the same origin for it to be able to read them without the assistance of a proxy. Similarly, if you have other canvas elements on the page, which have been tainted with cross-origin content, they will become dirty and no longer readable by html2canvas.<br><br>The script doesn’t render plugin content such as Flash or Java applets.</p>
-</blockquote>
-<p>讲的啥呢，这里为英文不好的同学翻译一下。英语好的可以直接看上文。大概的意思就是在<a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener">html2canvas</a>里面，是使用脚本去操作的，也就是说使用脚本把html转换成canvas，但是有一个限制，那就是不能使用跨源的图片。如果使用了，<a href="https://github.com/niklasvh/html2canvas" target="_blank" rel="noopener">html2canvas</a>将不会读取资源。</p>
+          
+          问题首先说说遇到了什么问题。首先有这么一个需求。需要前端根据后端传过来数据，动态的生成图片。图片中的文案、背景图片、用户头像全部都是通过后端的接口获取。但是使用 html2canvas 生成的canvas有些图片成功的在canvas里生成了。但是有些图片无论如何都显示不出来。
+官方文档在项目里面操作
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/frontend/html2canvas关于图片不能正常截取的原因/#more" rel="contents">
@@ -2624,7 +2621,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -2687,9 +2684,11 @@
 
       
         
-          <h1 id="传统方法"><a href="#传统方法" class="headerlink" title="传统方法"></a>传统方法</h1><p>以前在单页面路由中，就只能在html文件中定一个固定的网站的title。如果想要动态的去修改，需要使用如下的方法。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.title = <span class="string">'这是一个标题'</span>;</span><br></pre></td></tr></table></figure></p>
-<p>这样会让我们做很多无用功。显得十分蠢。</p>
-<h1 id="使用Vue-Router的方法"><a href="#使用Vue-Router的方法" class="headerlink" title="使用Vue-Router的方法"></a>使用Vue-Router的方法</h1><p>首先打开/src/router/index.js文件。<br>找到如下代码。</p>
+          
+          传统方法以前在单页面路由中，就只能在html文件中定一个固定的网站的title。如果想要动态的去修改，需要使用如下的方法。1document.title = '这是一个标题';
+这样会让我们做很多无用功。显得十分蠢。
+使用Vue-Router的方法首先打开/src/router/index.js文件
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/frontend/如何用vue-router为每个路由配置各自的title/#more" rel="contents">
@@ -2811,7 +2810,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:40:17" itemprop="dateModified" datetime="2019-02-20T13:40:17+08:00">2019-02-20</time>
               
             
           </span>
@@ -2874,9 +2873,9 @@
 
       
         
-          <p>为了使我们的项目兼容各种浏览器，我们可能会在开发中写大量的前缀。即使有了IDE为我们提供了边界的方式。但是仍然需要我们去花时间和精力。而这样会浪费我们很多的时间。为了在开发中提升团队的开发效率，并且同时节省时间，我们引入了<a href="https://github.com/postcss/autoprefixer" target="_blank" rel="noopener">autoprefixed</a>。搭配webpack使用，在每次打包的时候自动的给我们的样式加上前缀来兼容不同的浏览器。</p>
-<h1 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h1><p>如果你是使用vue-cli构建的项目。首先执行以下代码安装依赖包。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install autoprefixer postcss postcss-loader -D</span><br></pre></td></tr></table></figure></p>
-<h1 id="修改vue-loader配置文件"><a href="#修改vue-loader配置文件" class="headerlink" title="修改vue-loader配置文件"></a>修改vue-loader配置文件</h1><p>修改目录/build/vue-loader.conf.js文件。文件的原本代码应该如下。</p>
+          
+          为了使我们的项目兼容各种浏览器，我们可能会在开发中写大量的前缀。即使有了IDE为我们提供了边界的方式。但是仍然需要我们去花时间和精力。而这样会浪费我们很多的时间。为了在开发中提升团队的开发效率，并且同时节省时间，我们引入了autoprefixed。搭配webpack使用，在每次打包的时候自动的给我们
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/frontend/vue中使用Autoprefixer/#more" rel="contents">
@@ -3062,12 +3061,17 @@
       
         
           
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>几个月之前，因为项目上开发的必要，接触到了微信开发。前前后后做了大概有3、4个微信公众号开发的项目了。刚开始看的时候云里雾里。坎坎坷坷的，自己趟了很久的坑。终于是把微信开发鉴权这一套流程跑通了。都是一些自己的理解。有说的不对的地方，欢迎打脸。</p>
-<hr>
-<p>要进行微信开发，首先你需要微信开发者工具，因为涉及到微信鉴权的链接，都只能在微信端打开。要想进行开发测试，就只能在微信专用的开发者工具中开发。开发者工具支持Windows 64、Windows 32、Mac，目前的版本是V1.10。打开后，用你的微信扫码登陆，就可以进行开发了。此时会有两个选项，小程序项目、公众号网页项目。在微信开发者工具里面，你可以像在chrome里面调试前端项目一样调试微信项目。</p>
-<p>想要下载链接的同学看 <a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank" rel="noopener">这里</a></p>
-<h2 id="注册微信开发测试号"><a href="#注册微信开发测试号" class="headerlink" title="注册微信开发测试号"></a>注册微信开发测试号</h2>
-          
+          前言几个月之前，因为项目上开发的必要，接触到了微信开发。前前后后做了大概有3、4个微信公众号开发的项目了。刚开始看的时候云里雾里。坎坎坷坷的，自己趟了很久的坑。终于是把微信开发鉴权这一套流程跑通了。都是一些自己的理解。有说的不对的地方，欢迎打脸。
+
+要进行微信开发，首先你需要微信开发者工具，因为涉及
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/wechat/在项目中接入微信鉴权流程/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -3182,7 +3186,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -3245,11 +3249,12 @@
 
       
         
-          <p><strong>关于gitment</strong></p>
-<p>gitment其实就是利用你的代码仓库的Issues，来实现评论。每一篇文章对应该代码仓库中的<br>一个Issues,Issues中的评论对应你的博客每篇文章中的评论。如果你是用github的博客的话<br>用起来将会十分的方便。</p>
-<p><strong>注册github应用</strong></p>
-<p>首先需要在这注册一个<em>OAuth Application</em>, <a href="https://github.com/settings/applications/new" target="_blank" rel="noopener">请戳此处</a>。在注册的过程中，你需要输入以下的东西：<br><br>Application name 随意就好<br><br>Homepage URL 你的博客地址，例如<a href="https://detectivehlh.github.io/">https://detectivehlh.github.io/</a><br><br>Application description 随意就好<br><br>Authorization callback URL 也是博客地址，例如<a href="https://detectivehlh.github.io/">https://detectivehlh.github.io/</a><br><br>输入完成之后，点击注册就OK了。成功之后就会拿到<em>Client ID</em>和<em>Client Secret</em>，然后先进行一下步，暂时还不会用到这个。</p>
-<p><strong>修改主题配置文件</strong></p>
+          
+          关于gitment
+gitment其实就是利用你的代码仓库的Issues，来实现评论。每一篇文章对应该代码仓库中的一个Issues,Issues中的评论对应你的博客每篇文章中的评论。如果你是用github的博客的话用起来将会十分的方便。
+注册github应用
+首先需要在这注册一个OAuth Appl
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/frontend/为hexo博客添加基于gitment评论功能/#more" rel="contents">
@@ -3371,7 +3376,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -3434,8 +3439,12 @@
 
       
         
-          <p><strong>背景</strong></p>
-<p>前不久把项目中用了很久的一个伪中间件撸成了一个npm包发布了出去。</p>
+          
+          背景
+前不久把项目中用了很久的一个伪中间件撸成了一个npm包发布了出去。
+为什么叫伪中间件？正常的中间件的引用方式， 就拿body-parser为例。
+1234567891011var Koa = require('koa');var bodyParser = require('koa-bodypa
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/backend/对koa2-response实现真正的中间件调用/#more" rel="contents">
@@ -3557,7 +3566,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:40:17" itemprop="dateModified" datetime="2019-02-20T13:40:17+08:00">2019-02-20</time>
               
             
           </span>
@@ -3620,10 +3629,12 @@
 
       
         
-          <p>Github传送门 <a href="https://github.com/detectiveHLH/koa2-response" target="_blank" rel="noopener">koa2-response</a></p>
-<p><strong>背景</strong></p>
-<p>最近做了很多node的后台项目，写了很多接口，但是发现随着接口的慢慢增多，需要写越来越来越多类似于下面这种代码。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ctx.body = &#123;</span><br><span class="line">    data: &#123;</span><br><span class="line">        name: <span class="string">'test'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    status: &#123;</span><br><span class="line">        code: <span class="number">0</span>,</span><br><span class="line">        message: success</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+          Github传送门 koa2-response
+背景
+最近做了很多node的后台项目，写了很多接口，但是发现随着接口的慢慢增多，需要写越来越来越多类似于下面这种代码。
+123456789ctx.body = &#123;    data: &#123;        name: 'test'    
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/backend/Koa中更方便简单发送响应的方式/#more" rel="contents">
@@ -3745,7 +3756,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -3808,18 +3819,12 @@
 
       
         
-          <p>一天，小明正在网上查找资料，项目中遇到的问题需要通过查阅资料来解决，他看到一个标题很有意思，觉得这应该是他要找的答案，于是他就点了进去，结果进入网站后几秒钟的时间，网页还是一片空白，过了好久才加载完成。</p>
-<h2 id="为什么会出现这种情况？"><a href="#为什么会出现这种情况？" class="headerlink" title="为什么会出现这种情况？"></a>为什么会出现这种情况？</h2><p>说到这那我们就有必要先了解一下网站加载的整个完整过程了。</p>
-<ol>
-<li><p>首先浏览器从服务器接收到html代码，然后开始解析html</p>
-</li>
-<li><p>构建DOM树（根据html代码自顶向下进行构建），并且在同时构建渲染树</p>
-</li>
-<li><p>遇到js文件加载执行，将阻塞DOM树的构建；遇到css文件，将阻塞渲染树的构建</p>
-</li>
-</ol>
-<p>（script标签中的defer属性：构建DOM树的过程和js文件的加载异步（并行）进行，但是js文件执行需要在DOM树构建完成之后</p>
-<p>   script标签中的async属性：构建DOM树、渲染树的过程和js文件的加载和执行异步（并行）进行）</p>
+          
+          一天，小明正在网上查找资料，项目中遇到的问题需要通过查阅资料来解决，他看到一个标题很有意思，觉得这应该是他要找的答案，于是他就点了进去，结果进入网站后几秒钟的时间，网页还是一片空白，过了好久才加载完成。
+为什么会出现这种情况？说到这那我们就有必要先了解一下网站加载的整个完整过程了。
+
+首先浏览器从服
+          ...
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/frontend/js与css放置的位置问题/#more" rel="contents">
@@ -3870,6 +3875,47 @@
 
           </div>
           
+
+<% if(theme.gitment.enable) { %>
+<div id="gitment_title" class="gitment_title"></div>
+<div id="container" style="display:none"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  const myTheme = {
+    render(state, instance) {
+      const container = document.createElement('div');
+      container.lang = "en-US";
+      container.className = 'gitment-container gitment-root-container';
+      container.appendChild(instance.renderHeader(state, instance));
+      container.appendChild(instance.renderEditor(state, instance));
+      container.appendChild(instance.renderComments(state, instance));
+      container.appendChild(instance.renderFooter(state, instance));
+      return container;
+    }
+  }
+
+  function showGitment() {
+    $("#gitment_title").attr("style", "display:none");
+    $("#container").attr("style", "").addClass("gitment_container");
+    var gitment = new Gitment({
+      id: decodeURI(window.location.pathname),
+      theme: myTheme,
+      owner: 'detectiveHLH',
+      repo: 'detectiveHLH.github.io',
+      oauth: {
+        client_id: 'e07655d9c13124115cb8',
+        client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b'
+      }
+    });
+    gitment.render('container');
+  }
+
+  showGitment();
+</script>
+<% } %>
+
 
         </div>
         

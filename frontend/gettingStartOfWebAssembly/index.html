@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/8/166f14622827f306?w=1024&h=706&f=png&s=65153">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/8/166f0fe7bc778c8c?w=1320&h=864&f=png&s=250693">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/11/8/166f12bfd8a03f40?w=342&h=654&f=png&s=43231">
-<meta property="og:updated_time" content="2018-11-08T06:31:25.497Z">
+<meta property="og:updated_time" content="2019-02-20T05:41:45.629Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebAssembly完全入门——了解wasm的前世今身">
 <meta name="twitter:description" content="前言接触WebAssembly之后，在google上看了很多资料。感觉对WebAssembly的使用、介绍、意义都说的比较模糊和笼统。感觉看了之后收获没有达到预期，要么是文章中的例子自己去实操不能成功，要么就是不知所云、一脸蒙蔽。本着业务催生技术的态度，这边文章就诞生了。前部分主要是对WebAssembly的背景做一些介绍，WebAssembly是怎么出现的，优势在哪儿。如果想直接开始撸代码试试效">
@@ -383,7 +383,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-08 14:31:25" itemprop="dateModified" datetime="2018-11-08T14:31:25+08:00">2018-11-08</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -457,7 +457,6 @@
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>接触WebAssembly之后，在google上看了很多资料。感觉对WebAssembly的使用、介绍、意义都说的比较模糊和笼统。感觉看了之后收获没有达到预期，要么是文章中的例子自己去实操不能成功，要么就是不知所云、一脸蒙蔽。本着业务催生技术的态度，这边文章就诞生了。前部分主要是对WebAssembly的背景做一些介绍，WebAssembly是怎么出现的，优势在哪儿。如果想直接开始撸代码试试效果，可以直接跳到最后一个<a href="#WebAssembly实操">板块</a>。</p>
 <h2 id="WebAssembly是什么？"><a href="#WebAssembly是什么？" class="headerlink" title="WebAssembly是什么？"></a>WebAssembly是什么？</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>首先我们给它下个定义。</p>
-<a id="more"></a>
 <blockquote>
 <p>WebAssembly 或者 wasm 是一个可移植、体积小、加载快并且兼容 Web 的全新格式</p>
 </blockquote>
@@ -605,6 +604,47 @@
 
   
 
+
+
+<% if(theme.gitment.enable) { %>
+<div id="gitment_title" class="gitment_title"></div>
+<div id="container" style="display:none"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  const myTheme = {
+    render(state, instance) {
+      const container = document.createElement('div');
+      container.lang = "en-US";
+      container.className = 'gitment-container gitment-root-container';
+      container.appendChild(instance.renderHeader(state, instance));
+      container.appendChild(instance.renderEditor(state, instance));
+      container.appendChild(instance.renderComments(state, instance));
+      container.appendChild(instance.renderFooter(state, instance));
+      return container;
+    }
+  }
+
+  function showGitment() {
+    $("#gitment_title").attr("style", "display:none");
+    $("#container").attr("style", "").addClass("gitment_container");
+    var gitment = new Gitment({
+      id: decodeURI(window.location.pathname),
+      theme: myTheme,
+      owner: 'detectiveHLH',
+      repo: 'detectiveHLH.github.io',
+      oauth: {
+        client_id: 'e07655d9c13124115cb8',
+        client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b'
+      }
+    });
+    gitment.render('container');
+  }
+
+  showGitment();
+</script>
+<% } %>
 
 
         </div>

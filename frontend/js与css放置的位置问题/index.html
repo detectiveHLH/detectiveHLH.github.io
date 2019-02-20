@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="detectiveHLH&#39;s blog">
 <meta property="og:description" content="一天，小明正在网上查找资料，项目中遇到的问题需要通过查阅资料来解决，他看到一个标题很有意思，觉得这应该是他要找的答案，于是他就点了进去，结果进入网站后几秒钟的时间，网页还是一片空白，过了好久才加载完成。 为什么会出现这种情况？说到这那我们就有必要先了解一下网站加载的整个完整过程了。  首先浏览器从服务器接收到html代码，然后开始解析html  构建DOM树（根据html代码自顶向下进行构建），并">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-14T08:21:45.470Z">
+<meta property="og:updated_time" content="2019-02-20T05:41:45.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js与css放置的位置问题">
 <meta name="twitter:description" content="一天，小明正在网上查找资料，项目中遇到的问题需要通过查阅资料来解决，他看到一个标题很有意思，觉得这应该是他要找的答案，于是他就点了进去，结果进入网站后几秒钟的时间，网页还是一片空白，过了好久才加载完成。 为什么会出现这种情况？说到这那我们就有必要先了解一下网站加载的整个完整过程了。  首先浏览器从服务器接收到html代码，然后开始解析html  构建DOM树（根据html代码自顶向下进行构建），并">
@@ -377,7 +377,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-14 16:21:45" itemprop="dateModified" datetime="2018-09-14T16:21:45+08:00">2018-09-14</time>
+                <time title="修改时间：2019-02-20 13:41:45" itemprop="dateModified" datetime="2019-02-20T13:41:45+08:00">2019-02-20</time>
               
             
           </span>
@@ -461,7 +461,6 @@
 </ol>
 <p>（script标签中的defer属性：构建DOM树的过程和js文件的加载异步（并行）进行，但是js文件执行需要在DOM树构建完成之后</p>
 <p>   script标签中的async属性：构建DOM树、渲染树的过程和js文件的加载和执行异步（并行）进行）</p>
-<a id="more"></a>
 <h2 id="为什么要对css，js的放置位置进行调整？"><a href="#为什么要对css，js的放置位置进行调整？" class="headerlink" title="为什么要对css，js的放置位置进行调整？"></a>为什么要对css，js的放置位置进行调整？</h2><p>从以上过程可以知道，当js文件放在head中时，浏览器构建DOM树的时候遇到js文件加载会阻塞，也就是说，浏览器不会加载body中的标签，一旦这个js文件的数量和内容都比较大，那么就会造成刚刚小明遇到的那种情况，就不会给用户一个十分良好的可视化回馈，而在前端开发中，给予用户的可视化回馈十分重要。</p>
 <p>我们现在十分青睐于用进度条来描述一个过程，而对用户的可视化回馈，就是网页加载的进度条。</p>
 <p>对于现如今有着快节奏的人们，如果一个网页打开后在两秒钟内没有反应，或者加载很慢，那么用户就会很不耐烦的关掉它，想当于被直接宣判死刑了。</p>
@@ -540,6 +539,47 @@
 
   
 
+
+
+<% if(theme.gitment.enable) { %>
+<div id="gitment_title" class="gitment_title"></div>
+<div id="container" style="display:none"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  const myTheme = {
+    render(state, instance) {
+      const container = document.createElement('div');
+      container.lang = "en-US";
+      container.className = 'gitment-container gitment-root-container';
+      container.appendChild(instance.renderHeader(state, instance));
+      container.appendChild(instance.renderEditor(state, instance));
+      container.appendChild(instance.renderComments(state, instance));
+      container.appendChild(instance.renderFooter(state, instance));
+      return container;
+    }
+  }
+
+  function showGitment() {
+    $("#gitment_title").attr("style", "display:none");
+    $("#container").attr("style", "").addClass("gitment_container");
+    var gitment = new Gitment({
+      id: decodeURI(window.location.pathname),
+      theme: myTheme,
+      owner: 'detectiveHLH',
+      repo: 'detectiveHLH.github.io',
+      oauth: {
+        client_id: 'e07655d9c13124115cb8',
+        client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b'
+      }
+    });
+    gitment.render('container');
+  }
+
+  showGitment();
+</script>
+<% } %>
 
 
         </div>

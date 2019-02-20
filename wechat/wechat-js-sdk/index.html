@@ -117,7 +117,7 @@
 <meta property="og:description" content="微信JS-SDK的功能如果你点进来，那么我相信你应该知道微信的JS-SDK可以用来做什么了。微信的官方文档描述如下。  微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。  通过使用微信JS-SDK，网页开发者可借助微信高效地使用拍照、选图、语音、位置等手机系统的能力，同时可以直接使用微信分享、扫一扫等微信特有的能力，为微信用户提供更优质的网页体验。  通过使用微信的J">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://detectivehlh.github.io/img/3.jpg">
-<meta property="og:updated_time" content="2018-12-16T14:44:46.081Z">
+<meta property="og:updated_time" content="2019-02-20T05:40:17.626Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何正确的在项目中接入微信JS-SDK">
 <meta name="twitter:description" content="微信JS-SDK的功能如果你点进来，那么我相信你应该知道微信的JS-SDK可以用来做什么了。微信的官方文档描述如下。  微信JS-SDK是微信公众平台面向网页开发者提供的基于微信内的网页开发工具包。  通过使用微信JS-SDK，网页开发者可借助微信高效地使用拍照、选图、语音、位置等手机系统的能力，同时可以直接使用微信分享、扫一扫等微信特有的能力，为微信用户提供更优质的网页体验。  通过使用微信的J">
@@ -379,7 +379,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-16 22:44:46" itemprop="dateModified" datetime="2018-12-16T22:44:46+08:00">2018-12-16</time>
+                <time title="修改时间：2019-02-20 13:40:17" itemprop="dateModified" datetime="2019-02-20T13:40:17+08:00">2019-02-20</time>
               
             
           </span>
@@ -457,7 +457,6 @@
 <p> 通过使用微信JS-SDK，网页开发者可借助微信高效地使用拍照、选图、语音、位置等手机系统的能力，同时可以直接使用微信分享、扫一扫等微信特有的能力，为微信用户提供更优质的网页体验。</p>
 </blockquote>
 <p>通过使用微信的JS-SDK，你可以让你网页在微信内调用拍照、语音、支付、位置、扫一扫这些只能在微信内使用的功能。进过下面的步骤，一步一步的配置，就可以让你正确的在项目中引入微信的JS-SDK。</p>
-<a id="more"></a>
 <h2 id="引入微信的JS文件"><a href="#引入微信的JS文件" class="headerlink" title="引入微信的JS文件"></a>引入微信的JS文件</h2><p>微信的javascript文件的链接是： <a href="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" target="_blank" rel="noopener">http://res.wx.qq.com/open/js/jweixin-1.2.0.js</a></p>
 <p>但是只支持使用 AMD/CMD 标准模块加载方法加载。于是我就在npm的官网上找到了发布后的js-sdk，支持CommonJS的引入方式。npm的地址在 <a href="https://www.npmjs.com/package/weixin-js-sdk" target="_blank" rel="noopener">这里</a>。可以在你的项目中使用如下命令安装。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install weixin-js-sdk</span><br></pre></td></tr></table></figure></p>
 <p>安装好后可以使用一下两种方式进行引入。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 使用CommonJs规范引入 */</span></span><br><span class="line"><span class="keyword">const</span> wx = <span class="built_in">require</span>(<span class="string">'weixin-js-sdk'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 使用ES6模块引入 */</span></span><br><span class="line"><span class="keyword">import</span> wx <span class="keyword">from</span> <span class="string">'weixin-js-sdk'</span>;</span><br></pre></td></tr></table></figure></p>
@@ -575,6 +574,47 @@
 
   
 
+
+
+<% if(theme.gitment.enable) { %>
+<div id="gitment_title" class="gitment_title"></div>
+<div id="container" style="display:none"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  const myTheme = {
+    render(state, instance) {
+      const container = document.createElement('div');
+      container.lang = "en-US";
+      container.className = 'gitment-container gitment-root-container';
+      container.appendChild(instance.renderHeader(state, instance));
+      container.appendChild(instance.renderEditor(state, instance));
+      container.appendChild(instance.renderComments(state, instance));
+      container.appendChild(instance.renderFooter(state, instance));
+      return container;
+    }
+  }
+
+  function showGitment() {
+    $("#gitment_title").attr("style", "display:none");
+    $("#container").attr("style", "").addClass("gitment_container");
+    var gitment = new Gitment({
+      id: decodeURI(window.location.pathname),
+      theme: myTheme,
+      owner: 'detectiveHLH',
+      repo: 'detectiveHLH.github.io',
+      oauth: {
+        client_id: 'e07655d9c13124115cb8',
+        client_secret: 'a2e7006abcefdc46ef821e20a96c7f6497f5b49b'
+      }
+    });
+    gitment.render('container');
+  }
+
+  showGitment();
+</script>
+<% } %>
 
 
         </div>
