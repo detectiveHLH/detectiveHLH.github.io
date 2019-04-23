@@ -4,6 +4,23 @@
 
     
   <url>
+    <loc>https://detectivehlh.github.io/docker/build-front-end-docker-application/</loc>
+    <lastmod>2019-04-23T07:15:25.591Z</lastmod>
+    <data>
+        <display>
+        <title>将你的前端应用打包成docker镜像并部署到服务器？仅需一个脚本搞定</title>
+        <pubTime>2019-04-22T07:19:03.000Z</pubTime>
+        
+        <tag>docker</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://detectivehlh.github.io/java/add-jwt-in-spring-boot/</loc>
     <lastmod>2019-03-18T08:22:11.870Z</lastmod>
     <data>
@@ -301,9 +318,9 @@
         
         <tag>Java</tag>
          
-        <tag>SpringBoot</tag>
-         
         <tag>Redis</tag>
+         
+        <tag>SpringBoot</tag>
          
          
            
