@@ -112,7 +112,7 @@
 <meta name="keywords" content="中间件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="为hexo博客添加基于gitment评论功能">
-<meta property="og:url" content="https://detectivehlh.github.io/frontend/为hexo博客添加基于gitment评论功能/index.html">
+<meta property="og:url" content="http://blog.hulunhao.com/frontend/为hexo博客添加基于gitment评论功能/index.html">
 <meta property="og:site_name" content="detectiveHLH&#39;s blog">
 <meta property="og:description" content="关于gitment gitment其实就是利用你的代码仓库的Issues，来实现评论。每一篇文章对应该代码仓库中的一个Issues,Issues中的评论对应你的博客每篇文章中的评论。如果你是用github的博客的话用起来将会十分的方便。 注册github应用 首先需要在这注册一个OAuth Application, 请戳此处。在注册的过程中，你需要输入以下的东西：Application name">
 <meta property="og:locale" content="zh-CN">
@@ -126,7 +126,7 @@
 
 
 
-  <link rel="canonical" href="https://detectivehlh.github.io/frontend/为hexo博客添加基于gitment评论功能/">
+  <link rel="canonical" href="http://blog.hulunhao.com/frontend/为hexo博客添加基于gitment评论功能/">
 
 
 
@@ -318,7 +318,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://detectivehlh.github.io/frontend/为hexo博客添加基于gitment评论功能/">
+    <link itemprop="mainEntityOfPage" href="http://blog.hulunhao.com/frontend/为hexo博客添加基于gitment评论功能/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lunhao Hu">
@@ -452,7 +452,7 @@
         <p><strong>关于gitment</strong></p>
 <p>gitment其实就是利用你的代码仓库的Issues，来实现评论。每一篇文章对应该代码仓库中的<br>一个Issues,Issues中的评论对应你的博客每篇文章中的评论。如果你是用github的博客的话<br>用起来将会十分的方便。</p>
 <p><strong>注册github应用</strong></p>
-<p>首先需要在这注册一个<em>OAuth Application</em>, <a href="https://github.com/settings/applications/new" target="_blank" rel="noopener">请戳此处</a>。在注册的过程中，你需要输入以下的东西：<br><br>Application name 随意就好<br><br>Homepage URL 你的博客地址，例如<a href="https://detectivehlh.github.io/">https://detectivehlh.github.io/</a><br><br>Application description 随意就好<br><br>Authorization callback URL 也是博客地址，例如<a href="https://detectivehlh.github.io/">https://detectivehlh.github.io/</a><br><br>输入完成之后，点击注册就OK了。成功之后就会拿到<em>Client ID</em>和<em>Client Secret</em>，然后先进行一下步，暂时还不会用到这个。</p>
+<p>首先需要在这注册一个<em>OAuth Application</em>, <a href="https://github.com/settings/applications/new" target="_blank" rel="noopener">请戳此处</a>。在注册的过程中，你需要输入以下的东西：<br><br>Application name 随意就好<br><br>Homepage URL 你的博客地址，例如<a href="https://detectivehlh.github.io/" target="_blank" rel="noopener">https://detectivehlh.github.io/</a><br><br>Application description 随意就好<br><br>Authorization callback URL 也是博客地址，例如<a href="https://detectivehlh.github.io/" target="_blank" rel="noopener">https://detectivehlh.github.io/</a><br><br>输入完成之后，点击注册就OK了。成功之后就会拿到<em>Client ID</em>和<em>Client Secret</em>，然后先进行一下步，暂时还不会用到这个。</p>
 <p><strong>修改主题配置文件</strong></p>
 <p>下一步就是要修改你的博客所使用的主题的配置文件。定位到# Comments，添加如下代码。<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">gitment:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  mint:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  count:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  lazy:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  cleanly:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  language:</span></span><br><span class="line"><span class="attr">  github_user:</span> <span class="string">detectiveHLH</span></span><br><span class="line"><span class="attr">  github_repo:</span> <span class="string">detectiveHLH.github.io</span></span><br><span class="line"><span class="attr">  client_id:</span> <span class="string">xxx</span></span><br><span class="line"><span class="attr">  client_secret:</span> <span class="string">xxx</span></span><br><span class="line"><span class="attr">  proxy_gateway:</span></span><br><span class="line"><span class="attr">  redirect_protocol:</span></span><br></pre></td></tr></table></figure></p>
 <p>将上面代码的github_user和github_repo改成你自己的就可以了。</p>
