@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.hulunhao.com/java/learn-use-hashmap/</loc>
+    <lastmod>2020-11-26</lastmod>
+  </url>  <url>
     <loc>https://www.hulunhao.com/wechat/%E6%B3%A8%E5%86%8C%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E6%B5%8B%E8%AF%95%E5%8F%B7/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
@@ -10,10 +13,10 @@
     <loc>https://www.hulunhao.com/wechat/wechat-js-sdk/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/read/get-out-of-confort-zone/</loc>
+    <loc>https://www.hulunhao.com/read/new-area/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/read/new-area/</loc>
+    <loc>https://www.hulunhao.com/read/get-out-of-confort-zone/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
     <loc>https://www.hulunhao.com/sort/bubble-sort/</loc>
@@ -52,10 +55,10 @@
     <loc>https://www.hulunhao.com/java/newSprintBootStarter/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/java/Web%E5%90%8E%E7%AB%AFresfulAPI%E6%A8%A1%E6%9D%BF/</loc>
+    <loc>https://www.hulunhao.com/java/add-jwt-in-spring-boot/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/java/add-jwt-in-spring-boot/</loc>
+    <loc>https://www.hulunhao.com/java/Web%E5%90%8E%E7%AB%AFresfulAPI%E6%A8%A1%E6%9D%BF/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
     <loc>https://www.hulunhao.com/go/seed-in-go/</loc>
@@ -67,10 +70,10 @@
     <loc>https://www.hulunhao.com/go/talk-about-go/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/go/go-web-backend-starter/</loc>
+    <loc>https://www.hulunhao.com/go/inherit-in-go/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/go/inherit-in-go/</loc>
+    <loc>https://www.hulunhao.com/go/go-web-backend-starter/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
     <loc>https://www.hulunhao.com/frontend/%E5%A6%82%E4%BD%95%E7%94%A8vue-router%E4%B8%BA%E6%AF%8F%E4%B8%AA%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E5%90%84%E8%87%AA%E7%9A%84title/</loc>
@@ -79,10 +82,10 @@
     <loc>https://www.hulunhao.com/frontend/%E4%B8%BAhexo%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E5%9F%BA%E4%BA%8Egitment%E8%AF%84%E8%AE%BA%E5%8A%9F%E8%83%BD/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/frontend/html2canvas%E5%85%B3%E4%BA%8E%E5%9B%BE%E7%89%87%E4%B8%8D%E8%83%BD%E6%AD%A3%E5%B8%B8%E6%88%AA%E5%8F%96%E7%9A%84%E5%8E%9F%E5%9B%A0/</loc>
+    <loc>https://www.hulunhao.com/frontend/js%E4%B8%8Ecss%E6%94%BE%E7%BD%AE%E7%9A%84%E4%BD%8D%E7%BD%AE%E9%97%AE%E9%A2%98/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/frontend/js%E4%B8%8Ecss%E6%94%BE%E7%BD%AE%E7%9A%84%E4%BD%8D%E7%BD%AE%E9%97%AE%E9%A2%98/</loc>
+    <loc>https://www.hulunhao.com/frontend/html2canvas%E5%85%B3%E4%BA%8E%E5%9B%BE%E7%89%87%E4%B8%8D%E8%83%BD%E6%AD%A3%E5%B8%B8%E6%88%AA%E5%8F%96%E7%9A%84%E5%8E%9F%E5%9B%A0/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
     <loc>https://www.hulunhao.com/frontend/vue%E4%B8%AD%E4%BD%BF%E7%94%A8Autoprefixer/</loc>
@@ -94,10 +97,10 @@
     <loc>https://www.hulunhao.com/frontend/gettingStartOfWebAssembly/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/devtools/useful-chrome-extension/</loc>
+    <loc>https://www.hulunhao.com/docker/build-front-end-docker-application/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
-    <loc>https://www.hulunhao.com/docker/build-front-end-docker-application/</loc>
+    <loc>https://www.hulunhao.com/devtools/useful-chrome-extension/</loc>
     <lastmod>2020-11-23</lastmod>
   </url>  <url>
     <loc>https://www.hulunhao.com/build-k8s/</loc>
