@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.hulunhao.com/microservice/microservice-evolution/</loc>
+    
+    <lastmod>2020-11-26T13:35:22.264Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.hulunhao.com/mysql/kernel-in-innodb/</loc>
     
     <lastmod>2020-11-26T12:56:29.717Z</lastmod>
@@ -72,14 +79,14 @@
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/about/index.html</loc>
+    <loc>https://www.hulunhao.com/categories/index.html</loc>
     
     <lastmod>2020-11-23T09:14:26.873Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/categories/index.html</loc>
+    <loc>https://www.hulunhao.com/about/index.html</loc>
     
     <lastmod>2020-11-23T09:14:26.873Z</lastmod>
     
@@ -107,14 +114,14 @@
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/read/get-out-of-confort-zone/</loc>
+    <loc>https://www.hulunhao.com/read/new-area/</loc>
     
     <lastmod>2020-11-23T09:14:26.870Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/read/new-area/</loc>
+    <loc>https://www.hulunhao.com/read/get-out-of-confort-zone/</loc>
     
     <lastmod>2020-11-23T09:14:26.870Z</lastmod>
     
@@ -128,14 +135,14 @@
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/node/how-to-create-cli-tool/</loc>
+    <loc>https://www.hulunhao.com/node/meet-venus-init/</loc>
     
     <lastmod>2020-11-23T09:14:26.869Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/node/meet-venus-init/</loc>
+    <loc>https://www.hulunhao.com/node/how-to-create-cli-tool/</loc>
     
     <lastmod>2020-11-23T09:14:26.869Z</lastmod>
     
@@ -191,14 +198,14 @@
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/java/java-type-erase/</loc>
+    <loc>https://www.hulunhao.com/java/newSprintBootStarter/</loc>
     
     <lastmod>2020-11-23T09:14:26.865Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/java/newSprintBootStarter/</loc>
+    <loc>https://www.hulunhao.com/java/java-type-erase/</loc>
     
     <lastmod>2020-11-23T09:14:26.865Z</lastmod>
     
@@ -240,14 +247,14 @@
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/go/inherit-in-go/</loc>
+    <loc>https://www.hulunhao.com/go/go-web-backend-starter/</loc>
     
     <lastmod>2020-11-23T09:14:26.862Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/go/go-web-backend-starter/</loc>
+    <loc>https://www.hulunhao.com/go/inherit-in-go/</loc>
     
     <lastmod>2020-11-23T09:14:26.862Z</lastmod>
     
@@ -275,14 +282,14 @@
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/frontend/js%E4%B8%8Ecss%E6%94%BE%E7%BD%AE%E7%9A%84%E4%BD%8D%E7%BD%AE%E9%97%AE%E9%A2%98/</loc>
+    <loc>https://www.hulunhao.com/frontend/vue%E4%B8%AD%E4%BD%BF%E7%94%A8Autoprefixer/</loc>
     
     <lastmod>2020-11-23T09:14:26.859Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.hulunhao.com/frontend/vue%E4%B8%AD%E4%BD%BF%E7%94%A8Autoprefixer/</loc>
+    <loc>https://www.hulunhao.com/frontend/js%E4%B8%8Ecss%E6%94%BE%E7%BD%AE%E7%9A%84%E4%BD%8D%E7%BD%AE%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2020-11-23T09:14:26.859Z</lastmod>
     
