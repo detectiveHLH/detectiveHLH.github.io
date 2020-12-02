@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","width":300,"display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文主要介绍了，Redis的主从复制和其实现的底层原理">
+<meta name="keywords" content="Redis,Redis源码,主从复制,高可用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跟随杠精的视角一起来了解Redis的主从复制">
+<meta property="og:url" content="https://www.hulunhao.com/redis/redis-master-slave-copy/index.html">
+<meta property="og:site_name" content="SH的全栈笔记">
+<meta property="og:description" content="本文主要介绍了，Redis的主从复制和其实现的底层原理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gkshtgmguoj313a0piwg2.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gkshrilf4fj31ao0hsgns.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gktnq1q5s5j31460ns0uo.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gku8depsopj30x20iaq3x.jpg">
+<meta property="og:updated_time" content="2020-12-02T01:48:05.689Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="跟随杠精的视角一起来了解Redis的主从复制">
+<meta name="twitter:description" content="本文主要介绍了，Redis的主从复制和其实现的底层原理">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gkshtgmguoj313a0piwg2.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://www.hulunhao.com/redis/redis-master-slave-copy/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>跟随杠精的视角一起来了解Redis的主从复制 | SH的全栈笔记</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=124888966"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '124888966');
+</script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband">
+      <a href="https://github.com/detectiveHLH" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    </div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SH的全栈笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">微信搜索「SH的全栈笔记」</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-leetcode">
+    <a href="/leetcode/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-code"></i> <br>刷题</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.hulunhao.com/redis/redis-master-slave-copy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SH">
+      <meta itemprop="description" content="不想弹好吉他的撸铁狗不是好的程序员">
+      <meta itemprop="image" content="https://tva1.sinaimg.cn/large/006tNbRwgy1g9ydcu1h1hj30by0bygme.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SH的全栈笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">跟随杠精的视角一起来了解Redis的主从复制
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-12-02 09:46:26 / 修改时间：09:48:05" itemprop="dateCreated datePublished" datetime="2020-12-02T09:46:26+08:00">2020-12-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/redis/redis-master-slave-copy/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/redis/redis-master-slave-copy/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/redis/redis-master-slave-copy/" class="leancloud_visitors" data-flag-title="跟随杠精的视角一起来了解Redis的主从复制">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">本文主要介绍了，Redis的主从复制和其实现的底层原理</div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <section id="nice" data-tool="mdnice编辑器" data-website="https://www.mdnice.com" style="font-size: 16px; color: black; padding: 0 10px; word-spacing: 0px; word-break: break-word; word-wrap: break-word; text-align: left; line-height: 1.25; font-family: Optima-Regular, Optima, PingFangTC-Light, PingFangSC-light, PingFangTC-light; letter-spacing: 2px; background-image: linear-gradient(90deg, rgba(50, 0, 0, 0.05) 3%, rgba(0, 0, 0, 0) 3%), linear-gradient(360deg, rgba(50, 0, 0, 0.05) 3%, rgba(0, 0, 0, 0) 3%); background-size: 20px 20px; background-position: center center;"><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">不想弹好吉他的撸铁狗，都不是好的程序猿</p><br></blockquote><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">虽然说单机的Redis性能很好，也有完备的持久化机制，那如果你的业务体量真的很大，超过了单机能够承载的上限了怎么办？不做任何处理的话Redis挂了怎么办？带着这个问题开始我们今天的主题-<strong style="color: #916dd5; font-weight: bold;"><span>「</span>Redis高可用<span>」</span></strong>，由于篇幅原因，本章就只聊聊主从复制。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">为啥要先从主从复制开始聊，是因为<strong style="color: #916dd5; font-weight: bold;"><span>「</span>主从复制<span>」</span></strong>可以说是整个Redis高可用实现的基石，你可以先有这么一个概念，至于具体为什么是基石，这个后面聊到Sentinel和Redis集群的时候会说到。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">首先我们需要知道，对于我们开发人员来说，为什么需要<strong style="color: #916dd5; font-weight: bold;"><span>「</span>主从架构<span>」</span></strong>？一个Redis实例难道不行吗？</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">其实除了开篇提到的负载超过了Redis单机能够处理的上限，还有一种情况Redis也无法保证自身的高可用性。那就是即便Redis能够扛住所有流量，但是如果这个Redis进程所在的机器挂了呢？请求会直接调转枪口，大量的流量会瞬间把你的DB打挂，然后你就可以背个P0，打包回家了。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">而且，假设你对Redis的需求真的超过了单机的容量，你怎么办？搞多台独立的Redis实例吗？那如果用户缓存的数据这一次存在了实例一，下一次如果用户又访问到了实例二，难道又要去走一遍DB吗？除非你能够维护好用户和Redis实例的对应关系（但是通常这样的逻辑比较复杂），否则部署多个Redis实例也就失去了它的意义，没有办法做到横向扩展了。</p><br><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">那换成主从架构就能解决这个问题吗？</p><br></blockquote><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">我们可以从一个图来直观的了解一下。</p><br><figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;"><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkshtgmguoj313a0piwg2.jpg" alt="Redis主从复制" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto; object-fit: contain; box-shadow: 2px 4px 7px #999;"><figcaption style="margin-top: 5px; text-align: center; color: #888; display: block; font-size: 13px;">Redis主从复制</figcaption></figure><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">在主从同步中，我们将节点的角色划分为<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">master</code>和<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">slave</code>，形成<strong style="color: #916dd5; font-weight: bold;"><span>「</span>一主多从<span>」</span></strong>。slave对外提供读操作，而master负责写操作，形成一个读写分离的架构，这样一来就能够承载更多的业务请求。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">在多数的业务场景下，对于Redis的<strong style="color: #916dd5; font-weight: bold;"><span>「</span>读操作<span>」</span></strong>都要多于<strong style="color: #916dd5; font-weight: bold;"><span>「</span>写操作<span>」</span></strong>，所以当读请求量特别大的时候，我们可以通过增加slave节点来使Redis扛住更多的流量。</p><br><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">你这不行啊老弟，你往master写数据，那我要是连接到slave上去了，不就拿不到之前的数据了？</p><br></blockquote><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">我这个小标题的不是写了吗？<strong style="color: #916dd5; font-weight: bold;"><span>「</span>主从复制<span>」</span></strong>，slave会按照某种策略从master同步数据。Redis中我们可以通过<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">slaveof</code>命令让一个Redis实例去复制（replicate）另外一台Redis的状态。被复制的Redis实例就是master节点，而执行<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">slaveof</code>命令的机器就是slave节点。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Redis的主从复制分为两个步骤，分别是<strong style="color: #916dd5; font-weight: bold;"><span>「</span>同步<span>」</span></strong>和<strong style="color: #916dd5; font-weight: bold;"><span>「</span>命令传播<span>」</span></strong>。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;"><strong style="color: #916dd5; font-weight: bold;"><span>「</span>同步操作<span>」</span></strong>用于将Master节点内存状态复制给Slave节点，而<strong style="color: #916dd5; font-weight: bold;"><span>「</span>命令传播<span>」</span></strong>则是在同步时，客户端又执行了一些<strong style="color: #916dd5; font-weight: bold;"><span>「</span>写<span>」</span></strong>操作改变了服务器的状态，此时master节点的状态与同步操作执行的时候不一致了，所以需要命令传播来使master和slave状态重新一致。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">同步的大致的流程如下：</p><br><ul data-tool="mdnice编辑器" style="margin-top: 8px; margin-bottom: 8px; padding-left: 25px; color: black; font-size: 15px; list-style-type: circle;"><br><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;">slave节点向master节点发送<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">sync</code>命令</section></li><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;">master收到<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">sync</code>命令之后会执行<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">bgsave</code>命令，Redis会fork出一个子进程在后台生成RDB文件，同时将同步过程中的写命令记录到缓冲区中</section></li><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;">文件生成后，master会把RDB文件发送给slave，从服务器接收到RDB文件会将其载入内存</section></li><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;">然后master将记录在缓冲区的所有写命令发送给slave，slave对这些命令进行<strong style="color: #916dd5; font-weight: bold;"><span>「</span>重放<span>」</span></strong>，将其数据库的状态更新至和master一致</section></li></ul><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">为了让大家更加清晰的认识到这个过程，我们通过图再来了解一下。</p><br><figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;"><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkshrilf4fj31ao0hsgns.jpg" alt="Redis主从复制" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto; object-fit: contain; box-shadow: 2px 4px 7px #999;"><figcaption style="margin-top: 5px; text-align: center; color: #888; display: block; font-size: 13px;">Redis主从复制</figcaption></figure><br><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">🐂🍺，那如果同步完了之后slave又挂了咋办？slave重启之后很可能就又跟maste不一致了？</p><br></blockquote><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">的确是这样，这就涉及到一个名词叫<strong style="color: #916dd5; font-weight: bold;"><span>「</span>断点续传<span>」</span></strong>了。上面讨论的是slave第一次连接到master，会执行<strong style="color: #916dd5; font-weight: bold;"><span>「</span>全量复制<span>」</span></strong>，而针对上面这种情况，Redis新老版本处理方式不一样。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">Redis2.8之前，当主从完成了同步之后，slave如果断线重连，向master发送<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">sync</code>命令，master会将全量的数据再次同给slave。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">但是我们会发现一个问题，就是大部分数据都是有序的，再次全量同步显得没有必要。而在 Redis2.8之后，为了解决这个问题，便使用了<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">psync</code>命令来代替<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">sync</code>。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">简单来说psync命令就是将slave断线期间master接收到的写命令全部发送给slave，slave重放之后状态便与master一致了。</p><br><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">呵呵，就这？那你知道psync具体怎么实现的吗？还是说就只会用用？</p><br></blockquote><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">psync的实现依赖于主从双方共同维护的<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">offset</code>偏移量。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">每次master向slave进行<strong style="color: #916dd5; font-weight: bold;"><span>「</span>命令传播<span>」</span></strong>，传播了多少个字节的数据，就将自己的offset加上传播的字节数。而slave每次收到多少字节的数据，也会同样的更新自己的offset。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">基于offset，只需要简单的比对就知道当前主从的状态是否是一致的了，然后基于offset，将对应偏移量所对应的指令传播给slave重放即可。所以即使同步的时候slave挂掉了，基于offset，也能达到断点续传的效果。</p><br><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">不是吧不是吧，那master也挂了呢？你slave重新启动之后master的数据也更新了，按照你的说法，这两永远不可能达到数据一致了</p><br></blockquote><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">这个问题Redis的确也有想到，实际上除了offset之外，slave断线重连之后还会带上上一个master的实例的<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">runid</code>，每个服务实例都有自己的唯一的runid，只要Redis服务重启，其<code style="font-size: 14px; word-wrap: break-word; padding: 2px 4px; border-radius: 4px; margin: 0 2px; background-color: rgba(27,31,35,.05); font-family: Operator Mono, Consolas, Monaco, Menlo, monospace; word-break: break-all; color: #916dd5; font-weight: bolder; background: none;">runid</code>就会发生改变。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">master收到这个runid之后会判断是否与自己当前的runid一致，如果一致说明断线之前还是与自己建立的连接，而如果不一致就说明slave断线期间，master也发生了宕机，此时就需要将数据<strong style="color: #916dd5; font-weight: bold;"><span>「</span>全量同步<span>」</span></strong>给slave了。</p><br><figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;"><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gktnq1q5s5j31460ns0uo.jpg" alt="redis-runid" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto; object-fit: contain; box-shadow: 2px 4px 7px #999;"><figcaption style="margin-top: 5px; text-align: center; color: #888; display: block; font-size: 13px;">redis-runid</figcaption></figure><br><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">就算你能解决这个问题，但是你就维护了一个偏移量，偏移量对应的命令从哪儿来？天上掉下来吗？我哪儿知道这些命令是啥？</p><br></blockquote><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">的确，我们需要通过这个offset去拿到真正需要的数据—也就是指令，而Redis是通过<strong style="color: #916dd5; font-weight: bold;"><span>「</span>复制积压缓冲区<span>」</span></strong>来实现的。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">名字高大上，实际上就是一队列。就跟什么递归、轮询、透传一样，听着高大上，实际上简单的一匹。言归正传，复制积压缓冲区的默认大小为1M，Redis在进行<strong style="color: #916dd5; font-weight: bold;"><span>「</span>命令传播<span>」</span></strong>时，除了将写命令发送给slave，还会将命令写到<strong style="color: #916dd5; font-weight: bold;"><span>「</span>复制积压缓冲区<span>」</span></strong>内，并和当前的offset关联起来。这样一来就能够通过offset获取到对应的指令了。</p><br><figure data-tool="mdnice编辑器" style="margin: 0; margin-top: 10px; margin-bottom: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;"><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gku8depsopj30x20iaq3x.jpg" alt="redis-backlog" style="max-width: 100%; border-radius: 6px; display: block; margin: 20px auto; object-fit: contain; box-shadow: 2px 4px 7px #999;"><figcaption style="margin-top: 5px; text-align: center; color: #888; display: block; font-size: 13px;">redis-backlog</figcaption></figure><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">但是由于缓冲区的大小有限，如果slave的断线时间太久，复制积压缓冲区内早些时候的指令就已经被新的指令覆盖掉了，此处可以理解为一个队列，早些时候入队的元素已经被出队了。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">由于没有相对应的offset了，也就无法获取指令数据，此时Redis就会进行<strong style="color: #916dd5; font-weight: bold;"><span>「</span>全量同步<span>」</span></strong>。当然，如果offset还存在于复制积压缓冲区中，则按照对应的offset进行<strong style="color: #916dd5; font-weight: bold;"><span>「</span>部分同步<span>」</span></strong>。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">基于以上的全量、增量的主从复制，能够在master出现故障的情况下，进行主从的切换，保证服务的正常运行。除此之外还能解决异常情况下数据丢失的问题。基于读写分离的策略还能够提高整个Redis服务的并发量。</p><br><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">可别吹了，你说的这个什么<strong style="color: #916dd5; font-weight: bold;"><span>「</span>主从复制<span>」</span></strong>就没啥缺点吗？</p><br></blockquote><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">其实是有的，例如刚刚提到的主从的切换，如果不用现成的<strong style="color: #916dd5; font-weight: bold;"><span>「</span>HA<span>」</span></strong>框架，这个过程需要程序员自己手动的完成，同时通知服务调用方Redis的IP发生了变化，这个过程可以说是十分的复杂，甚至还可能涉及到代码配置的改动。而且之前的slave复制的可都是挂掉的master，还得去slave上更改其复制的主库，就更加复杂了。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">除此之外，虽然实现了读写分离，但是由于是<strong style="color: #916dd5; font-weight: bold;"><span>「</span>一主多从<span>」</span></strong>的架构，集群的<strong style="color: #916dd5; font-weight: bold;"><span>「</span>读请求<span>」</span></strong>可以扩展，但是<strong style="color: #916dd5; font-weight: bold;"><span>「</span>写请求<span>」</span></strong>的并发是有上限的，那就是master能够扛住的上限，这个没有办法扩展。</p><br><p data-tool="mdnice编辑器" style="padding-top: 8px; padding-bottom: 8px; line-height: 26px; color: black; margin: 10px 0px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px;">好了，本期的分享就到此结束了，我们下期再见。</p><br><blockquote class="multiquote-1" data-tool="mdnice编辑器" style="border: none; display: block; font-size: 0.9em; overflow: auto; overflow-scrolling: touch; border-left: 3px solid rgba(0, 0, 0, 0.4); color: #6a737d; padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px; margin-bottom: 20px; margin-top: 20px; border-left-color: #d89cf6; background: #f4eeff;"><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">如果你觉得这篇文章对你有帮助，还麻烦<strong style="color: #916dd5; font-weight: bold;"><span>「</span>点个赞<span>」</span></strong>，<strong style="color: #916dd5; font-weight: bold;"><span>「</span>关个注<span>」</span></strong>，<strong style="color: #916dd5; font-weight: bold;"><span>「</span>分个享<span>」</span></strong>，<strong style="color: #916dd5; font-weight: bold;"><span>「</span>留个言<span>」</span></strong></p><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">也可以微信搜索公众号【<strong style="color: #916dd5; font-weight: bold;"><span>「</span>SH的全栈笔记<span>」</span></strong>】，关注公众号提前阅读其他的文章</p><br><p style="padding-top: 8px; padding-bottom: 8px; letter-spacing: 2px; font-size: 14px; word-spacing: 2px; margin: 0px; color: black; line-height: 26px;">往期文章</p><br><ul style="margin-top: 8px; margin-bottom: 8px; padding-left: 25px; color: black; font-size: 15px; list-style-type: circle;"><br><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;"><a href="https://mp.weixin.qq.com/s/Pje0emTqS4S_IbtbVY9S5w" style="text-decoration: none; word-wrap: break-word; color: #916dd5; font-weight: bolder; border-bottom: 1px solid #916dd5;" target="_blank" rel="noopener">Redis基础—剖析基础数据结构及其用法</a></section></li><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;"><a href="https://mp.weixin.qq.com/s/m7WEAC6juUYnA5yyKgR4uA" style="text-decoration: none; word-wrap: break-word; color: #916dd5; font-weight: bolder; border-bottom: 1px solid #916dd5;" target="_blank" rel="noopener">Redis基础—了解Redis是如何做数据持久化的</a></section></li><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;"><a href="https://mp.weixin.qq.com/s/m9Vuzey7frP7f9p_0er1xw" style="text-decoration: none; word-wrap: break-word; color: #916dd5; font-weight: bolder; border-bottom: 1px solid #916dd5;" target="_blank" rel="noopener">简单了解一下K8S，并搭建自己的集群</a></section></li><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;"><a href="https://mp.weixin.qq.com/s/KGubO4ARo8IEBqzJ8t6GzA" style="text-decoration: none; word-wrap: break-word; color: #916dd5; font-weight: bolder; border-bottom: 1px solid #916dd5;" target="_blank" rel="noopener">WebAssembly完全入门——了解wasm的前世今生</a></section></li><li><section style="margin-top: 5px; margin-bottom: 5px; line-height: 26px; text-align: left; color: rgb(1,1,1); font-size: 14px; font-weight: normal;"><a href="https://mp.weixin.qq.com/s/1JVETSgjTrV-JjB96Q_ePQ" style="text-decoration: none; word-wrap: break-word; color: #916dd5; font-weight: bolder; border-bottom: 1px solid #916dd5;" target="_blank" rel="noopener">浅谈JVM与垃圾回收</a></section></li></ul><br></blockquote><br></section>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+            <a href="/tags/Redis源码/" rel="tag"># Redis源码</a>
+          
+            <a href="/tags/主从复制/" rel="tag"># 主从复制</a>
+          
+            <a href="/tags/高可用/" rel="tag"># 高可用</a>
+          
+        </div>
+      
+
+      <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------      本文结束  <i class="fa fa-thumbs-up"></i>   感谢您的阅读      -------------</div>
+    
+</div>
+
+        
+      </div>
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/redis/redis-persistence/" rel="next" title="Redis基础—了解Redis是如何做数据持久化的">
+                <i class="fa fa-chevron-left"></i> Redis基础—了解Redis是如何做数据持久化的
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://tva1.sinaimg.cn/large/006tNbRwgy1g9ydcu1h1hj30by0bygme.jpg" alt="SH">
+            
+              <p class="site-author-name" itemprop="name">SH</p>
+              <p class="site-description motion-element" itemprop="description">不想弹好吉他的撸铁狗不是好的程序员</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/detectiveHLH" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SH</span>
+  <br>
+  <span class="author" itemprop="copyrightHolder">版权所有ICP证：<a target="_blank" href="http://www.beian.miit.gov.cn/">蜀ICP备19009702号</a></span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz',
+        appKey: 'w9colOCMhD54kJr6lybpWuoy',
+        placeholder: '欢迎交流',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "r4GA5m4P4SXbOnic6b03CRyO-gzGzoHsz",
+                'X-LC-Key': "w9colOCMhD54kJr6lybpWuoy",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
