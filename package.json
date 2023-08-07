@@ -1,0 +1,15 @@
+{
+  "name": "detectivehlh.github.io",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:detectiveHLH/detectiveHLH.github.io.git",
+  "author": "leonsh",
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.9.9"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  }
+}
