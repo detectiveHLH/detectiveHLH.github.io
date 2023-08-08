@@ -3,11 +3,18 @@ module.exports = {
     title: 'SH的全栈笔记',
     description: 'Just playing around',
     head: [
-        ['link', { rel: 'icon', href: '/logo.png' }]
+        ['link', {rel: 'icon', href: '/logo.png'}]
+    ],
+    plugins: [
+        '@vuepress/back-to-top',
+        '@vuepress/medium-zoom',
+        '@vuepress/nprogress',
     ],
     themeConfig: {
         // 导航栏的图标
         logo: '/logo.png',
+        smoothScroll: true,
+        lastUpdated: 'Last Updated',
         // 导航栏目录
         nav: [{
             text: '链接',
@@ -22,13 +29,18 @@ module.exports = {
                 {text: 'Go', link: '/language/go'}
             ]
         }, {
-            text: 'Kafka',
-            link: '/middleware/kafka/kafka-1'
-        }, {
-            text: 'RocketMQ',
-            link: '/middleware/rocketmq/rocketmq-1',
+            text: '博客',
+            link: '/blog/mysql/简单了解InnoDB底层原理.md',
         }],
         sidebar: {
+            '/blog/': [{
+                title: 'MySQL',
+                collapsable: true,
+                sidebarDepth: 2,
+                children: [
+                    '/blog/mysql/简单了解InnoDB底层原理.md',
+                ]
+            }],
             '/middleware/kafka/': [{
                 title: 'Kafka 分组 1',
                 collapsable: true,

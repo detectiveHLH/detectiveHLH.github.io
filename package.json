@@ -6,10 +6,14 @@
   "author": "leonsh",
   "license": "MIT",
   "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.9.9",
+    "@vuepress/plugin-medium-zoom": "^1.9.9",
+    "@vuepress/plugin-nprogress": "^1.9.9",
     "vuepress": "^1.9.9"
   },
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
-  }
+  },
+  "dependencies": {}
 }
