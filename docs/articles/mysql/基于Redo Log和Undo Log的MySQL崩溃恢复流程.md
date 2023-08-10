@@ -7,7 +7,7 @@ permalink: /articles/23083.html
 
 
 
-### 黑盒下的更新数据流程
+## 黑盒下的更新数据流程
 
 当我们查询数据的时候，会先去Buffer Pool中查询。如果Buffer Pool中不存在，存储引擎会先将数据从磁盘加载到Buffer Pool中，然后将数据返回给客户端；同理，当我们更新某个数据的时候，如果这个数据不存在于Buffer Pool，同样会先数据加载进来，然后修改修改内存的数据。被修改过的数据会在之后统一刷入磁盘。
 
@@ -19,7 +19,7 @@ permalink: /articles/23083.html
 
 
 
-### Redo Log & Undo Log
+## Redo Log & Undo Log
 
 而通过MySQL能够实现崩溃恢复的**事实**来看，MySQL必定实现了某些骚操作。没错，这就是接下来我们要介绍的另外的两个关键功能，**Redo Log**和**Undo Log**。
 
@@ -36,7 +36,7 @@ Undo Log就像你刚刚在Git中Commit了一下，然后再做一个较为复杂
 
 
 
-### 实现日志后的更新流程
+## 实现日志后的更新流程
 
 有了Redo Log和Undo Log，我们再将上面的那张图给完善一下。
 
@@ -60,7 +60,7 @@ Undo Log就像你刚刚在Git中Commit了一下，然后再做一个较为复杂
 
 
 
-### 流程中仍然存在的问题
+## 流程中仍然存在的问题
 
 你可能认为到这一步就完美了，事实上则不然。假设我们在将Redo Log刷入到磁盘之后MySQL突然宕机了，binlog还没有来得及写入。此时重启，Redo Log所代表的状态就和Binlog所代表的状态**不一致**了。Redo Log恢复到Buffer Pool中的某行的A字段是3，但是任何监听其Binlog的数据库读取出来的数据确是2。
 
@@ -68,7 +68,7 @@ Undo Log就像你刚刚在Git中Commit了一下，然后再做一个较为复杂
 
 
 
-### 基于2PC的一致性保障
+## 基于2PC的一致性保障
 
 从这你可以发现一个关键的问题，那就是必须保证Redo Log和Binlog在事务提交时的数据一致性，要么都存在，要么都不存在。MySQL是通过 **2PC（two-phase commit protocol）**来实现的。
 
@@ -92,7 +92,7 @@ Commit阶段，向磁盘中的Redo Log写入Commit标识，表示事务提交。
 
 
 
-### 验证2PC机制的可用性
+## 验证2PC机制的可用性
 
 这就是2PC提交Redo Log和Binlog的过程，那在这个期间发生了异常，2PC这套机制真的能保证数据一致性吗？
 
