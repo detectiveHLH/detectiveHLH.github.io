@@ -5,15 +5,16 @@
   "repository": "git@github.com:detectiveHLH/detectiveHLH.github.io.git",
   "author": "leonsh",
   "license": "MIT",
-  "devDependencies": {
-    "@vuepress/plugin-back-to-top": "^1.9.9",
-    "@vuepress/plugin-medium-zoom": "^1.9.9",
-    "vuepress": "^1.9.9",
-    "vuepress-plugin-nprogress": "^1.1.8"
-  },
   "scripts": {
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build src",
+    "docs:clean-dev": "vuepress dev src --clean-cache",
+    "docs:dev": "vuepress dev src",
+    "docs:update-package": "yarn dlx vp-update"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "@vuepress/client": "2.0.0-beta.66",
+    "vue": "^3.2.47",
+    "vuepress": "2.0.0-beta.66",
+    "vuepress-theme-hope": "2.0.0-beta.234"
+  }
 }
