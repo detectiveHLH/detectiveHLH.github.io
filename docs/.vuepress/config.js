@@ -18,6 +18,7 @@ const sidebar = {
         collapsable: true,
         sidebarDepth: 2,
         children: [
+            '/articles/mysql/深入了解 MySQL 主从复制的原理.md',
             '/articles/mysql/简单了解InnoDB底层原理.md',
         ]
     }],
@@ -63,9 +64,9 @@ module.exports = {
         ['link', {rel: 'icon', href: '/logo.png'}]
     ],
     plugins: [
+        'vuepress-plugin-nprogress',
         '@vuepress/back-to-top',
         '@vuepress/medium-zoom',
-        '@vuepress/nprogress',
     ],
     themeConfig: {
         // 导航栏的图标

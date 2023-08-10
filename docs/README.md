@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /images/wechat-official-qrcode.jpg
+heroImage: /wechat-official-qrcode.jpg
 heroText: SH的全栈笔记
 tagline: Nothing is true, Everything is permitted.
 actionText: 历史博客 →
