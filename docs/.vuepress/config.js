@@ -18,6 +18,7 @@ const sidebar = {
         collapsable: true,
         sidebarDepth: 2,
         children: [
+            '/articles/mysql/基于Redo Log和Undo Log的MySQL崩溃恢复流程.md',
             '/articles/mysql/深入了解 MySQL 主从复制的原理.md',
             '/articles/mysql/简单了解InnoDB底层原理.md',
         ]
