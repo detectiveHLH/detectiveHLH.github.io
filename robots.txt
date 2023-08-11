@@ -1,16 +1,5 @@
-User-agent: *
-Allow: /
-Allow: /article
-Allow: /tags/
-Allow: /category/
-Allow: /intro/
 
-Disallow: /vendors/
-Disallow: /js/
-Disallow: /css/
-Disallow: /fonts/
-Disallow: /vendors/
-Disallow: /fancybox/
+User-agent:*
+Disallow:
 
-Sitemap: https://www.hulunhao.com/sitemap.xml
-Sitemap: https://www.hulunhao.com/baidusitemap.xml
+Sitemap: https://leonsh.cn/sitemap.xml
