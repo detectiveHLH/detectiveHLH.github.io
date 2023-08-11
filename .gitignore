@@ -104,3 +104,12 @@ dist
 .tern-port
 
 .idea/
+
+# Vuepress Cache
+**/.vuepress/.cache/**
+# Vuepress Temp
+**/.vuepress/.temp/**
+# Vuepress Output
+**/.vuepress/dist/
+
+.DS_Store
