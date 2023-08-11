@@ -2,8 +2,9 @@
 title: 主要功能与配置演示
 index: false
 icon: laptop-code
+article: false
 category:
-  - 使用指南
+- 使用指南
 ---
 
 ## 目录

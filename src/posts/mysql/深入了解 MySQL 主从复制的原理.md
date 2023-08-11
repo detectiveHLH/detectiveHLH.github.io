@@ -1,6 +1,6 @@
 ---
-permalink: /articles/23082.html
 date: 2021-01-12
+permalink: /posts/23082.html
 category:
 - mysql
 ---

@@ -1,6 +1,6 @@
 let nav = [{
     text: '博客',
-    link: '/articles.html',
+    link: '/posts.html',
 },
 //     {
 //     text: '链接',

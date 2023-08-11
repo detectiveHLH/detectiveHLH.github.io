@@ -1,11 +1,8 @@
 ---
-permalink: /articles/23083.html
-icon: pen-to-square
 date: 2021-01-26
+permalink: /posts/23083.html
 category:
 - mysql
-tag:
-- mysql2
 ---
 
 # 基于Redo Log和Undo Log的MySQL崩溃恢复流程

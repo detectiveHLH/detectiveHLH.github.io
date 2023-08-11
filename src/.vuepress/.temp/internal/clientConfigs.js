@@ -7,9 +7,10 @@ import clientConfig5 from '/Users/bytedance/projects/personal/detectiveHLH.githu
 import clientConfig6 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/node_modules/@vuepress/plugin-theme-data/lib/client/config.js'
 import clientConfig7 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/node_modules/vuepress-plugin-comment2/lib/client/config.js'
 import clientConfig8 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/node_modules/vuepress-plugin-copy-code2/lib/client/config.js'
-import clientConfig9 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/src/.vuepress/.temp/md-enhance/config.js'
-import clientConfig10 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/node_modules/vuepress-plugin-photo-swipe/lib/client/config.js'
-import clientConfig11 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/src/.vuepress/.temp/theme-hope/config.js'
+import clientConfig9 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/node_modules/vuepress-plugin-copyright2/lib/client/config.js'
+import clientConfig10 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/src/.vuepress/.temp/md-enhance/config.js'
+import clientConfig11 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/node_modules/vuepress-plugin-photo-swipe/lib/client/config.js'
+import clientConfig12 from '/Users/bytedance/projects/personal/detectiveHLH.github.io/src/.vuepress/.temp/theme-hope/config.js'
 
 export const clientConfigs = [
   clientConfig0,
@@ -24,4 +25,5 @@ export const clientConfigs = [
   clientConfig9,
   clientConfig10,
   clientConfig11,
+  clientConfig12,
 ]
