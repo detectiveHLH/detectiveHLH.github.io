@@ -23,3 +23,5 @@ listFiles(){
 }
 
 listFiles $path
+
+echo "image compress success."
