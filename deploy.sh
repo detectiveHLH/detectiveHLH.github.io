@@ -1,6 +1,6 @@
 rm -rf src/.vuepress/dist
 
-./compress-image.sh
+./compress_image.sh
 
 yarn docs:build
 

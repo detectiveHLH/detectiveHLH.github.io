@@ -1,5 +1,5 @@
 #!/bin/sh
-cd src/.vuepress/public/images && ls
+cd src/.vuepress/public/images || exit
 
 if [ ! -z "$1" ]; then
   path=$1
