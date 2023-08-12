@@ -12,7 +12,7 @@ cover: /assets/images/cover3.jpg
 
 小册介绍：
 
-![RocketMQ 核心原理解析](/images/rocketmq-course-share.jpg)
+![RocketMQ 核心原理解析](/images/rocketmq-course-share.jpg =400x)
 
 ## 个人公众号
 

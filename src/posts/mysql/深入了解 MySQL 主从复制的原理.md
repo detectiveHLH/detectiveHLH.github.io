@@ -194,7 +194,7 @@ relay log其实和binlog没有太大的区别，在MySQL 4.0 之前是没有Rela
 
 甚至你可以把其中一个备库作为你的预发环境的数据库，当然，这说到底还是直接动了生产环境的数据库，是一种过于理想的用途，因为这还涉及到生产环境数据库的数据敏感性。不是所有人都能够接触到的，需要有完善的权限机制。
 
-![MySQL一主多从](/images/mysql/23082/one-master-multi-follower.jpeg)
+![MySQL一主多从](/images/mysql/23082/one-master-multi-follower.jpeg =600x)
 
 值得注意的是，如果有n个从库，那么主库上就会有n个binlog dump线程。如果这个n比较大的话在复制的时候可能会造成主库的性能抖动。所以在从库较多的情况下可以采用级联复制。
 
