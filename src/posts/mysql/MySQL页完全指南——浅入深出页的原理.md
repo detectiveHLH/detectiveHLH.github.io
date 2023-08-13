@@ -7,7 +7,7 @@ category:
 
 # MySQL 页完全指南——浅入深出页的原理
 
-之前写了一些关于 MySQL 的 InnoDB 存储引擎的文章，里面好几次都提到了**页（Pages）**这个概念，但是都只是简要的提了一下。例如之前在聊 [InnoDB内存结构](https://mp.weixin.qq.com/s/D-4m5RZwOjhJpLytiJ5FdA) 时提到过，但当时的重点是内存架构，就没有展开深入。
+之前写了一些关于 MySQL 的 InnoDB 存储引擎的文章，里面好几次都提到了**页**这个概念，但是都只是简要的提了一下。例如之前在聊 [InnoDB内存结构](https://mp.weixin.qq.com/s/D-4m5RZwOjhJpLytiJ5FdA) 时提到过，但当时的重点是内存架构，就没有展开深入。
 
 我发现有好几次都需要提到页，那我就正好拿一篇来详细的讲讲 InnoDB 中的页。
 
