@@ -1,7 +1,6 @@
 project_path=$(pwd)
 
 cd ./src/posts || exit
-
 final_path=$(pwd)
 
 get_permalink(){
@@ -14,16 +13,12 @@ get_permalink(){
   else
     echo "${curr_prefix}1"
   fi
-
-#  echo "${date: 2: 2}${date: 5: 2}"
-#  echo "$last"
 }
-
 
 filename=$1
 category=$2
 date=$(date "+%Y-%m-%d")
-permalink="$(get_permalink "$project_path")"
+permanent_number="$(get_permalink "$project_path")"
 
 if [ -z "$filename" ]; then
   echo "filename can not be empty"
@@ -32,10 +27,11 @@ fi
 
 article_temp='---
 date: '${date}'
-permalink: /posts/'${permalink}'.html
+permalink: /posts/'${permanent_number}'.html
 category:
 - '${category}'
 ---'
-#rm $latest_permalink
-echo "$permalink" > "$project_path/latest_permalink.txt"
+
+mkdir "$project_path/src/.vuepress/public/images/${category}/${permanent_number}"
+echo "$permanent_number" > "$project_path/latest_permalink.txt"
 echo "$article_temp" > "$final_path/$category/$filename".md
