@@ -33,6 +33,7 @@ category:
 ---'
 
 new_post_dir=$project_path/src/.vuepress/public/images/${category}/${permanent_number}
-mkdir "$new_post_dir" && open "$new_post_dir"
+mkdir "$new_post_dir"
+open "$new_post_dir"
 echo "$permanent_number" > "$project_path/latest_permalink.txt"
 echo "$article_temp" > "$final_path/$category/$filename".md
