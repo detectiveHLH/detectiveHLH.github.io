@@ -30,14 +30,12 @@ if [ -z "$filename" ]; then
   exit 1
 fi
 
-article_temp='
----
+article_temp='---
 date: '${date}'
 permalink: /posts/'${permalink}'.html
 category:
 - '${category}'
----
-'
+---'
 #rm $latest_permalink
 echo "$permalink" > "$project_path/latest_permalink.txt"
 echo "$article_temp" > "$final_path/$category/$filename".md
