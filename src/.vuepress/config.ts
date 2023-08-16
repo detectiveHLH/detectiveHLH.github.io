@@ -1,7 +1,7 @@
 import {defineUserConfig} from "vuepress";
 import theme from "./theme.js";
 
-export default defineUserConfig({
+let config = {
     base: "/",
     lang: "zh-CN",
     title: "SH的全栈笔记",
@@ -9,4 +9,6 @@ export default defineUserConfig({
     theme,
     // Enable it with pwa
     // shouldPrefetch: false,
-});
+};
+
+export default defineUserConfig(config);
