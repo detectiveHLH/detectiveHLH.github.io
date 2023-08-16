@@ -19,14 +19,26 @@ get_permalink(){
 filename=$1
 category=$2
 date=$(date "+%Y-%m-%d")
-permanent_number="$(get_permalink "$project_path")"
 
 if [ -z "$filename" ]; then
   echo "filename can not be empty"
   exit 1
 fi
 
+# post 目录不存在则直接创建目录
+if [ ! -d "${$final_path/$category}" ]; then
+  mkdir "$final_path/$category"
+fi
+
+# 放图片的 category 目录不存在, 也直接新建目录
+image_category_dir=$project_path/src/.vuepress/public/images/${category}
+if [ ! -d "$image_category_dir" ]; then
+  mkdir "$image_category_dir"
+fi
+
+
 # 新文章的 formatter 模版
+permanent_number="$(get_permalink "$project_path")"
 article_temp='---
 date: '${date}'
 permalink: /posts/'${permanent_number}'.html
