@@ -13,7 +13,7 @@ tag:
 
 事情是这样的，在某乎的邀请回答中看到了这个问题：
 
--![](/images/mysql/230814/question-invited.jpeg)
+-![](/images/230814/question-invited.jpeg)
 
 然后当时我没多想就啪一下写下来这样的答案：
 
@@ -37,7 +37,7 @@ tag:
 
 我们这篇「短文」讨论的是【MySQL 表数据多久刷一次盘】，从这个标题中我们可以分裂成两个问题：
 
-![](/images/mysql/230814/all-questions.jpeg)
+![](/images/230814/all-questions.jpeg)
 
 1. 刷什么到磁盘
 2. 什么时候刷到磁盘
@@ -54,7 +54,7 @@ tag:
 >
 > 对页不太了解的可以去看看之前写的文章：[MySQL 页完全指南——浅入深出页的原理](https://mp.weixin.qq.com/s/UgLcleeeAbXPQYp61JB0qQ)
 
-![](/images/mysql/230814/flush-page-list.jpeg)
+![](/images/230814/flush-page-list.jpeg)
 
 在 InnoDB 中，**页**是数据被管理的最小的单位。当使用 InnoDB 作为存储引擎的 MySQL 运行时，表中一行一行的数据会被组织在一页一页当中，放在 Buffer Pool 中。
 
@@ -62,13 +62,13 @@ tag:
 
 这一页一页的数据，就存放在 Buffer Pool 中。当 DML 语句（也就是 CRUD）语句对表数据进行了变更之后，数据所在的那一页就会被标记为**脏页**。
 
-![](/images/mysql/230814/dirty-page.jpeg)
+![](/images/230814/dirty-page.jpeg)
 
 InnoDB 会用一个叫【Flush 链表】的结构来存放这些脏页，凡是被放进该链表的页都代表需要**刷入磁盘**，但不是立即刷入。
 
 和 InnoDB 的其他日志例如 Redo Log 一样，这些日志都是有自己的**刷盘策略**。例如 Redo Log，其刷盘策略可以用下图来表示： 
 
-![](/images/mysql/230814/flush-page-strategy.jpeg)
+![](/images/230814/flush-page-strategy.jpeg)
 
 参数为0，Redo Log 会每隔一秒，写入并且刷入磁盘。
 
@@ -76,7 +76,7 @@ InnoDB 会用一个叫【Flush 链表】的结构来存放这些脏页，凡是�
 
 参数为2，每次事务提交，都会写到 OS 缓存中去，然后每隔一秒将 OS 缓存中的数据刷入磁盘
 
-![](/images/mysql/230814/strategy-detail.jpeg)
+![](/images/230814/strategy-detail.jpeg)
 
 而 Flush 链表也有自己的策略。
 

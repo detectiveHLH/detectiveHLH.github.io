@@ -23,7 +23,7 @@ tag:
 
 其大致结构如下图。
 
-![](/images/mysql/23084/innodb-memory-structure.jpeg)
+![](/images/23084/innodb-memory-structure.jpeg)
 
 InnoDB内存的两个主要区域分别为**Buffer Pool**和**Log Buffer**，此处的Log Buffer目前是用于缓存Redo Log。而Buffer Pool则是MySQL或者说InnoDB中，十分重要、核心的一部分，位于主存。这也是为什么其访问数据的效率高，你可以暂时把它理解成Redis那样的内存数据库，因为我们更新和新增当然它不是，只是这样会更加方便我们理解。
 
@@ -39,11 +39,11 @@ InnoDB内存的两个主要区域分别为**Buffer Pool**和**Log Buffer**，此
 
 InnoDB使用了**链表**来组织页和页中存储的数据，页与页之间形成了**双向链表**，这样可以方便的从当前页跳到下一页，同时使用LRU（Least Recently Used）算法去淘汰那些不经常使用的数据。
 
-![](/images/mysql/23084/simple-page-structure.jpeg)
+![](/images/23084/simple-page-structure.jpeg)
 
 同时，每页中的数据也通过**单向链表**进行链接。因为这些数据是分散到Buffer Pool中的，单向链表将这些分散的内存给连接了起来。
 
-![](/images/mysql/23084/single-linkedlist-for-user-record.jpeg)
+![](/images/23084/single-linkedlist-for-user-record.jpeg)
 
 
 
@@ -75,13 +75,13 @@ Log Buffer用来存储那些即将被刷入到磁盘文件中的日志，例如R
 
 优化之后的链表被分成了两个部分，分别是 New Sublist 和 Old Sublist，其分别占用了 Buffer Pool 的3/4和1/4。
 
-![](/images/mysql/23084/optimized-lru.jpeg)
+![](/images/23084/optimized-lru.jpeg)
 
 链表的前3/4，也就是 New Sublist 存放的是访问较为频繁的页，而后1/4也就是 Old Sublist 则是反问的不那么频繁的页。Old Sublist中的数据，会在后续Buffer Pool剩余空间不足、或者有新的页加入时被移除掉。
 
 了解了链表的整体构造和组成之后，我们就以新页被加入到链表为起点，把整体流程走一遍。首先，一个新页被放入到Buffer Pool之后，会被插入到链表中 New Sublist 和 Old Sublist 相交的位置，该位置叫**MidPoint**。
 
-![](/images/mysql/23084/midpoint-in-optimized-lru.jpeg)
+![](/images/23084/midpoint-in-optimized-lru.jpeg)
 
 该链表存储的数据来源有两部分，分别是：
 

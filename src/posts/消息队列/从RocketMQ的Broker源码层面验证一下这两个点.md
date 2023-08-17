@@ -26,7 +26,7 @@ tag:
 
 在上篇博客中提到过，Broker为了保证自身的高可用，会采取一主一从的架构。即使Master Broker因为意外原因挂了，Slave Broker上还有一份完整的数据，Broker可以继续提供服务。
 
-![](/images/messagequeue/230823/register-all-broker.jpeg)
+![](/images/230823/register-all-broker.jpeg)
 
 `isEnableDLegerCommitLog`中提到的DLeger可以先不管，我们目前只需要知道其默认返回的结果是`false`。所以Broker首次启动的时候，就会执行被If包裹住的逻辑。
 
@@ -42,7 +42,7 @@ RocketMQ本身是有主从架构的，但是功能不够完善，如果Master Br
 
 如果当前执行注册的Broker角色是`Slave`，那就会使用`ScheduledExecutorService`启动一个周期性的定时任务，每隔10秒就会去Master同步一次，同步的数据包括Topic的相关配置、Consumer的消费偏移量、延迟消息的Offset、订阅组的相关数据和配置。
 
-![](/images/messagequeue/230823/sync-master-data.jpeg)
+![](/images/230823/sync-master-data.jpeg)
 
 `ScheduledExecutorService`的作用和原理下面会做简单介绍。
 
@@ -50,7 +50,7 @@ RocketMQ本身是有主从架构的，但是功能不够完善，如果Master Br
 
 ## 首次启动时强制进行Broker注册
 
-![](/images/messagequeue/230823/force-register-broker.jpeg)
+![](/images/230823/force-register-broker.jpeg)
 
 因为是首次启动，所以参数`forceRegister`被直接设置成了true。
 
@@ -60,7 +60,7 @@ RocketMQ本身是有主从架构的，但是功能不够完善，如果Master Br
 
 通过入口进来之后，Broker会启动一个定时任务，**周期性**的去注册。`ScheduledExecutorService`底层就是一个`newSingleThreadScheduledExecutor`，只有一个线程的线程池，其关键的参数`corePoolSize`值为`1`，然后按照指定的**频率**周期性的执行某个任务。
 
-![](/images/messagequeue/230823/use-scheduled-executor.jpeg)
+![](/images/230823/use-scheduled-executor.jpeg)
 
 ScheduledExecutorService主要的功能有两个，分别是：
 
@@ -73,7 +73,7 @@ ScheduledExecutorService主要的功能有两个，分别是：
 
 此处我们使用的是`scheduleAtFixedRate`，如下图。
 
-![](/images/messagequeue/230823/start-to-heart-beat.jpeg)
+![](/images/230823/start-to-heart-beat.jpeg)
 
 至于执行的频率，我们能够配置的范围最大不能超过一分钟，也就是说这个范围是在10-60秒之间，默认30秒执行一次，这也就验证了每30秒，Broker会向NameServer发送一次心跳。
 
@@ -89,7 +89,7 @@ ScheduledExecutorService主要的功能有两个，分别是：
 
 继续往里走，如果当前满足注册条件，则会实际的执行注册操作。那具体满足什么条件呢？由变量`forceRegister`和一个`needRegister`方法来决定，`forceRegister`默认是`true`，所以当第一执行这个逻辑的时候是一定会执行注册操作的。
 
-![](/images/messagequeue/230823/do-register.jpeg)
+![](/images/230823/do-register.jpeg)
 
 
 
@@ -101,13 +101,13 @@ ScheduledExecutorService主要的功能有两个，分别是：
 
 所以每次定时任务触发的时候会去对比NameServer和Broker的数据，如果发现数据版本不一致，Broker会重新进行注册，将最新的数据更新到NameServer。说直白一点，就是做一个数据定时更新。以下红框中的代码就是数据对比的核心代码。
 
-![](/images/messagequeue/230823/compare-version.jpeg)
+![](/images/230823/compare-version.jpeg)
 
 
 
 当Broker和所有的NameServer节点一一完成数据对比之后，就会进行结果判定，但凡有一个节点数据不一致，都需要进行重新注册，把最新的数据更新到NameServer，核心判断逻辑同样用红框标出。
 
-![](/images/messagequeue/230823/get-value-for-need-register.jpeg)
+![](/images/230823/get-value-for-need-register.jpeg)
 
 
 
@@ -119,7 +119,7 @@ ScheduledExecutorService主要的功能有两个，分别是：
 
 除此之外，还值得注意的是在`needRegister`中，对于和多个NameServer的交互，RocketMQ是通过线程池异步实现的，同时使用了CountDownLatch来等待所有的请求结束，返回结果给主线程。
 
-![](/images/messagequeue/230823/use-countdown-latch.jpeg)
+![](/images/230823/use-countdown-latch.jpeg)
 
 既然聊到了CountDownLatch，就顺带提一下。假设我们有5个互不依赖的计算任务，如果快速的计算出结果并返回呢？那当然是5个任务并发执行，这就需要通过新开线程实现，结果就无法一起返回了。
 
@@ -129,7 +129,7 @@ ScheduledExecutorService主要的功能有两个，分别是：
 
 指定需要注册之后，接下来就是核心的注册方法了，核心逻辑由`registerBrokerAll`来实现。Broker同样会去每一个NameServer节点上注册自己，并且为了提前执行的效率，同样开线程采用了异步的方式。在获取所有结果时，同样的使用了CountDownLatch。
 
-![](/images/messagequeue/230823/use-countdown-latch-again.jpeg)
+![](/images/230823/use-countdown-latch-again.jpeg)
 
 
 
@@ -137,7 +137,7 @@ ScheduledExecutorService主要的功能有两个，分别是：
 
 除此之外，用于保存注册结果的列表，使用的是`CopyOnWriteArrayList`，被面试虐过的同学应该熟悉。我们知道此处开启了多线程去不同的NameServer注册，写入注册结果的时候，多线程对同一个列表进行写入，会产生线程安全的问题。
 
-![](/images/messagequeue/230823/use-copy-on-write-array-list.jpeg)
+![](/images/230823/use-copy-on-write-array-list.jpeg)
 
 而我们知道`ArrayList`是非线程安全的，这也是为什么此处要使用`CopyOnWriteArrayList`来保存注册结果。为什么`CopyOnWriteArrayList`能够保证线程安全？
 
@@ -147,13 +147,13 @@ ScheduledExecutorService主要的功能有两个，分别是：
 
 上面并发执行的**注册**操作，具体做了哪些事情呢？先看代码。
 
-![](/images/messagequeue/230823/invoke-one-way-request.jpeg)
+![](/images/230823/invoke-one-way-request.jpeg)
 
 上面就是单个注册的所有逻辑，可以看到在构建完请求之后，有一个`oneway`的判断。
 
 `oneway`值为false，表示单向通信，Broker不关心NameServer的返回，也不会触发任何回调函数。接下来Broker就会把已经写进request body的所有数据发送给NameServer。请求数据统一由一个叫`TopicConfigSerializeWrapper`的Wrapper给包裹住。
 
-![](/images/messagequeue/230823/build-wrapper.jpeg)
+![](/images/230823/build-wrapper.jpeg)
 
 其可以看为两部分：
 

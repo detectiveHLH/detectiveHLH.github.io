@@ -17,7 +17,7 @@ tag:
 
 首先，对于我们来说，MySQL 是个啥？我们从一个最简单的例子来回顾一下。
 
-![](/images/mysql/230813/simple-example.jpeg)
+![](/images/230813/simple-example.jpeg)
 
 这可能就是最开始大家认知中的 MySQL。那 MySQL 中是怎么处理这个查询语句的呢？换句话说，它是如何感知到这串字符串是一个查询语句的？它是如何感知到该去哪张表中取数据？它是如何感知到该如何取数据？
 
@@ -29,7 +29,7 @@ tag:
 
 首先，要去 MySQL 执行命令，肯定是需要连接上 MySQL 服务器的，就像我们通过「用户名」和「密码」登陆网站一样。所以，我们首先要认识的就是**连接池**。
 
-![](/images/mysql/230813/with-connection-pool.jpeg)
+![](/images/230813/with-connection-pool.jpeg)
 
 这种**池化技术**的作用很明显，复用连接，避免频繁的销毁、创建线程所带来的开销。除此之外，在这一层还可以根据你的账号密码对用户的**合法性**、用户的**权限**进行校验。
 
@@ -49,7 +49,7 @@ tag:
 
 所以，下一步就是要将 SQL 进行解析。解析完成之后，我们就知道当前的 SQL 是否符合语法，它到底要干嘛，是要查询数据？还是要更新数据？还是要删除数据？
 
-![](/images/mysql/230813/with-anlynizer.jpeg)
+![](/images/230813/with-anlynizer.jpeg)
 
 很简单，我们肉眼能能明显看出来一条 SQL 语句是要干嘛。**但电脑不是人脑**，我们得让电脑也能看懂这条 SQL 语句，才能帮我们去做后面的事。
 
@@ -75,7 +75,7 @@ MySQL 除了要知道这条 SQL 要干嘛，在执行之前，还得决定怎么
 
 这差不多就是**优化器**要做的事情，优化器会分析你的 SQL，找出最优解。
 
-![](/images/mysql/230813/with-optimizer.jpeg)
+![](/images/230813/with-optimizer.jpeg)
 
 
 
@@ -94,7 +94,7 @@ MySQL 除了要知道这条 SQL 要干嘛，在执行之前，还得决定怎么
 
 执行器会掉用底层**存储引擎**的接口，来真正的执行 SQL 语句，在这里的例子就是查询操作。
 
-![](/images/mysql/230813/with-executor.jpeg)
+![](/images/230813/with-executor.jpeg)
 
 
 
@@ -126,7 +126,7 @@ MySQL 的存储引擎有很多的种类，分别适用于不同的场景。大�
 
 - **磁盘**
 
-![](/images/mysql/230813/with-storage-engine.jpeg)
+![](/images/230813/with-storage-engine.jpeg)
 
 所以，从宏观上来说，MySQL 就是把数据在缓存在内存中，鼓捣鼓捣，然后在某些时候刷入磁盘中去，就这么回事。
 
@@ -140,7 +140,7 @@ MySQL 的存储引擎有很多的种类，分别适用于不同的场景。大�
 
 - Log Buffer
 
-![](/images/mysql/230813/with-buffer-pool.jpeg)
+![](/images/230813/with-buffer-pool.jpeg)
 
 从上面画的图就能够看出，Buffer Pool 是 InnoDB 中非常重要的一部分，MySQL 之所以这么快其中一个重要的原因就是其数据都存在内存中，而这个内存就是 Buffer Pool。
 
@@ -158,7 +158,7 @@ MySQL 的存储引擎有很多的种类，分别适用于不同的场景。大�
 
 如果我们能想象一下，InnoDB 会如何组织内存的数据。想象一下，图书馆的书是直接一本一本的摊在地上好找，还是按照类目、名称进行分类、放到对应的书架上、再进行编号好找？结论自然不言而喻。Buffer Pool 也采用了同样的数据整合措施。
 
-![](/images/mysql/230813/with-page.jpeg)
+![](/images/230813/with-page.jpeg)
 
 InnoDB 将 Buffer Pool 分成了一张一张的**页（Pages**），同时还有个 Change Buffer（后面会详细讲，这里先知道就行）。分成一页一页的数据就能够提升查询效率吗？那这个页里面到底是个啥呢？
 
@@ -174,7 +174,7 @@ InnoDB 将 Buffer Pool 分成了一张一张的**页（Pages**），同时还有
 
 当然，光跳来跳去的并不能说明任何问题，我们还是揭开页（Pages）这个黑盒的面纱吧。
 
-!![](/images/mysql/230813/with-user-records.jpeg)
+!![](/images/230813/with-user-records.jpeg)
 
 可以看到，主要就分为
 
@@ -192,7 +192,7 @@ InnoDB 将 Buffer Pool 分成了一张一张的**页（Pages**），同时还有
 
 User Records 就是一行一行的数据**（Rows）**最终存储的地方，其中，行与行之间形成了**单向链表**。
 
-![](/images/mysql/230813/one-way-linked-list.jpeg)
+![](/images/230813/one-way-linked-list.jpeg)
 
 看了这个单向链表不知道你有没有一个疑问。
 
@@ -208,7 +208,7 @@ User Records 就是一行一行的数据**（Rows）**最终存储的地方，�
 
 用图来表示，大概如下：
 
-![](/images/mysql/230813/sorted-records.jpeg)
+![](/images/230813/sorted-records.jpeg)
 
 可以理解为数组和链表的区别。
 
@@ -224,7 +224,7 @@ User Records 就是一行一行的数据**（Rows）**最终存储的地方，�
 
 分别代表当前页（Pages）中的**最大**和**最小**的记录。
 
-![](/images/mysql/230813/infimum-and-supremum.jpeg)
+![](/images/230813/infimum-and-supremum.jpeg)
 
 可以看到，有了 **Infimum** 和 **Supremum**，我们不需要再去遍历 User Records 就能够知道，要找的数据是否在当前的页中，大大的提升了效率。
 
@@ -240,7 +240,7 @@ User Records 就是一行一行的数据**（Rows）**最终存储的地方，�
 
 顾名思义，这玩意儿是个「目录」，可以看下图。
 
-!![](/images/mysql/230813/with-page-directory.jpeg)
+!![](/images/230813/with-page-directory.jpeg)
 
 可以看到，每隔一段记录就会在 Page Directory 中有个记录，这个记录是一个指向 User Records 中记录的一个指针。
 
@@ -380,7 +380,7 @@ LRU是**（L**east **R**ecently **U**sed）的简称，表示最近最少使用�
 
 这也是为什么 InnoDB 要对 LRU 算法做优化。
 
-![](/images/mysql/230813/optimized-lru-linked-list.jpeg)
+![](/images/230813/optimized-lru-linked-list.jpeg)
 
 优化之后的链表被分成了两个部分，分别是 **New Sublist** 和 **Old Sublist**，其分别占用了 Buffer Pool 的 3/4 和 1/4。
 

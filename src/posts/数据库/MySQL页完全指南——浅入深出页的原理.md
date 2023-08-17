@@ -27,11 +27,11 @@ tag:
 
 我们往 MySQL 插入的数据最终都是存在页中的。在 InnoDB 中的设计中，页与页之间是通过一个**双向链表**连接起来。
 
-![](/images/mysql/23088/intro-for-page.jpeg)
+![](/images/23088/intro-for-page.jpeg)
 
 而存储在页中的一行一行的数据则是通过**单链表**连接起来的。
 
-![](/images/mysql/23088/single-linked-list-in-page.jpeg)
+![](/images/23088/single-linked-list-in-page.jpeg)
 
 上图中的 `User Records` 的区域就是用来存储行数据的。那 InnoDB 为什么要这么设计？假设我们没有页这个概念，那么当我们查询时，成千上万的数据要如何做到快速的查询出结果？众所周知，MySQL 的性能是不错的，而如果没有页，我们剩下的只能是逐条逐条的遍历数据了。
 
@@ -45,7 +45,7 @@ tag:
 
 当然，MySQL 也考虑到了这个问题，所以实际上在页中还存在一块区域叫做 `The Infimum and Supremum Records` ，代表了当前页中**最大**和**最小**的记录。
 
-![](/images/mysql/23088/infimum-supremum.jpeg)
+![](/images/23088/infimum-supremum.jpeg)
 
 有了 `Infimum Record` 和 `Supremum Record` ，现在查询不需要将某一页的 `User Records` 全部遍历完，只需要将这两个记录和待查询的目标记录进行比较。比如我要查询的数据 `id = 101` ，那很明显不在当前页。接下来就可以通过**下一页指针**跳到下页进行检索。
 
@@ -57,7 +57,7 @@ tag:
 
 不得不说，这的确是个问题，不过是一个 MySQL 已经考虑到的问题。不错，挨个遍历确实效率很低。为了解决这个问题，MySQL 又在页中加入了另一个区域 `Page Directory` 。
 
-![](/images/mysql/23088/use-page-directory.jpeg)
+![](/images/23088/use-page-directory.jpeg)
 
 顾名思义，`Page Directory` 是个目录，里面有很多个**槽位（Slots）**，每一个槽位都指向了一条 `User Records` 中的记录。大家可以看到，每隔几条数据，就会创建一个槽位。其实我图中给出的数据是非常严格按照其设定来的，在一个完整的页中，**每隔6条数据就会有一个 Slot。**
 
@@ -67,7 +67,7 @@ MySQL 会在新增数据的时候就将对应的 Slot 创建好，有了 `Page D
 
 不过这样的效率已经比我们刚开始聊的原始版本高了很多了。
 
-![](/images/mysql/23088/use-binary-search-in-page-directory.jpeg)
+![](/images/23088/use-binary-search-in-page-directory.jpeg)
 
 
 ## 页的真实面貌
@@ -76,7 +76,7 @@ MySQL 会在新增数据的时候就将对应的 Slot 创建好，有了 `Page D
 
 实际上，页上还存储了很多其他的字段，也还有其他的区域，但是这些都不会影响到我们对页的理解。所以，在对页有了一个较为清晰的认知之后，我们就可以来看看真实的页到底长啥样了。
 
-![](/images/mysql/23088/true-face-for-page.jpeg)
+![](/images/23088/true-face-for-page.jpeg)
 
 上图就是页的实际全部组成，除了我们之前提到过的，还多了一些之前没有聊过的，例如 `File Header`、`Page Header`、`Free Space`、`File Tailer` 。我们一个一个来看。
 
@@ -86,7 +86,7 @@ MySQL 会在新增数据的时候就将对应的 Slot 创建好，有了 `Page D
 
 其实`File Header` 在上文已经聊过了，只是不叫这个名字。上面提到的**上一页指针**和**下一页指针**其实就是属于`File Header`的，除此之外还有很多其他的数据。
 
-![](/images/mysql/23088/file-header.jpeg)
+![](/images/23088/file-header.jpeg)
 
 其实我比较抗拒把一堆参数列出来，告诉你这个大小多少，那个用来干嘛。对于我们需要详细了解页来说，其实暂时只需要知道两个就足够了，分别是：
 
@@ -101,7 +101,7 @@ MySQL 会在新增数据的时候就将对应的 Slot 创建好，有了 `Page D
 
 比起 `File Header` ，`Page Header` 中的数据对我们来说就显得更加熟悉了，我这里画了一张图，把里面的内容详细的列了出来。
 
-![](/images/mysql/23088/page-header-detail.jpeg)
+![](/images/23088/page-header-detail.jpeg)
 
 这里全列出来是因为了解这些参数的含义和为什么要设置参数，能够更好的帮助我们了解页的原理和构造，具体的看图说话就行。
 
@@ -131,7 +131,7 @@ MySQL 会在新增数据的时候就将对应的 Slot 创建好，有了 `Page D
 
 用图来表示，大概如下：
 
-![](/images/mysql/23088/sorted-user-record-list.jpeg)
+![](/images/23088/sorted-user-record-list.jpeg)
 
 ### Free Space
 
@@ -151,7 +151,7 @@ MySQL 会在新增数据的时候就将对应的 Slot 创建好，有了 `Page D
 
 里面有只有一个组成部分：
 
-![](/images/mysql/23088/file-trailer.jpeg)
+![](/images/23088/file-trailer.jpeg)
 
 
 

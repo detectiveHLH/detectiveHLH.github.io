@@ -25,7 +25,7 @@ tag:
 
 在聊事务隔离级别之前，我们需要知道 **ACID** 模型。
 
-![ACID 模型](/images/mysql/230810/acid-model.jpeg)
+![ACID 模型](/images/230810/acid-model.jpeg)
 
 分别代表：
 
@@ -81,7 +81,7 @@ InnoDB 默认的事务隔离级别为 `REPEATABLE READ` 。
 
 而如果事务B又新增了数据，事务A再次读取，会读取到事务B新增的数据，这造成了**幻读**。
 
-![](/images/mysql/230810/read-uncommitted.jpeg)
+![](/images/230810/read-uncommitted.jpeg)
 
 所以总结来说，在**读未提交**这个隔离级别下，会造成以下的问题：
 
@@ -99,7 +99,7 @@ InnoDB 默认的事务隔离级别为 `REPEATABLE READ` 。
 
 同理，如果事务B新增了数据并且提交，事务A再次进行读取时拿到了事务B刚刚提交的数据，这就造成了幻读。
 
-![](/images/mysql/230810/read-committed.jpeg)
+![](/images/230810/read-committed.jpeg)
 
 所以总结来说，在**读已提交**的隔离级别下，会造成：
 
@@ -114,7 +114,7 @@ InnoDB 默认的事务隔离级别为 `REPEATABLE READ` 。
 
 在可重复读场景下，不会出现**脏读**、不会出现**不可重复读**，可能会出现**幻读**。
 
-![](/images/mysql/230810/repeatable-read.jpeg)
+![](/images/230810/repeatable-read.jpeg)
 
 无论事务B做了什么操作，事务A查询到的 `id=1` 的数据都是张三。
 

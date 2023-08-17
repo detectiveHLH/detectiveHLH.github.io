@@ -33,7 +33,7 @@ tag:
 
 当然，当前事务自己更新的数据是个例外。当前事务修改过的行，再次读取时是能够拿到最新的数据的。而对于其他行，读取的仍然是**打快照时的版本**。
 
-![](/images/mysql/230811/consistant-read.jpeg)
+![](/images/230811/consistant-read.jpeg)
 
 而这个快照就是 InnoDB 实现事务隔离级别的关键。
 
@@ -66,7 +66,7 @@ tag:
 
 InnoDB 内实现 MVCC 的关键其实就是三个字段，并且数据表中每一行都有这三个字段：
 
-![](/images/mysql/230811/three-key-in-a-row.jpeg)
+![](/images/230811/three-key-in-a-row.jpeg)
 
 - **DB_TRX_ID** 该字段有6个字节，用于存储上次**插入**或者**更新**该行数据的事务的唯一标识。你可能会问，只有插入和更新吗？那删除呢？其实在InnoDB的内部，*删除***其实就是更新操作**，只不过会更新该行中一个特定的比标志位，将其标记为删除。
 - **DB_ROLL_PTR** 该字段有7个字节，你可以叫它**回滚指针**，该指针指向了存储在**回滚段**中的一条具体的Undo Log。即使当前这行数据被更新了，我们同样的可以通过回滚指针，拿到更新之前的历史版本数据。
@@ -76,7 +76,7 @@ InnoDB 内实现 MVCC 的关键其实就是三个字段，并且数据表中每�
 
 通过 `DB_ROLL_PTR` 可以拿到最新的一条 Undo Log，然后每一个对应的 Undo Log 指向其上一个 Undo Log，这样一来，不同的版本就可以连接起来形成链表，不同的事务根据需求和规则，从链表中选择不同的版本进行读取，从而实现多版本的并发控制，**就像这样**：
 
-![](/images/mysql/230811/undo-log-ptr.jpeg)
+![](/images/230811/undo-log-ptr.jpeg)
 
 
 
@@ -95,7 +95,7 @@ InnoDB 内实现 MVCC 的关键其实就是三个字段，并且数据表中每�
 - Insert Undo Log
 - Update Undo Log
 
-![](/images/mysql/230811/composition-of-undo-log.jpeg)
+![](/images/230811/composition-of-undo-log.jpeg)
 
 对于 Insert Undo Log 来说，它只会用于在事务中发生错误的回滚，因为一旦事务提交了，Insert Undo Log 就完全没用了，所以在事务提交之后 Insert Undo Log 就会被删除。
 

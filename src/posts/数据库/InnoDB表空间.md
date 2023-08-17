@@ -15,7 +15,7 @@ tag:
 
 其底层的存储方式，会影响到聚簇索引中数据的存储，进而影响到 MySQL 的 DML（**D**ata **M**anipulation **L**anguage） 性能，所以对底层存储逻辑有个清晰的认知，就能够在某些对性能有着极致追求的场景下，帮助我们对 MySQL 进行优化。
 
-![](/images/mysql/23089/img-1.jpeg)
+![](/images/23089/img-1.jpeg)
 
 
 ## 表在磁盘上到底长啥样
@@ -26,7 +26,7 @@ tag:
 
 然后我们新建一个叫 `test` 的 DB，然后在 `_data` 的这个目录下就会多一个 `test` 的目录。然后在 test 数据库下新建了一张 `student` 的表，在 `test` 目录下就会多出两个文件，分别是 `student.frm` 和 `student.ibd`。
 
-![](/images/mysql/23089/table-on-disk.jpeg)
+![](/images/23089/table-on-disk.jpeg)
 
 可以发现，最终数据在磁盘上的宏观表现其实很简单，就这么些个文件，什么索引啊、页啊都先忽略不管。
 
@@ -62,7 +62,7 @@ tag:
 
 > 不能理解的话，可以想象 Java 里的标记-清理垃圾回收算法，该算法会在清理的时候造成大量的内存碎片，不利于提高后期的内存利用率
 
-![](/images/mysql/23089/share-table-space.jpeg)
+![](/images/23089/share-table-space.jpeg)
 
 而对于独占表空间来说，从始至终一整张表的数据都只存储在一个文件，比起共享表空间谁更容易清理并且还能释放磁盘空间，简直是一目了然。所以，对于独占表空间来说，`TRUNCATE` 的性能会更好。
 
@@ -82,11 +82,11 @@ tag:
 
 一堆页组合在一起，就变成了**区（Extents）**。
 
-![](/images/mysql/23089/extends-on-disk.jpeg)
+![](/images/23089/extends-on-disk.jpeg)
 
 每个**区**的大小是固定的。当我们设置了不同的 `innodb_page_size` 时，每个区（Extents）内所包含的页的数量、和对应的固定区大小都不同，具体的情况如下图所示。
 
-![](/images/mysql/23089/extend-size.jpeg)
+![](/images/23089/extend-size.jpeg)
 
 当 `innodb_page_size` 为 4K、8K或者16K时，其对应的区（Extents）大小为1M；当其页大小为32K时，区大小为2M；当页大小为64K时，区大小为4M。
 
@@ -98,7 +98,7 @@ tag:
 
 上面聊过，一页一页的数据组成了**区**，而一个一个区则组成了**段（Segments）**。
 
-![](/images/mysql/23089/segment-on-disk.jpeg)
+![](/images/23089/segment-on-disk.jpeg)
 
 在**逻辑**上，InnoDB 的表空间就是由一个一个这样的段（Segment)组成的。随着数据量的持续增长需要申请新的空间时，InnoDB 会先请求32个页，之后便会直接分配一整个区（Extents) 。甚至在某个很大的 Segment 内，还会一次性分配 4 个区。
 
@@ -150,7 +150,7 @@ innodb_data_file_path=ibdata1:10M:autoextend
 
 而这两个 Undo 表空间数据文件的初始大小，在 MySQL 8.0.23 之前是由 InnoDB 的页大小来决定的，具体的情况如下图：
 
-![](/images/mysql/23089/undo-table-space-size.jpeg)
+![](/images/23089/undo-table-space-size.jpeg)
 
 而在 MySQL 8.0.23 之后，Undo 表空间的初始化大小都是 16M 了。至于 Undo 表空间的扩容，不同的版本也有不通的处理方式。
 

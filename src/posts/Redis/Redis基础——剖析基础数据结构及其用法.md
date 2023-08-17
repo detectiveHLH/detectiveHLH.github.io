@@ -41,7 +41,7 @@ String可以说是最基础的数据结构了， 用法上可以直接和Java中
 - **decr** 给当前key的值-1，其余的同上
 - **mget** 同get，只是一次性返回多条数据，不存在的key将会返回空指针
 
-![string相关命令](/images/redis/230815/string-command.jpeg)
+![string相关命令](/images/230815/string-command.jpeg)
 
 可能大多数的人只是到用一用的地步，这也无可厚非，但是如果是作为一个对技术有追求的开发，或者说你有想近大厂的想法，一定要有刨根问底的精神。只有当你真正知道一个东西的底层原理时，你遇到问题时才能提供给你更多的思路去解决问题。接下来我们就来聊一下Redis中String底层是如何实现的。
 
@@ -77,7 +77,7 @@ struct sdshdr {
 
 可以结合下面的图来理解SDS。
 
-![图片来源于网络，侵删](/images/redis/230815/simple-dynamic-string.jpeg)
+![图片来源于网络，侵删](/images/230815/simple-dynamic-string.jpeg)
 
 总结一下就是上面列表的四个小标题，为了减少获取字符串长度开销、避免缓冲区溢出、空间预分配&空间惰性释放和保证二进制安全。
 

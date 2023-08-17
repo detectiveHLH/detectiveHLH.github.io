@@ -107,7 +107,7 @@ tag:
 
 下图是这几种锁的组合下相互互斥、兼容的情况
 
-![](/images/mysql/23086/mysql-locks-compatible.jpeg)
+![](/images/23086/mysql-locks-compatible.jpeg)
 
 对照上面的表，在相互兼容的情况下，对应的事务就能获取锁，但是如果不兼容则无法获取锁，直到不兼容的锁释放之后才能获取。
 

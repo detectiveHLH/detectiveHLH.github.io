@@ -27,7 +27,7 @@ tag:
 
 首先我们要知道，使用RocketMQ时我们经历了什么。那就是生产者发送一条消息给RocketMQ，RocketMQ拿到这条消息之后将其持久化存储起来，然后消费者去找MQ消费这条消息。
 
-![RocketMQ操作](/images/messagequeue/230822/rocketmq-operation.jpeg)
+![RocketMQ操作](/images/230822/rocketmq-operation.jpeg)
 
 上图中，RocketMQ被标识为了一个单点，但事实上肯定不是如此，对于可以随时横向扩展的服务来说，生产者向MQ生产消息的数量也会随之而变化，所以一个合格成熟的MQ必然是要能够处理这种情况的；而且MQ自身需要做到高可用，否则一旦这个单点宕机，那所有存储在MQ中的消息就全部丢失且无法找回了。
 
@@ -47,7 +47,7 @@ tag:
 
 NameServer可以被简单的理解为上一小节中提到的**注册中心**，所有的Broker的在启动的时候都会向NameServer进行注册，将自己的信息上报。这些信息除了Broker的IP、端口相关数据，还有RocketMQ集群的路由信息，路由信息后面再聊。
 
-![RocketMQ操作](/images/messagequeue/230822/with-nameserver.jpeg)
+![RocketMQ操作](/images/230822/with-nameserver.jpeg)
 
 有了NameServer，客户端启动之后会和NameServer交互，获取到当前RocketMQ集群中所有的Broker信息、路由信息。这样一来，生产者就知道自己需要连接的Broker信息了，就可以进行消息投递。
 
@@ -84,7 +84,7 @@ Topic是对发送到RocketMQ中的消息的逻辑分类，例如我们的订单�
 
 所以在真实存储中，消息是分布式的存储在多个Broker上的，这这些分散在多个Broker上的存储介质叫MessageQueue，如果你熟悉Kafka的底层原理，就知道这个跟Kafka中的Partition是同类的实现。
 
-![Message Queue存储](/images/messagequeue/230822/with-message-queue.jpeg)
+![Message Queue存储](/images/230822/with-message-queue.jpeg)
 
 通过上图可以看出，同一个Topic的数据，被分成了好几份，分别存储在不同的Broker上，那RocketMQ为什么要这么实现？
 
@@ -100,7 +100,7 @@ Topic是对发送到RocketMQ中的消息的逻辑分类，例如我们的订单�
 
 那Producer发送到Broker中的消息，到底是以什么方式存储的呢？答案是**Commit Log**，Broker收到消息，会将该消息采用顺序写入的方式，追加到磁盘上的Commit Log文件中，每个Commit Log大小为1G，如果写满了1G则会新建一个Commit Log继续写，Commit Log文件的特点是顺序写、随机读。
 
-![](/images/messagequeue/230822/with-commit-log.jpeg)
+![](/images/230822/with-commit-log.jpeg)
 
 这就是最底层的存储的方式，那么问题来了，Consumer来取消息的时候，Broker是如何从这一堆的Commit Log中找到相应的数据呢？众所周知，一提到磁盘的I/O操作，就会联想到**耗时**这两个字，而RocketMQ的一大特点就是高吞吐，看似很矛盾，RocketMQ是如何做的呢？
 
@@ -136,7 +136,7 @@ Tag，标签，用于对同一个Topic内的消息进行分类，为什么还需
 
 首先给出整个发送消息的大致流程，先熟悉这个流程看源码，会更加的清晰一点。
 
-![总体流程](/images/messagequeue/230822/send-message-process.jpeg)
+![总体流程](/images/230822/send-message-process.jpeg)
 
 
 
@@ -144,7 +144,7 @@ Tag，标签，用于对同一个Topic内的消息进行分类，为什么还需
 
 还是按照下面这个例子出发。
 
-![producer使用样例](/images/messagequeue/230822/producer-demo.jpeg)
+![producer使用样例](/images/230822/producer-demo.jpeg)
 
 首先我们会初始化一个DefaultMQProducer，RocketMQ会给这个Producer一个默认的实现`DefaultMQProducerImpl`。然后`producer.start()`会启动一个线程池。
 
@@ -154,11 +154,11 @@ Tag，标签，用于对同一个Topic内的消息进行分类，为什么还需
 
 接下来就是比较核心的`producer.send(msg)`了，首先RocketMQ会调用`checkMessage`来检测发送的消息是否合法。
 
-![send消息](/images/messagequeue/230822/validate-message.jpeg)
+![send消息](/images/230822/validate-message.jpeg)
 
 这些检测包含了待发送的消息是否为空，Topic是否为空、Topic是否包含了非法的字符串、Topic的长度是否超过了最大限制`127`，然后会去检查Body是否符合发送要求，例如msg的Body是否为空、msg的Body是否超过了最大的限制等等，这里消息的Body最大不能超过4M。
 
-![检查消息合法性源码](/images/messagequeue/230822/validation-detail.jpeg)
+![检查消息合法性源码](/images/230822/validation-detail.jpeg)
 
 
 
@@ -166,7 +166,7 @@ Tag，标签，用于对同一个Topic内的消息进行分类，为什么还需
 
 对于msg的Topic，RocketMQ会用NameSpace将其包装一层，然后就会调用`DefaultMQProducerImpl`中的`sendDefaultImpl`默认实现，发送消息给Broker，默认的发送消息Timeout是3秒。
 
-![发送消息默认实现](/images/messagequeue/230822/send-message-default-implementation.jpeg)
+![发送消息默认实现](/images/230822/send-message-default-implementation.jpeg)
 
 发送消息中，MQ会再次调用`checkMessage`对消息的合法性再次进行检查，然后就会去尝试获取Topic的详细信息。
 
@@ -174,7 +174,7 @@ Tag，标签，用于对同一个Topic内的消息进行分类，为什么还需
 
 这个TopicPublishInfo中就包含了之前在**基础概念**中提到的，从Broker中获取到的相应的元数据，其中就包含了关键的**MessageQueue**和集群元数据，其基础的结构如下。
 
-![](/images/messagequeue/230822/topic-public-info.jpeg)
+![](/images/230822/topic-public-info.jpeg)
 
 `messageQueueList`包含了该Topic下的所有的MessageQueue，每个MessageQueue的所属Topic，每个MessageQueue所在的Broker的名称以及专属的queueId。
 
@@ -186,7 +186,7 @@ Tag，标签，用于对同一个Topic内的消息进行分类，为什么还需
 
 在最终发送消息前，需要获取到Topic的详情，例如像Broker地址这样的数据，Producer中是通过`tryToFindTopicPublishInfo`方法获取的，详细的注释我已经写在了下图中。
 
-![获取topic详情](/images/messagequeue/230822/get-topic-detail.jpeg)
+![获取topic详情](/images/230822/get-topic-detail.jpeg)
 
 对于首次使用的Topic，在上面的Map肯定是不存在的。所以RocketMQ会将其加入到Map中去，并且调用方法`updateTopicRouteInfoFromNameServer`从NameServer处获取该Topic的元数据，将其一并写入Map。初次之外，还会将路由信息、Broker的详细信息分别放入`topicRouteTable`和`brokerAddrTable`中，这两个都是Producer维护在内存中的ConcurrentHashMap。
 
@@ -196,7 +196,7 @@ Tag，标签，用于对同一个Topic内的消息进行分类，为什么还需
 
 这个重试的次数`timesTotal`受到参数`communicationMode`的影响；`CommunicationMode`有三个值，分别是`SYNC`、`ASYNC`和`ONEWAY`。RocketMQ默认的实现中，选择了`SYNC`同步。
 
-![计算重试次数](/images/messagequeue/230822/calculate-retry-times.jpeg)
+![计算重试次数](/images/230822/calculate-retry-times.jpeg)
 
 通过代码我们可以看到，如果是`communicationMode`是`SYNC`的话，`timesTotal`的值为`1+retryTimesWhenSendFailed`，而`retryTimesWhenSendFailed`的值默认为`2`，代表在消息发送失败之后的重试次数。
 
@@ -216,7 +216,7 @@ Producer中是通过`selectOneMessageQueue`来进行的Message Queue选择，该
 
 其**核心的选择逻辑**是什么呢？用大白话来说，就是选出一个index，然后将其和当前Topic的MessageQueue数量取模。这个index在首次选择的时候，肯定是没有的， RocketMQ会搞一个随机数出来。然后在该值的基础上+1，因为为了通用，在外层看来，这个index上次已经用过了，所以每次获取你都直接帮我+1就好了。
 
-![核心的选择机制](/images/messagequeue/230822/select-a-message-queue.jpeg)
+![核心的选择机制](/images/230822/select-a-message-queue.jpeg)
 
 上图就是MessageQueue最核心的、最底层的原则机制了。但是由于实际的业务情况十分复杂， RocketMQ在实现中还额外的做了很多的事情。
 
@@ -230,7 +230,7 @@ Producer中是通过`selectOneMessageQueue`来进行的Message Queue选择，该
 
 如果当前没有可用的Broker，则会触发其兜底的逻辑，再选择一个MessageQueue出来。
 
-![选择queue的源码](/images/messagequeue/230822/select-message-queue-source-code.jpeg)
+![选择queue的源码](/images/230822/select-message-queue-source-code.jpeg)
 
 
 
@@ -238,7 +238,7 @@ Producer中是通过`selectOneMessageQueue`来进行的Message Queue选择，该
 
 如果当前发送故障延迟没有启用，则会走常规逻辑，同样的会去for循环计算，循环中取到了MessageQueue之后会去判断是否和上次选择的MessageQueue属于同一个Broker，如果是同一个Broker，则会重新选择，直到选择到不属于同一个Broker的MessageQueue，或者直到循环结束。这也是为了将消息均匀的分发存储，防止数据倾斜。
 
-![常规逻辑下的选择逻辑](/images/messagequeue/230822/normal-select.jpeg)
+![常规逻辑下的选择逻辑](/images/230822/normal-select.jpeg)
 
 
 

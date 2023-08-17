@@ -55,7 +55,7 @@ tag:
 
 传统模式具体是咋工作的？
 
-![](/images/mysql/23087/traditional-mode.jpeg)
+![](/images/23087/traditional-mode.jpeg)
 
 我们知道，当我们向包含了 `AUTO_INCREMENT` 列的表中插入数据时，都会持有这么一个特殊的表锁——自增锁（AUTO-INC），并且当语句执行完之后就会释放。这样一来可以保证单个语句内生成的自增值是连续的。
 
@@ -81,7 +81,7 @@ tag:
 
 交叉模式（Interleaved）下，所有的 `INSERT` 语句，包含 `INSERT` 和 `INSERT INTO ... SELECT` ，都不会使用 `AUTO-INC` 自增锁，而是使用较为轻量的 `mutex`  锁。这样一来，多条 `INSERT` 语句可以并发的执行，这也是三种锁模式中扩展性最好的一种。
 
-![](/images/mysql/23087/interleaved-mode.jpeg)
+![](/images/23087/interleaved-mode.jpeg)
 
 并发执行所带来的副作用就是单个 `INSERT` 的自增值并不连续，因为 `AUTO_INCREMENT` 的值分配会在多个 `INSERT` 语句中来回交叉的执行。
 
@@ -101,7 +101,7 @@ tag:
 
 可能你还没看出问题在哪儿，`INSERT` 同时交叉执行，并且 `AUTO_INCREMENT` 交叉分配将会直接导致主从之间同行的数据**主键 ID 不同**。而这对主从同步来说是灾难性的。
 
-![](/images/mysql/23087/bug-in-interleaved-mode.jpeg)
+![](/images/23087/bug-in-interleaved-mode.jpeg)
 
 换句话说，如果你的 DB 有主从同步，并且 Binlog 存储格式为 Statement，那么不要将 InnoDB 自增锁模式设置为交叉模式，会有问题。其实主从同步的过程远比上图中的复杂，之前我也写过详细的[MySQL主从同步](https://mp.weixin.qq.com/s/xejfrjc1CO0r8uBT-_vpag)的文章，感兴趣可以先去看看。
 

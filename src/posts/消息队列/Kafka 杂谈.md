@@ -108,7 +108,7 @@ Kafka 其实就是用实际行动来告诉我们「**Don't fear the filesystem**
 
 可能你看文字有点懵逼，简单总结就是，涉及到了 **4 次态的切换，4 次数据的拷贝，2次系统调用**。
 
-![](/images/messagequeue/230821/switch-context.jpeg)
+![](/images/230821/switch-context.jpeg)
 
 **红色**的是态的切换，**绿色**的是数据拷贝。
 

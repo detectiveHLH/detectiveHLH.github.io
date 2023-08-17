@@ -17,7 +17,7 @@ tag:
 
 当我们查询数据的时候，会先去Buffer Pool中查询。如果Buffer Pool中不存在，存储引擎会先将数据从磁盘加载到Buffer Pool中，然后将数据返回给客户端；同理，当我们更新某个数据的时候，如果这个数据不存在于Buffer Pool，同样会先数据加载进来，然后修改修改内存的数据。被修改过的数据会在之后统一刷入磁盘。
 
-![MySQL 崩溃恢复](/images/mysql/23083/data-update-steps-in-buffer-pool.jpeg)
+![MySQL 崩溃恢复](/images/23083/data-update-steps-in-buffer-pool.jpeg)
 
 这个过程看似没啥问题，实则不讲武德。假设我们修改Buffer Pool中的数据成功，但是还没来得及将数据刷入磁盘MySQL就挂了怎么办？按照上图的逻辑，此时更新之后的数据只存在于Buffer Pool中，如果此时MySQL宕机了，这部分数据将会永久的丢失；
 
@@ -46,13 +46,13 @@ Undo Log就像你刚刚在Git中Commit了一下，然后再做一个较为复杂
 
 有了Redo Log和Undo Log，我们再将上面的那张图给完善一下。
 
-![MySQL 崩溃恢复](/images/mysql/23083/data-update-steps-in-buffer-pool-with-more-detail.jpeg)
+![MySQL 崩溃恢复](/images/23083/data-update-steps-in-buffer-pool-with-more-detail.jpeg)
 
 首先，更新数据还是会判断数据是否存在于Buffer Pool中，不存在则加载。上面我们提到了回滚的问题，在更新Buffer Pool中的数据之前，我们需要先将该数据事务开始之前的状态写入Undo Log中。假设更新到一半出错了，我们就可以通过Undo Log来回滚到事务开始前。
 
 然后执行器会更新Buffer Pool中的数据，成功更新后会将数据最新状态写入Redo Log Buffer中。因为一个事务中可能涉及到多次读写操作，写入Buffer中分组写入，比起一条条的写入磁盘文件，效率会高很多。
 
-![redo-log-buffer](/images/mysql/23083/batch-write-into-redo-log.jpeg)
+![redo-log-buffer](/images/23083/batch-write-into-redo-log.jpeg)
 
 
 
@@ -80,7 +80,7 @@ Undo Log就像你刚刚在Git中Commit了一下，然后再做一个较为复杂
 
 
 
-![MySQL 崩溃恢复](/images/mysql/23083/use-2pc-in-update-process.jpeg)
+![MySQL 崩溃恢复](/images/23083/use-2pc-in-update-process.jpeg)
 
 简单介绍一下2PC，它是一种保证分布式事务数据一致性的协议，它中文名叫两阶段提交，它将分布式事务的提交拆分成了2个阶段，分别是Prepare和Commit/Rollback。
 
@@ -90,7 +90,7 @@ Undo Log就像你刚刚在Git中Commit了一下，然后再做一个较为复杂
 
 下面我们通过一张图来看一下整个流程。
 
-![2PC刷入磁盘](/images/mysql/23083/2pc-detail-for-redo-log.jpeg)
+![2PC刷入磁盘](/images/23083/2pc-detail-for-redo-log.jpeg)
 
 Prepare阶段，将Redo Log写入文件，并刷入磁盘，记录上内部XA事务的ID，同时将Redo Log状态设置为Prepare。Redo Log写入成功后，再将Binlog同样刷入磁盘，记录XA事务ID。
 

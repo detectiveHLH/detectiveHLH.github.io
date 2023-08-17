@@ -35,7 +35,7 @@ tag:
 
 我们可以从一个图来直观的了解一下。
 
-![Redis主从复制](/images/redis/230817/master-slave-structure.jpeg)
+![Redis主从复制](/images/230817/master-slave-structure.jpeg)
 
 在主从同步中，我们将节点的角色划分为`master`和`slave`，形成**一主多从**。slave对外提供读操作，而master负责写操作，形成一个读写分离的架构，这样一来就能够承载更多的业务请求。
 
@@ -62,7 +62,7 @@ Redis的主从复制分为两个步骤，分别是**同步**和**命令传播**�
 
 为了让大家更加清晰的认识到这个过程，我们通过图再来了解一下。
 
-![Redis主从复制](/images/redis/230817/sync-process.jpeg)
+![Redis主从复制](/images/230817/sync-process.jpeg)
 
 
 
@@ -94,7 +94,7 @@ psync的实现依赖于主从双方共同维护的`offset`偏移量。
 
 master收到这个runid之后会判断是否与自己当前的runid一致，如果一致说明断线之前还是与自己建立的连接，而如果不一致就说明slave断线期间，master也发生了宕机，此时就需要将数据**全量同步**给slave了。
 
-![redis-runid](/images/redis/230817/p-sync-process.jpeg)
+![redis-runid](/images/230817/p-sync-process.jpeg)
 
 
 
@@ -104,7 +104,7 @@ master收到这个runid之后会判断是否与自己当前的runid一致，如�
 
 名字高大上，实际上就是一队列。就跟什么递归、轮询、透传一样，听着高大上，实际上简单的一匹。言归正传，复制积压缓冲区的默认大小为1M，Redis在进行**命令传播**时，除了将写命令发送给slave，还会将命令写到**复制积压缓冲区**内，并和当前的offset关联起来。这样一来就能够通过offset获取到对应的指令了。
 
-![redis-backlog](/images/redis/230817/redis-backlog.jpeg)
+![redis-backlog](/images/230817/redis-backlog.jpeg)
 
 但是由于缓冲区的大小有限，如果slave的断线时间太久，复制积压缓冲区内早些时候的指令就已经被新的指令覆盖掉了，此处可以理解为一个队列，早些时候入队的元素已经被出队了。
 

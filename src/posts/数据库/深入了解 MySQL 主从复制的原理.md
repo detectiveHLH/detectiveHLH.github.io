@@ -56,7 +56,7 @@ MySQL什么时候会记录binlog呢？是在事务提交的时候，并不是按
 
 这里拿MySQL 5.6举例子，binlog默认是处于关闭状态的。我们可以通过命令`show variables like '%log_bin%'` 来查看关于binlog的配置。
 
-![默认配置](/images/mysql/23082/binlog-default-setting.jpeg)
+![默认配置](/images/23082/binlog-default-setting.jpeg)
 
 `log_bin`代表是否开启了binlog，其默认值为`OFF`。
 
@@ -69,7 +69,7 @@ MySQL什么时候会记录binlog呢？是在事务提交的时候，并不是按
 
 你可以在MySQL中通过命令`show binary logs`查看所有的binlog文件
 
-![查看binlog](/images/mysql/23082/show-all-binlog.jpeg)
+![查看binlog](/images/23082/show-all-binlog.jpeg)
 
 
 
@@ -77,7 +77,7 @@ MySQL什么时候会记录binlog呢？是在事务提交的时候，并不是按
 
 > show binglog events 查看第一个binlog文件，我们也可以通过`in`参数来指定，假设我们想看的文件名是`mysql-bin.000001`，那么可以使用命令`show binlog events in 'mysql-bin.000001'`来查看指定的binlog文件
 
-![查看binlog](/images/mysql/23082/find-specify-binlog-file.jpeg)
+![查看binlog](/images/23082/find-specify-binlog-file.jpeg)
 
 
 
@@ -104,7 +104,7 @@ INSERT INTO `student` (`id`, `name`) VALUES (NULL, '张三');
 INSERT INTO `student` (`id`, `name`) VALUES (NULL, '李四');
 ```
 
-![image-20210106123550397](/images/mysql/23082/new-transaction-per-insert.jpeg)
+![image-20210106123550397](/images/23082/new-transaction-per-insert.jpeg)
 
 可以看到每次INSERT都会开启一个事务，你可能会疑惑，我们只是简单的执行了INSERT语句，没有显示的开启事务。那为什么会有事务产生呢？
 
@@ -126,7 +126,7 @@ INSERT INTO `student` (`id`, `name`) VALUES (NULL, '李四');
 
 总结来说，主库上只会有一个线程，而从库上则会有两个线程。
 
-![主从复制流程](/images/mysql/23082/core-copy-steps.jpeg)
+![主从复制流程](/images/23082/core-copy-steps.jpeg)
 
 
 
@@ -134,7 +134,7 @@ INSERT INTO `student` (`id`, `name`) VALUES (NULL, '李四');
 
 relay log其实和binlog没有太大的区别，在MySQL 4.0 之前是没有Relay Log这部分的，整个过程中只有两个线程。但是这样也带来一个问题，那就是复制的过程需要同步的进行，很容易被影响，而且效率不高。例如主库必须要等待从库读取完了才能发送下一个binlog事件。这就有点类似于一个阻塞的信道和非阻塞的信道。
 
-![阻塞信道](/images/mysql/23082/demo-for-relay-log.jpeg)
+![阻塞信道](/images/23082/demo-for-relay-log.jpeg)
 
 **阻塞信道**就跟你在柜台一样，你要递归柜员一个东西，但是你和柜员之间没有可以放东西的地方，你就只能一直把文件拿着，直到柜员接手；而**非阻塞信道**就像你们之间有个地方可以放文件，你就直接放上去就好了，不用等柜员接手。
 
@@ -196,7 +196,7 @@ relay log其实和binlog没有太大的区别，在MySQL 4.0 之前是没有Rela
 
 甚至你可以把其中一个备库作为你的预发环境的数据库，当然，这说到底还是直接动了生产环境的数据库，是一种过于理想的用途，因为这还涉及到生产环境数据库的数据敏感性。不是所有人都能够接触到的，需要有完善的权限机制。
 
-![MySQL一主多从](/images/mysql/23082/one-master-multi-follower.jpeg =600x)
+![MySQL一主多从](/images/23082/one-master-multi-follower.jpeg =600x)
 
 值得注意的是，如果有n个从库，那么主库上就会有n个binlog dump线程。如果这个n比较大的话在复制的时候可能会造成主库的性能抖动。所以在从库较多的情况下可以采用级联复制。
 
@@ -212,7 +212,7 @@ relay log其实和binlog没有太大的区别，在MySQL 4.0 之前是没有Rela
 - D、E复制B
 - F、G复制C
 
-![MySQL级联复制](/images/mysql/23082/cascade-replication.jpeg)
+![MySQL级联复制](/images/23082/cascade-replication.jpeg)
 
 这就叫级联复制，开启疯狂套娃模式。你甚至会觉得这种套娃很眼熟，在Redis主从复制中也可以采用级联模式， slave去复制另一个slave。
 
@@ -238,13 +238,13 @@ relay log其实和binlog没有太大的区别，在MySQL 4.0 之前是没有Rela
 
 其用途在哪里呢？例如我们要在不中断服务的前提下对MySQL进行维护、优化，举个例子——**修改表结构**。假设我们有两个数据库，主库A和被动主库B，注意此处的被动主库是**只读**的，我们先停止A对B的复制，也就是停掉A上的SQL线程。
 
-![主主停止复制](/images/mysql/23082/master-master-replication.jpeg)
+![主主停止复制](/images/23082/master-master-replication.jpeg)
 
 这样一来，我们之后在B上执行的非常耗时、可能需要锁表的操作就不会立即同步到A上来。因为此时A正在对外提供服务，所以不能使其收到影响，但是由于采用的是异步的复制模式，所以Relay Log还是继续由I/O线程写入，只是不去进行重放。
 
 然后我们在B上执行此次的维护操作，注意，此时A上面发生的更新还是会正常的同步到B来。执行完后**交换读写的角色**。也就是让A变成只读的被动主库，而B变为主动主库对外提供服务。
 
-![重新开启SQL线程](/images/mysql/23082/restart-sql-thread.jpeg)
+![重新开启SQL线程](/images/23082/restart-sql-thread.jpeg)
 
 然后重新开启SQL线程，A开始去对之前Relay Log中积累的event进行重放。虽然A此时可能会阻塞住，但是A已经没有对外提供服务了，所以没有问题。
 
@@ -262,7 +262,7 @@ relay log其实和binlog没有太大的区别，在MySQL 4.0 之前是没有Rela
 
 首先就是异步，这也是MySQL默认的方式。在异步复制下，主库不会主动的向从库发送消息，而是等待从库的I/O线程建立连接，然后主库创建`binlog dump`线程，把binlog event发送给I/O线程，流程如下图。
 
-![MySQL复制模式](/images/mysql/23082/async-replication.jpeg)
+![MySQL复制模式](/images/23082/async-replication.jpeg)
 
 主库在执行完自己的事务、记录完binlog之后就会直接返回，不会与客户端确认任何结果。然后后续由binlog dump线程异步的读取binlog，然后发送给从库。**处理请求**和**主从复制**是两个完全异步化的过程。
 
@@ -272,7 +272,7 @@ relay log其实和binlog没有太大的区别，在MySQL 4.0 之前是没有Rela
 
 同步模式则是，主库执行一个事务，那么主库必须等待所有的从库全部执行完事务返回commit之后才能给客户端返回成功，
 
-![同步复制](/images/mysql/23082/sync-replication.jpeg)
+![同步复制](/images/23082/sync-replication.jpeg)
 
 值得注意的是，主库会直接提交事务，而不是等待所有从库返回之后再提交。MySQL只是延迟了对客户端的返回，并没有延后事务的提交。
 
@@ -284,7 +284,7 @@ relay log其实和binlog没有太大的区别，在MySQL 4.0 之前是没有Rela
 
 半同步相对于同步的区别在于，同步需要等待所有的从库commit，而半同步只需要一个从库commit就可以返回了。如果超过默认的时间仍然没有从库commit，就会切换为异步模式再提交。客户端也不会一直去等待了。
 
-![MySQL复制模式](/images/mysql/23082/half-sync-replication.jpeg)
+![MySQL复制模式](/images/23082/half-sync-replication.jpeg)
 
 因为即使后面主库宕机了，也能至少保证有一个从库节点是可以用的，此外还减少了同步时的等待时间。
 

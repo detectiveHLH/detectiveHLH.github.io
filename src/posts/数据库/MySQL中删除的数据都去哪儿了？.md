@@ -15,7 +15,7 @@ tag:
 
 这还用问吗？当然是被删除了啊
 
-![](/images/mysql/230812/img-1.jpeg =250x)
+![](/images/230812/img-1.jpeg =250x)
 
 那么这里又有个新的问题了，如果在 InnoDB 下，多事务并发的情况下，如果事务A删除了 `id=1` 的数据，同时事务B又去读取 `id=1` 的数据，如果这条数据真的被删除了，那 MVCC 拿啥数据返回给用户呢？
 
@@ -27,7 +27,7 @@ tag:
 
 > 这其实跟我们日常的操作——**软删除**，差不多是一个意思
 
-![](/images/mysql/230812/row-data-in-db.jpeg)
+![](/images/230812/row-data-in-db.jpeg)
 
 
 
@@ -37,7 +37,7 @@ tag:
 
 那么问题又来了，那这些删除的数据如果一直这么堆下去，那不早晚把硬盘撑爆？
 
-![](/images/mysql/230812/img-2.jpeg =250x)
+![](/images/230812/img-2.jpeg =250x)
 
 如果都玩儿成这样了，那 MySQL 还能像现在这样被大规模的用于生产环境中吗？那 MySQL 到底是怎么玩的？
 
@@ -51,29 +51,29 @@ Purge操作是啥？
 
 Purge 操作才是真正将数据（已被标记为已删除）物理删除的操作。
 
-![](/images/mysql/230812/purge-operation.jpeg)
+![](/images/230812/purge-operation.jpeg)
 
 Purge 操作针对的数据对象，不仅仅是某一行，还有其对应的索引数据和 Undo Log。
 
 好的那么问题又来了。
 
-![](/images/mysql/230812/img-3.jpeg =250x)
+![](/images/230812/img-3.jpeg =250x)
 
 问题是，Purge 操作什么时候会执行呢？实际上，你可以将执行 Purge 操作的线程（简称 Purge 线程）理解成一个后台周期性执行的线程。
 
 Purge 线程可以有一个，也可以有多个，具体的线程数量可以由 MySQL 的配置项 `innodb_purge_threads` 来进行配置。当然，我相信你肯定不记得在使用 MySQL 的时候配置过这个，因为 `innodb_purge_threads` 有个默认值，值为 `4`。
 
-![](/images/mysql/230812/config-innodb-purge-threads.jpeg)
+![](/images/230812/config-innodb-purge-threads.jpeg)
 
 InnoDB 会根据 MySQL 中表的数量和 Purge 线程的数量进行分配。
 
-![](/images/mysql/230812/assign-purge-thread.jpeg =500x)
+![](/images/230812/assign-purge-thread.jpeg =500x)
 
 但正是因为有这种特性，Purge 线程的数量才需要根据业务的实际情况来做调整。举个例子，假设 **DML** 操作都集中在某张表，比如**表1**上...
 
 你先等等，我打断一下......
 
-![](/images/mysql/230812/img-4.jpeg =250x)
+![](/images/230812/img-4.jpeg =250x)
 
 什么叫 DML 操作？总喜欢搞些复杂的名词...DML（**D**ata **M**anipulation **L**anguage）数据操作语句，实际上就是CRUD增删改查...
 
@@ -87,7 +87,7 @@ InnoDB 会根据 MySQL 中表的数量和 Purge 线程的数量进行分配。
 
 `innodb_purge_threads` 的最大值为 32，而且并不是我们配了 32 InnoDB 就真的会启动 32 个 Purge 线程，为啥呢？举个很简单的例子，假设此时只有一张表，然后我们配置了 32 个 Purge 线程。
 
-![](/images/mysql/230812/all-in-one-table.jpeg =450x)
+![](/images/230812/all-in-one-table.jpeg =450x)
 
 你看着上面这个图问问自己，这「河里」吗？这样不仅浪费了系统的资源，同时还使得不同的 Purge 线程之间发生了**数据竞争**。不仅如此，Purge 线程还可能跟用户线程产生竞争。
 
@@ -103,7 +103,7 @@ InnoDB 会根据 MySQL 中表的数量和 Purge 线程的数量进行分配。
 
 了解完 Purge 线程本身之后，我们就可以来了解 Purge 线程所针对的对象了。Purge 线程主要清理的对象是 Undo Logs，其次是行记录。
 
-![](/images/mysql/230812/main-object.jpeg)
+![](/images/230812/main-object.jpeg)
 
 因为 Undo Log 可以分为：
 
