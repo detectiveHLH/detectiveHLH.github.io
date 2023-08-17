@@ -45,7 +45,10 @@ date: '${date}'
 permalink: /posts/'${permanent_number}'.html
 category:
 - '${category}'
----'
+---
+
+# '${filename}'
+'
 
 new_post_dir=$project_path/src/.vuepress/public/images/${category}/${permanent_number}
 # 为新文章创建单独的文件夹
