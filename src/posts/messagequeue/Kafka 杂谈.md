@@ -4,7 +4,7 @@ permalink: /posts/230821.html
 category:
 - messagequeue
 tag:
-- kafka
+- Kafka
 ---
 
 # Kafka 杂谈
