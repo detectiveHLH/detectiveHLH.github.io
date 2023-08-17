@@ -20,13 +20,14 @@ filename=$1
 category=$2
 date=$(date "+%Y-%m-%d")
 
+# 检查 filename 是否为空
 if [ -z "$filename" ]; then
   echo "filename can not be empty"
   exit 1
 fi
 
 # post 目录不存在则直接创建目录
-if [ ! -d "${$final_path/$category}" ]; then
+if [ ! -d "$final_path/$category" ]; then
   mkdir "$final_path/$category"
 fi
 
