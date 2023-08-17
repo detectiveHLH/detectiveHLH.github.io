@@ -32,7 +32,7 @@ if [ ! -d "$final_path/$category" ]; then
 fi
 
 # 放图片的 category 目录不存在, 也直接新建目录
-image_category_dir=$project_path/src/.vuepress/public/images/${category}
+image_category_dir=$project_path/src/.vuepress/public/images/
 if [ ! -d "$image_category_dir" ]; then
   mkdir "$image_category_dir"
 fi
@@ -50,7 +50,7 @@ category:
 # '${filename}'
 '
 
-new_post_dir=$project_path/src/.vuepress/public/images/${category}/${permanent_number}
+new_post_dir=$project_path/src/.vuepress/public/images/${permanent_number}
 # 为新文章创建单独的文件夹
 mkdir "$new_post_dir"
 # 打开这个目录, 方便往里面丢图片
