@@ -3,6 +3,8 @@ date: 2021-11-04
 permalink: /posts/230826.html
 category:
 - 消息队列
+tag:
+- RocketMQ
 ---
 
 # RocketMQ Consumer 启动时都干了些啥？
