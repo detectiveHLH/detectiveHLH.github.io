@@ -4,7 +4,7 @@ permalink: /posts/230829.html
 category:
 - 计算机网络
 tag:
-- TCP
+- TCP/IP
 ---
 
 # 【俗话说】换个角度理解TCP的三次握手和四次挥手
