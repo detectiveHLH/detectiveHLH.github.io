@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="generator" content="VuePress 2.0.0-beta.66" />
+    <meta name="theme" content="VuePress Theme Hope" />
+    <meta property="og:url" content="https://leonsh.cn/posts/230839.html"><meta property="og:site_name" content="SH的全栈笔记"><meta property="og:title" content="手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志"><meta property="og:description" content="手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志 前言 不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。 这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就是，实现一个日志记录的工具类，然后在需要记录日志的接口中，添加一行代码。由这个日志工具类去判断此时应该处理哪些参数。 但是这样有很大的问题。如果需要记日志的接口数量非常多，先不讨论这个工具类中需要做多少的类型判断，仅仅是给所有接口添加这样一行代码在我个人看来都是不能接受的行为。首先，这样对代码的侵入性太大。其次，后期万一有改动，维护的人将会十分难受。想象一下，全局搜索相同的代码，再一一进行修改。"><meta property="og:type" content="article"><meta property="og:locale" content="zh-CN"><meta property="article:author" content="LeonSH"><meta property="article:tag" content="AOP"><meta property="article:published_time" content="2019-02-11T00:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志","image":[""],"datePublished":"2019-02-11T00:00:00.000Z","dateModified":null,"author":[{"@type":"Person","name":"LeonSH","url":"https://leonsh.cn"}]}</script><title>手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志 | SH的全栈笔记</title><meta name="description" content="手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志 前言 不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。 这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就是，实现一个日志记录的工具类，然后在需要记录日志的接口中，添加一行代码。由这个日志工具类去判断此时应该处理哪些参数。 但是这样有很大的问题。如果需要记日志的接口数量非常多，先不讨论这个工具类中需要做多少的类型判断，仅仅是给所有接口添加这样一行代码在我个人看来都是不能接受的行为。首先，这样对代码的侵入性太大。其次，后期万一有改动，维护的人将会十分难受。想象一下，全局搜索相同的代码，再一一进行修改。">
+    <style>
+      :root {
+        --bg-color: #fff;
+      }
+
+      html[data-theme="dark"] {
+        --bg-color: #1d1e1f;
+      }
+
+      html,
+      body {
+        background: var(--bg-color);
+      }
+    </style>
+    <script>
+      const userMode = localStorage.getItem("vuepress-theme-hope-scheme");
+      const systemDarkMode =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      if (userMode === "dark" || (userMode !== "light" && systemDarkMode)) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    </script>
+    <link rel="preload" href="/assets/style-1dd6ee92.css" as="style"><link rel="stylesheet" href="/assets/style-1dd6ee92.css">
+    <link rel="modulepreload" href="/assets/app-4842716a.js"><link rel="modulepreload" href="/assets/230839.html-f1447271.js"><link rel="modulepreload" href="/assets/plugin-vue_export-helper-c27b6911.js"><link rel="modulepreload" href="/assets/230839.html-2dee6d7a.js"><link rel="prefetch" href="/assets/index.html-914fb662.js" as="script"><link rel="prefetch" href="/assets/intro.html-819f842b.js" as="script"><link rel="prefetch" href="/assets/slides.html-0b7fa2da.js" as="script"><link rel="prefetch" href="/assets/230836.html-95884dbf.js" as="script"><link rel="prefetch" href="/assets/230838.html-c1c3fe92.js" as="script"><link rel="prefetch" href="/assets/230837.html-f8f72cdf.js" as="script"><link rel="prefetch" href="/assets/230818.html-0e32725b.js" as="script"><link rel="prefetch" href="/assets/230815.html-9ee79e2e.js" as="script"><link rel="prefetch" href="/assets/230816.html-9a6e2327.js" as="script"><link rel="prefetch" href="/assets/230819.html-94096dd1.js" as="script"><link rel="prefetch" href="/assets/230817.html-b7930907.js" as="script"><link rel="prefetch" href="/assets/230835.html-d974a8fb.js" as="script"><link rel="prefetch" href="/assets/230834.html-faef4fbb.js" as="script"><link rel="prefetch" href="/assets/230833.html-08b671d5.js" as="script"><link rel="prefetch" href="/assets/230829.html-6a1d740a.js" as="script"><link rel="prefetch" href="/assets/230830.html-85ff4c40.js" as="script"><link rel="prefetch" href="/assets/230832.html-ff908c99.js" as="script"><link rel="prefetch" href="/assets/230831.html-651da2b9.js" as="script"><link rel="prefetch" href="/assets/23089.html-95612e98.js" as="script"><link rel="prefetch" href="/assets/230813.html-804e7933.js" as="script"><link rel="prefetch" href="/assets/230812.html-1ee56f3a.js" as="script"><link rel="prefetch" href="/assets/230811.html-04566070.js" as="script"><link rel="prefetch" href="/assets/230814.html-eecc7ece.js" as="script"><link rel="prefetch" href="/assets/23088.html-65ec93e0.js" as="script"><link rel="prefetch" href="/assets/230810.html-3372ab3c.js" as="script"><link rel="prefetch" href="/assets/23083.html-0c814563.js" as="script"><link rel="prefetch" href="/assets/23085.html-e1a09711.js" as="script"><link rel="prefetch" href="/assets/23082.html-be0c7183.js" as="script"><link rel="prefetch" href="/assets/23087.html-599e1095.js" as="script"><link rel="prefetch" href="/assets/230828.html-9b01d105.js" as="script"><link rel="prefetch" href="/assets/23081.html-94bfbf7f.js" as="script"><link rel="prefetch" href="/assets/23086.html-24b130f2.js" as="script"><link rel="prefetch" href="/assets/23084.html-21666437.js" as="script"><link rel="prefetch" href="/assets/230821.html-99dc7c31.js" as="script"><link rel="prefetch" href="/assets/230825.html-cb09d57e.js" as="script"><link rel="prefetch" href="/assets/230826.html-a3d7463d.js" as="script"><link rel="prefetch" href="/assets/230824.html-5e4bec4f.js" as="script"><link rel="prefetch" href="/assets/230822.html-d39a1a80.js" as="script"><link rel="prefetch" href="/assets/230823.html-e5248a06.js" as="script"><link rel="prefetch" href="/assets/230827.html-3f3abbfe.js" as="script"><link rel="prefetch" href="/assets/230820.html-ba73ecf9.js" as="script"><link rel="prefetch" href="/assets/404.html-bf97690d.js" as="script"><link rel="prefetch" href="/assets/index.html-4a209bc8.js" as="script"><link rel="prefetch" href="/assets/index.html-4e1c8491.js" as="script"><link rel="prefetch" href="/assets/index.html-4dbfa225.js" as="script"><link rel="prefetch" href="/assets/index.html-66597874.js" as="script"><link rel="prefetch" href="/assets/index.html-b4a41d05.js" as="script"><link rel="prefetch" href="/assets/index.html-b8557c1e.js" as="script"><link rel="prefetch" href="/assets/index.html-348570b3.js" as="script"><link rel="prefetch" href="/assets/index.html-05dfb6a1.js" as="script"><link rel="prefetch" href="/assets/index.html-1e488b19.js" as="script"><link rel="prefetch" href="/assets/index.html-1c45ffab.js" as="script"><link rel="prefetch" href="/assets/index.html-20bfe488.js" as="script"><link rel="prefetch" href="/assets/index.html-cd7b0a37.js" as="script"><link rel="prefetch" href="/assets/index.html-b2b9cfa5.js" as="script"><link rel="prefetch" href="/assets/index.html-22397f44.js" as="script"><link rel="prefetch" href="/assets/index.html-64ab4ac5.js" as="script"><link rel="prefetch" href="/assets/index.html-0dcf1be3.js" as="script"><link rel="prefetch" href="/assets/index.html-214ad155.js" as="script"><link rel="prefetch" href="/assets/index.html-072e8412.js" as="script"><link rel="prefetch" href="/assets/index.html-b87cf74b.js" as="script"><link rel="prefetch" href="/assets/index.html-d2775737.js" as="script"><link rel="prefetch" href="/assets/index.html-e1de3ee0.js" as="script"><link rel="prefetch" href="/assets/index.html-d23ed6c4.js" as="script"><link rel="prefetch" href="/assets/index.html-1d1b33b2.js" as="script"><link rel="prefetch" href="/assets/index.html-6b394281.js" as="script"><link rel="prefetch" href="/assets/index.html-37cb46f5.js" as="script"><link rel="prefetch" href="/assets/index.html-8b2a7788.js" as="script"><link rel="prefetch" href="/assets/index.html-6db05d1e.js" as="script"><link rel="prefetch" href="/assets/intro.html-3d350148.js" as="script"><link rel="prefetch" href="/assets/slides.html-fd8293a0.js" as="script"><link rel="prefetch" href="/assets/230836.html-b86d7514.js" as="script"><link rel="prefetch" href="/assets/230838.html-7e1b3c00.js" as="script"><link rel="prefetch" href="/assets/230837.html-da13314b.js" as="script"><link rel="prefetch" href="/assets/230818.html-7b7265cc.js" as="script"><link rel="prefetch" href="/assets/230815.html-0bd7e98a.js" as="script"><link rel="prefetch" href="/assets/230816.html-fa8633fc.js" as="script"><link rel="prefetch" href="/assets/230819.html-e8e500dc.js" as="script"><link rel="prefetch" href="/assets/230817.html-2b5f5e6b.js" as="script"><link rel="prefetch" href="/assets/230835.html-5c7f3a61.js" as="script"><link rel="prefetch" href="/assets/230834.html-ca7ac5f1.js" as="script"><link rel="prefetch" href="/assets/230833.html-8bbcbbc9.js" as="script"><link rel="prefetch" href="/assets/230829.html-21d74b5f.js" as="script"><link rel="prefetch" href="/assets/230830.html-82d675ba.js" as="script"><link rel="prefetch" href="/assets/230832.html-8075a3d2.js" as="script"><link rel="prefetch" href="/assets/230831.html-c12c7bdc.js" as="script"><link rel="prefetch" href="/assets/23089.html-51a9e22e.js" as="script"><link rel="prefetch" href="/assets/230813.html-f9b19e51.js" as="script"><link rel="prefetch" href="/assets/230812.html-b1706697.js" as="script"><link rel="prefetch" href="/assets/230811.html-85ee7c15.js" as="script"><link rel="prefetch" href="/assets/230814.html-c2413393.js" as="script"><link rel="prefetch" href="/assets/23088.html-06831b58.js" as="script"><link rel="prefetch" href="/assets/230810.html-be1f4942.js" as="script"><link rel="prefetch" href="/assets/23083.html-7af9c2dc.js" as="script"><link rel="prefetch" href="/assets/23085.html-4a2a674e.js" as="script"><link rel="prefetch" href="/assets/23082.html-c0ec0456.js" as="script"><link rel="prefetch" href="/assets/23087.html-ec7bbb49.js" as="script"><link rel="prefetch" href="/assets/230828.html-a8e2cd8b.js" as="script"><link rel="prefetch" href="/assets/23081.html-3f847ae2.js" as="script"><link rel="prefetch" href="/assets/23086.html-4d84bdd7.js" as="script"><link rel="prefetch" href="/assets/23084.html-3dd0a34d.js" as="script"><link rel="prefetch" href="/assets/230821.html-f56f92db.js" as="script"><link rel="prefetch" href="/assets/230825.html-035f6391.js" as="script"><link rel="prefetch" href="/assets/230826.html-146a4285.js" as="script"><link rel="prefetch" href="/assets/230824.html-31c6e3a8.js" as="script"><link rel="prefetch" href="/assets/230822.html-c142cd9c.js" as="script"><link rel="prefetch" href="/assets/230823.html-68010680.js" as="script"><link rel="prefetch" href="/assets/230827.html-167b40e2.js" as="script"><link rel="prefetch" href="/assets/230820.html-fda884dd.js" as="script"><link rel="prefetch" href="/assets/404.html-2d714573.js" as="script"><link rel="prefetch" href="/assets/index.html-01f376d7.js" as="script"><link rel="prefetch" href="/assets/index.html-7c465d66.js" as="script"><link rel="prefetch" href="/assets/index.html-e8801e68.js" as="script"><link rel="prefetch" href="/assets/index.html-94ee55d8.js" as="script"><link rel="prefetch" href="/assets/index.html-4199fd9e.js" as="script"><link rel="prefetch" href="/assets/index.html-8008225a.js" as="script"><link rel="prefetch" href="/assets/index.html-abea3965.js" as="script"><link rel="prefetch" href="/assets/index.html-73cb0be1.js" as="script"><link rel="prefetch" href="/assets/index.html-39b85c92.js" as="script"><link rel="prefetch" href="/assets/index.html-aa9a1aa1.js" as="script"><link rel="prefetch" href="/assets/index.html-edcc1ce5.js" as="script"><link rel="prefetch" href="/assets/index.html-88f89bae.js" as="script"><link rel="prefetch" href="/assets/index.html-e6fc2970.js" as="script"><link rel="prefetch" href="/assets/index.html-f4216e7c.js" as="script"><link rel="prefetch" href="/assets/index.html-8fdff568.js" as="script"><link rel="prefetch" href="/assets/index.html-71637ca1.js" as="script"><link rel="prefetch" href="/assets/index.html-e5961b84.js" as="script"><link rel="prefetch" href="/assets/index.html-6df94dd4.js" as="script"><link rel="prefetch" href="/assets/index.html-35e4f5c4.js" as="script"><link rel="prefetch" href="/assets/index.html-f4724b22.js" as="script"><link rel="prefetch" href="/assets/index.html-79ddc60f.js" as="script"><link rel="prefetch" href="/assets/index.html-1aad938e.js" as="script"><link rel="prefetch" href="/assets/index.html-0121d5ae.js" as="script"><link rel="prefetch" href="/assets/index.html-d6e22720.js" as="script"><link rel="prefetch" href="/assets/index.html-0c0bd30b.js" as="script"><link rel="prefetch" href="/assets/index.html-ea719d7e.js" as="script"><link rel="prefetch" href="/assets/waline-meta-56fbc549.js" as="script"><link rel="prefetch" href="/assets/component-81f659e4.js" as="script"><link rel="prefetch" href="/assets/auto-712ff3ee.js" as="script"><link rel="prefetch" href="/assets/index-2bf332f6.js" as="script"><link rel="prefetch" href="/assets/flowchart-c441f34d.js" as="script"><link rel="prefetch" href="/assets/mermaid.core-894e290b.js" as="script"><link rel="prefetch" href="/assets/highlight.esm-75b11b9d.js" as="script"><link rel="prefetch" href="/assets/markdown.esm-abe06b83.js" as="script"><link rel="prefetch" href="/assets/math.esm-70a288c8.js" as="script"><link rel="prefetch" href="/assets/notes.esm-a106bb2c.js" as="script"><link rel="prefetch" href="/assets/reveal.esm-ec5549c1.js" as="script"><link rel="prefetch" href="/assets/search.esm-7e6792e2.js" as="script"><link rel="prefetch" href="/assets/zoom.esm-b83b91d0.js" as="script"><link rel="prefetch" href="/assets/VuePlayground-93c57ade.js" as="script"><link rel="prefetch" href="/assets/photoswipe.esm-5794cde2.js" as="script"><link rel="prefetch" href="/assets/pageview-ab91780d.js" as="script">
+  </head>
+  <body>
+    <div id="app"><!--[--><!--[--><!--[--><span tabindex="-1"></span><a href="#main-content" class="vp-skip-link sr-only">跳至主要內容</a><!--]--><div class="theme-container has-toc"><!--[--><header id="navbar" class="vp-navbar"><div class="vp-navbar-start"><button type="button" class="vp-toggle-sidebar-button" title="Toggle Sidebar"><span class="icon"></span></button><!--[--><!----><!--]--><!--[--><a class="vp-link vp-brand" href="/"><img class="vp-nav-logo" src="/logo.png" alt="SH的全栈笔记"><!----><span class="vp-site-name hide-in-pad">SH的全栈笔记</span></a><!--]--><!--[--><!----><!--]--></div><div class="vp-navbar-center"><!--[--><!----><!--]--><!--[--><nav class="vp-nav-links"><div class="nav-item hide-in-mobile"><a class="vp-link nav-link" href="/"><span class="font-icon icon fa-fw fa-sm fas fa-home" style=""></span>首页<!----></a></div><div class="nav-item hide-in-mobile"><a class="vp-link nav-link" href="/intro.html"><span class="font-icon icon fa-fw fa-sm fas fa-circle-info" style=""></span>关于我<!----></a></div></nav><!--]--><!--[--><!----><!--]--></div><div class="vp-navbar-end"><!--[--><!----><!--]--><!--[--><!----><div class="nav-item vp-repo"><a class="vp-repo-link" href="https://github.com/detectiveHLH" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="icon github-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="github icon" style="width:1.25rem;height:1.25rem;vertical-align:middle;"><path d="M511.957 21.333C241.024 21.333 21.333 240.981 21.333 512c0 216.832 140.544 400.725 335.574 465.664 24.49 4.395 32.256-10.07 32.256-23.083 0-11.69.256-44.245 0-85.205-136.448 29.61-164.736-64.64-164.736-64.64-22.315-56.704-54.4-71.765-54.4-71.765-44.587-30.464 3.285-29.824 3.285-29.824 49.195 3.413 75.179 50.517 75.179 50.517 43.776 75.008 114.816 53.333 142.762 40.79 4.523-31.66 17.152-53.377 31.19-65.537-108.971-12.458-223.488-54.485-223.488-242.602 0-53.547 19.114-97.323 50.517-131.67-5.035-12.33-21.93-62.293 4.779-129.834 0 0 41.258-13.184 134.912 50.346a469.803 469.803 0 0 1 122.88-16.554c41.642.213 83.626 5.632 122.88 16.554 93.653-63.488 134.784-50.346 134.784-50.346 26.752 67.541 9.898 117.504 4.864 129.834 31.402 34.347 50.474 78.123 50.474 131.67 0 188.586-114.73 230.016-224.042 242.09 17.578 15.232 33.578 44.672 33.578 90.454v135.85c0 13.142 7.936 27.606 32.854 22.87C862.25 912.597 1002.667 728.747 1002.667 512c0-271.019-219.648-490.667-490.71-490.667z"></path></svg></a></div><div class="nav-item hide-in-mobile"><button type="button" id="appearance-switch"><svg xmlns="http://www.w3.org/2000/svg" class="icon auto-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="auto icon" style="display:block;"><path d="M512 992C246.92 992 32 777.08 32 512S246.92 32 512 32s480 214.92 480 480-214.92 480-480 480zm0-840c-198.78 0-360 161.22-360 360 0 198.84 161.22 360 360 360s360-161.16 360-360c0-198.78-161.22-360-360-360zm0 660V212c165.72 0 300 134.34 300 300 0 165.72-134.28 300-300 300z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon dark-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="dark icon" style="display:none;"><path d="M524.8 938.667h-4.267a439.893 439.893 0 0 1-313.173-134.4 446.293 446.293 0 0 1-11.093-597.334A432.213 432.213 0 0 1 366.933 90.027a42.667 42.667 0 0 1 45.227 9.386 42.667 42.667 0 0 1 10.24 42.667 358.4 358.4 0 0 0 82.773 375.893 361.387 361.387 0 0 0 376.747 82.774 42.667 42.667 0 0 1 54.187 55.04 433.493 433.493 0 0 1-99.84 154.88 438.613 438.613 0 0 1-311.467 128z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon light-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="light icon" style="display:none;"><path d="M952 552h-80a40 40 0 0 1 0-80h80a40 40 0 0 1 0 80zM801.88 280.08a41 41 0 0 1-57.96-57.96l57.96-58a41.04 41.04 0 0 1 58 58l-58 57.96zM512 752a240 240 0 1 1 0-480 240 240 0 0 1 0 480zm0-560a40 40 0 0 1-40-40V72a40 40 0 0 1 80 0v80a40 40 0 0 1-40 40zm-289.88 88.08-58-57.96a41.04 41.04 0 0 1 58-58l57.96 58a41 41 0 0 1-57.96 57.96zM192 512a40 40 0 0 1-40 40H72a40 40 0 0 1 0-80h80a40 40 0 0 1 40 40zm30.12 231.92a41 41 0 0 1 57.96 57.96l-57.96 58a41.04 41.04 0 0 1-58-58l58-57.96zM512 832a40 40 0 0 1 40 40v80a40 40 0 0 1-80 0v-80a40 40 0 0 1 40-40zm289.88-88.08 58 57.96a41.04 41.04 0 0 1-58 58l-57.96-58a41 41 0 0 1 57.96-57.96z"></path></svg></button></div><!----><!--]--><!--[--><!----><!--]--><button type="button" class="vp-toggle-navbar-button" aria-label="Toggle Navbar" aria-expanded="false" aria-controls="nav-screen"><span><span class="vp-top"></span><span class="vp-middle"></span><span class="vp-bottom"></span></span></button></div></header><!----><!--]--><!----><div class="toggle-sidebar-wrapper"><span class="arrow start"></span></div><aside id="sidebar" class="vp-sidebar"><!--[--><!----><!--]--><ul class="vp-sidebar-links"><li><!--[--><a class="vp-link nav-link vp-sidebar-link vp-sidebar-page" href="/"><span class="font-icon icon fa-fw fa-sm fas fa-home" style=""></span>首页<!----></a><ul class="vp-sidebar-sub-headers"></ul><!--]--></li><li><section class="vp-sidebar-group"><p class="vp-sidebar-heading active"><span class="font-icon icon fa-fw fa-sm fas fa-book" style=""></span><span class="vp-sidebar-title">文章</span><!----></p><ul class="vp-sidebar-links"><li><section class="vp-sidebar-group"><button class="vp-sidebar-heading clickable active" type="button"><!----><span class="vp-sidebar-title">Java</span><span class="vp-arrow down"></span></button><ul class="vp-sidebar-links"><li><!--[--><a class="vp-link nav-link vp-sidebar-link vp-sidebar-page" href="/posts/230836.html"><!---->使用IntelliJ IDEA新建Java Web后端resfulAPI模板<!----></a><ul class="vp-sidebar-sub-headers"></ul><!--]--></li><li><!--[--><a class="vp-link nav-link vp-sidebar-link vp-sidebar-page" href="/posts/230838.html"><!---->在Java中使用redisTemplate操作缓存<!----></a><ul class="vp-sidebar-sub-headers"></ul><!--]--></li><li><!--[--><a class="vp-link nav-link vp-sidebar-link vp-sidebar-page" href="/posts/230837.html"><!---->在SpringBoot中添加Redis<!----></a><ul class="vp-sidebar-sub-headers"></ul><!--]--></li><li><!--[--><a class="vp-link nav-link active vp-sidebar-link vp-sidebar-page active" href="/posts/230839.html"><!---->手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志<!----></a><ul class="vp-sidebar-sub-headers"><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#前言"><!---->前言<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#开始操作前"><!---->开始操作前<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#开始操作"><!---->开始操作<!----></a><ul class="vp-sidebar-sub-headers"><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#新建项目"><!---->新建项目<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#新建aop类"><!---->新建Aop类<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#自定义注解"><!---->自定义注解<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#加上普通注解"><!---->加上普通注解<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#加上带类型注解"><!---->加上带类型注解<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#通过反射获取请求的参数"><!---->通过反射获取请求的参数<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#获取简单参数类型"><!---->获取简单参数类型<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#获取复杂参数类型"><!---->获取复杂参数类型<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#判断请求是否成功"><!---->判断请求是否成功<!----></a><ul class="vp-sidebar-sub-headers"></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#通过反射获取返回的参数"><!---->通过反射获取返回的参数<!----></a><ul class="vp-sidebar-sub-headers"></ul></li></ul></li><li class="vp-sidebar-sub-header"><a class="vp-link nav-link vp-sidebar-link vp-heading" href="/posts/230839.html#项目源码地址"><!---->项目源码地址<!----></a><ul class="vp-sidebar-sub-headers"></ul></li></ul><!--]--></li></ul></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-heading clickable" type="button"><!----><span class="vp-sidebar-title">Redis</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-heading clickable" type="button"><!----><span class="vp-sidebar-title">操作系统</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-heading clickable" type="button"><!----><span class="vp-sidebar-title">数据库</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-heading clickable" type="button"><!----><span class="vp-sidebar-title">消息队列</span><span class="vp-arrow end"></span></button><!----></section></li><li><section class="vp-sidebar-group"><button class="vp-sidebar-heading clickable" type="button"><!----><span class="vp-sidebar-title">计算机网络</span><span class="vp-arrow end"></span></button><!----></section></li></ul></section></li><li><!--[--><a class="vp-link nav-link vp-sidebar-link vp-sidebar-page" href="/intro.html"><span class="font-icon icon fa-fw fa-sm fas fa-circle-info" style=""></span>关于我<!----></a><ul class="vp-sidebar-sub-headers"></ul><!--]--></li></ul><!--[--><!----><!--]--></aside><!--[--><main id="main-content" class="vp-page"><!--[--><!----><!----><nav class="vp-breadcrumb disable"></nav><div class="vp-page-title"><h1><!---->手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志</h1><div class="page-info"><span class="page-author-info" aria-label="作者🖊" data-balloon-pos="down"><svg xmlns="http://www.w3.org/2000/svg" class="icon author-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="author icon"><path d="M649.6 633.6c86.4-48 147.2-144 147.2-249.6 0-160-128-288-288-288s-288 128-288 288c0 108.8 57.6 201.6 147.2 249.6-121.6 48-214.4 153.6-240 288-3.2 9.6 0 19.2 6.4 25.6 3.2 9.6 12.8 12.8 22.4 12.8h704c9.6 0 19.2-3.2 25.6-12.8 6.4-6.4 9.6-16 6.4-25.6-25.6-134.4-121.6-240-243.2-288z"></path></svg><span><a class="page-author-item" href="https://leonsh.cn" target="_blank" rel="noopener noreferrer">LeonSH</a></span><span property="author" content="LeonSH"></span></span><!----><span class="page-date-info" aria-label="写作日期📅" data-balloon-pos="down"><svg xmlns="http://www.w3.org/2000/svg" class="icon calendar-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="calendar icon"><path d="M716.4 110.137c0-18.753-14.72-33.473-33.472-33.473-18.753 0-33.473 14.72-33.473 33.473v33.473h66.993v-33.473zm-334.87 0c0-18.753-14.72-33.473-33.473-33.473s-33.52 14.72-33.52 33.473v33.473h66.993v-33.473zm468.81 33.52H716.4v100.465c0 18.753-14.72 33.473-33.472 33.473a33.145 33.145 0 01-33.473-33.473V143.657H381.53v100.465c0 18.753-14.72 33.473-33.473 33.473a33.145 33.145 0 01-33.473-33.473V143.657H180.6A134.314 134.314 0 0046.66 277.595v535.756A134.314 134.314 0 00180.6 947.289h669.74a134.36 134.36 0 00133.94-133.938V277.595a134.314 134.314 0 00-133.94-133.938zm33.473 267.877H147.126a33.145 33.145 0 01-33.473-33.473c0-18.752 14.72-33.473 33.473-33.473h736.687c18.752 0 33.472 14.72 33.472 33.473a33.145 33.145 0 01-33.472 33.473z"></path></svg><span><!----></span><meta property="datePublished" content="2019-02-11T00:00:00.000Z"></span><span class="page-pageview-info" aria-label="访问量🔢" data-balloon-pos="down"><svg xmlns="http://www.w3.org/2000/svg" class="icon eye-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="eye icon"><path d="M992 512.096c0-5.76-.992-10.592-1.28-11.136-.192-2.88-1.152-8.064-2.08-10.816-.256-.672-.544-1.376-.832-2.08-.48-1.568-1.024-3.104-1.6-4.32C897.664 290.112 707.104 160 512 160c-195.072 0-385.632 130.016-473.76 322.592-1.056 2.112-1.792 4.096-2.272 5.856a55.512 55.512 0 00-.64 1.6c-1.76 5.088-1.792 8.64-1.632 7.744-.832 3.744-1.568 11.168-1.568 11.168-.224 2.272-.224 4.032.032 6.304 0 0 .736 6.464 1.088 7.808.128 1.824.576 4.512 1.12 6.976h-.032c.448 2.08 1.12 4.096 1.984 6.08.48 1.536.992 2.976 1.472 4.032C126.432 733.856 316.992 864 512 864c195.136 0 385.696-130.048 473.216-321.696 1.376-2.496 2.24-4.832 2.848-6.912.256-.608.48-1.184.672-1.728 1.536-4.48 1.856-8.32 1.728-8.32l-.032.032c.608-3.104 1.568-7.744 1.568-13.28zM512 672c-88.224 0-160-71.776-160-160s71.776-160 160-160 160 71.776 160 160-71.776 160-160 160z"></path></svg><span id="ArtalkPV" class="waline-pageview-count" data-path="/posts/230839.html">...</span></span><span class="page-reading-time-info" aria-label="阅读时间⌛" data-balloon-pos="down"><svg xmlns="http://www.w3.org/2000/svg" class="icon timer-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="timer icon"><path d="M799.387 122.15c4.402-2.978 7.38-7.897 7.38-13.463v-1.165c0-8.933-7.38-16.312-16.312-16.312H256.33c-8.933 0-16.311 7.38-16.311 16.312v1.165c0 5.825 2.977 10.874 7.637 13.592 4.143 194.44 97.22 354.963 220.201 392.763-122.204 37.542-214.893 196.511-220.2 389.397-4.661 5.049-7.638 11.651-7.638 19.03v5.825h566.49v-5.825c0-7.379-2.849-13.981-7.509-18.9-5.049-193.016-97.867-351.985-220.2-389.527 123.24-37.67 216.446-198.453 220.588-392.892zM531.16 450.445v352.632c117.674 1.553 211.787 40.778 211.787 88.676H304.097c0-48.286 95.149-87.382 213.728-88.676V450.445c-93.077-3.107-167.901-81.297-167.901-177.093 0-8.803 6.99-15.793 15.793-15.793 8.803 0 15.794 6.99 15.794 15.793 0 80.261 63.69 145.635 142.01 145.635s142.011-65.374 142.011-145.635c0-8.803 6.99-15.793 15.794-15.793s15.793 6.99 15.793 15.793c0 95.019-73.789 172.82-165.96 177.093z"></path></svg><span>大约 17 分钟</span><meta property="timeRequired" content="PT17M"></span><span class="page-category-info" aria-label="分类🌈" data-balloon-pos="down"><svg xmlns="http://www.w3.org/2000/svg" class="icon category-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="category icon"><path d="M148.41 106.992h282.176c22.263 0 40.31 18.048 40.31 40.31V429.48c0 22.263-18.047 40.31-40.31 40.31H148.41c-22.263 0-40.311-18.047-40.311-40.31V147.302c0-22.263 18.048-40.31 40.311-40.31zM147.556 553.478H429.73c22.263 0 40.311 18.048 40.311 40.31v282.176c0 22.263-18.048 40.312-40.31 40.312H147.555c-22.263 0-40.311-18.049-40.311-40.312V593.79c0-22.263 18.048-40.311 40.31-40.311zM593.927 106.992h282.176c22.263 0 40.31 18.048 40.31 40.31V429.48c0 22.263-18.047 40.31-40.31 40.31H593.927c-22.263 0-40.311-18.047-40.311-40.31V147.302c0-22.263 18.048-40.31 40.31-40.31zM730.22 920.502H623.926c-40.925 0-74.22-33.388-74.22-74.425V623.992c0-41.038 33.387-74.424 74.425-74.424h222.085c41.038 0 74.424 33.226 74.424 74.067v114.233c0 10.244-8.304 18.548-18.547 18.548s-18.548-8.304-18.548-18.548V623.635c0-20.388-16.746-36.974-37.33-36.974H624.13c-20.585 0-37.331 16.747-37.331 37.33v222.086c0 20.585 16.654 37.331 37.126 37.331H730.22c10.243 0 18.547 8.304 18.547 18.547 0 10.244-8.304 18.547-18.547 18.547z"></path></svg><!--[--><span class="page-category-item category4 clickable" role="navigation">Java</span><!--]--><meta property="articleSection" content="Java"></span><span class="page-tag-info" aria-label="标签🏷" data-balloon-pos="down"><svg xmlns="http://www.w3.org/2000/svg" class="icon tag-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="tag icon"><path d="M939.902 458.563L910.17 144.567c-1.507-16.272-14.465-29.13-30.737-30.737L565.438 84.098h-.402c-3.215 0-5.726 1.005-7.634 2.913l-470.39 470.39a10.004 10.004 0 000 14.164l365.423 365.424c1.909 1.908 4.42 2.913 7.132 2.913s5.223-1.005 7.132-2.913l470.39-470.39c2.01-2.11 3.014-5.023 2.813-8.036zm-240.067-72.121c-35.458 0-64.286-28.828-64.286-64.286s28.828-64.285 64.286-64.285 64.286 28.828 64.286 64.285-28.829 64.286-64.286 64.286z"></path></svg><!--[--><span class="page-tag-item tag2 clickable" role="navigation">AOP</span><!--]--><meta property="keywords" content="AOP"></span></div><hr></div><div class="toc-place-holder"><aside id="toc"><!--[--><!----><!--]--><div class="toc-header">此页内容<button type="button" class="print-button" title="打印"><svg xmlns="http://www.w3.org/2000/svg" class="icon print-icon" viewBox="0 0 1024 1024" fill="currentColor" aria-label="print icon"><path d="M819.2 364.8h-44.8V128c0-17.067-14.933-32-32-32H281.6c-17.067 0-32 14.933-32 32v236.8h-44.8C145.067 364.8 96 413.867 96 473.6v192c0 59.733 49.067 108.8 108.8 108.8h44.8V896c0 17.067 14.933 32 32 32h460.8c17.067 0 32-14.933 32-32V774.4h44.8c59.733 0 108.8-49.067 108.8-108.8v-192c0-59.733-49.067-108.8-108.8-108.8zM313.6 160h396.8v204.8H313.6V160zm396.8 704H313.6V620.8h396.8V864zM864 665.6c0 25.6-19.2 44.8-44.8 44.8h-44.8V588.8c0-17.067-14.933-32-32-32H281.6c-17.067 0-32 14.933-32 32v121.6h-44.8c-25.6 0-44.8-19.2-44.8-44.8v-192c0-25.6 19.2-44.8 44.8-44.8h614.4c25.6 0 44.8 19.2 44.8 44.8v192z"></path></svg></button></div><div class="toc-wrapper"><ul class="toc-list"><!--[--><li class="toc-item"><a class="vp-link toc-link level2" href="/#前言">前言</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level2" href="/#开始操作前">开始操作前</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level2" href="/#开始操作">开始操作</a></li><li><ul class="toc-list"><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#新建项目">新建项目</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#新建aop类">新建Aop类</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#自定义注解">自定义注解</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#加上普通注解">加上普通注解</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#加上带类型注解">加上带类型注解</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#通过反射获取请求的参数">通过反射获取请求的参数</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#获取简单参数类型">获取简单参数类型</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#获取复杂参数类型">获取复杂参数类型</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#判断请求是否成功">判断请求是否成功</a></li><!----><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level3" href="/#通过反射获取返回的参数">通过反射获取返回的参数</a></li><!----><!--]--></ul></li><!--]--><!--[--><li class="toc-item"><a class="vp-link toc-link level2" href="/#项目源码地址">项目源码地址</a></li><!----><!--]--></ul><div class="toc-marker" style="top:-1.7rem;"></div></div><!--[--><!----><!--]--></aside></div><!----><div class="theme-hope-content"><h1 id="手把手教你如何优雅的使用aop记录带参数的复杂web接口日志" tabindex="-1"><a class="header-anchor" href="#手把手教你如何优雅的使用aop记录带参数的复杂web接口日志" aria-hidden="true">#</a> 手把手教你如何优雅的使用Aop记录带参数的复杂Web接口日志</h1><h2 id="前言" tabindex="-1"><a class="header-anchor" href="#前言" aria-hidden="true">#</a> 前言</h2><p>不久前，因为需求的原因，需要实现一个操作日志。几乎每一个接口被调用后，都要记录一条跟这个参数挂钩的特定的日志到数据库。举个例子，就比如禁言操作，日志中需要记录因为什么禁言，被禁言的人的id和各种信息。方便后期查询。</p><p>这样的接口有很多个，而且大部分接口的参数都不一样。可能大家很容易想到的一个思路就是，实现一个日志记录的工具类，然后在需要记录日志的接口中，添加一行代码。由这个日志工具类去判断此时应该处理哪些参数。</p><p>但是这样有很大的问题。如果需要记日志的接口数量非常多，先不讨论这个工具类中需要做多少的类型判断，仅仅是给所有接口添加这样一行代码在我个人看来都是不能接受的行为。首先，这样对代码的侵入性太大。其次，后期万一有改动，维护的人将会十分难受。想象一下，全局搜索相同的代码，再一一进行修改。</p><p>所以我放弃了这个略显原始的方法。我最终采用了Aop的方式，采取拦截的请求的方式，来记录日志。但是即使采用这个方法，仍然面临一个问题，那就是如何处理大量的参数。以及如何对应到每一个接口上。</p><p>我最终没有拦截所有的controller，而是自定义了一个日志注解。所有打上了这个注解的方法，将会记录日志。同时，注解中会带有类型，来为当前的接口指定特定的日志内容以及参数。</p><p>那么如何从众多可能的参数中，为当前的日志指定对应的参数呢。我的解决方案是维护一个参数类，里面列举了所有需要记录在日志中的参数名。然后在拦截请求时，通过反射，获取到该请求的request和response中的所有参数和值，如果该参数存在于我维护的param类中，则将对应的值赋值进去。</p><p>然后在请求结束后，将模板中的所有预留的参数全部用赋了值的参数替换掉。这样一来，在不大量的侵入业务的前提下，满足了需求，同时也保证了代码的可维护性。</p><p>下面我将会把详细的实现过程列举出来。</p><h2 id="开始操作前" tabindex="-1"><a class="header-anchor" href="#开始操作前" aria-hidden="true">#</a> 开始操作前</h2><p>文章结尾我会给出这个demo项目的所有源码。所以不想看过程的兄台可移步到末尾，直接看源码。（听说和源码搭配，看文章更美味...）</p><h2 id="开始操作" tabindex="-1"><a class="header-anchor" href="#开始操作" aria-hidden="true">#</a> 开始操作</h2><h3 id="新建项目" tabindex="-1"><a class="header-anchor" href="#新建项目" aria-hidden="true">#</a> 新建项目</h3><p>大家可以参考我之前写的另一篇文章，<a href="https://detectivehlh.github.io./java/newSprintBootStarter/" target="_blank" rel="noopener noreferrer">手把手教你从零开始搭建SpringBoot后端项目框架<span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span></a>。只要能请求简单的接口就可以了。本项目的依赖如下。</p><div class="language-xml line-numbers-mode" data-ext="xml"><pre class="language-xml"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>spring-boot-starter-web<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>2.1.1.RELEASE<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>org.aspectj<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>aspectjrt<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>1.9.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>org.aspectj<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>aspectjweaver<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>1.9.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>org.projectlombok<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>lombok<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>1.18.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>cn.hutool<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>hutool-all<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>4.1.14<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="新建aop类" tabindex="-1"><a class="header-anchor" href="#新建aop类" aria-hidden="true">#</a> 新建Aop类</h3><p>新建<code>LogAspect</code>类。代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.util;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+
+/**
+ * LogAspect
+ *
+ * @author Lunhao Hu
+ * @date 2019-01-30 16:21
+ **/
+@Aspect
+@Component
+public class LogAspect {
+    /**
+     * 定义切入点
+     */
+    @Pointcut(&quot;@annotation(spring.aop.log.demo.api.util.Log)&quot;)
+    public void operationLog() {
+    }
+    
+    /**
+     * 新增结果返回后触发
+     *
+     * @param point
+     * @param returnValue
+     */
+    @AfterReturning(returning = &quot;returnValue&quot;, pointcut = &quot;operationLog() &amp;&amp; @annotation(log)&quot;)
+    public void doAfterReturning(JoinPoint point, Object returnValue, Log log) {
+        System.out.println(&quot;test&quot;);
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><code>Pointcut</code>中传入了一个注解，表示凡是打上了这个注解的方法，都会触发由<code>Pointcut</code>修饰的<code>operationLog</code>函数。而<code>AfterReturning</code>则是在请求返回之后触发。</p><h3 id="自定义注解" tabindex="-1"><a class="header-anchor" href="#自定义注解" aria-hidden="true">#</a> 自定义注解</h3><p>上一步提到了自定义注解，这个自定义注解将打在controller的每个方法上。新建一个<code>annotation</code>的类。代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.util;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Log
+ *
+ * @author Lunhao Hu
+ * @date 2019-01-30 16:19
+ **/
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Log {
+    String type() default &quot;&quot;;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><code>Target</code>和<code>Retention</code>都属于元注解。共有4种，分别是<code>@Retention</code>、<code>@Target</code>、<code>@Document</code>、<code>@Inherited</code>。</p><p><code>Target</code>注解说明了该Annotation所修饰的范围。可以传入很多类型，参数为<code>ElementType</code>。例如<code>TYPE</code>，用于描述类、接口或者枚举类；<code>FIELD</code>用于描述属性；<code>METHOD</code>用于描述方法；<code>PARAMETER</code>用于描述参数；<code>CONSTRUCTOR</code>用于描述构造函数；<code>LOCAL_VARIABLE</code>用于描述局部变量；<code>ANNOTATION_TYPE</code>用于描述注解；<code>PACKAGE</code>用于描述包等。</p><p><code>Retention</code>注解定义了该Annotation被保留的时间长短。参数为<code>RetentionPolicy</code>。例如<code>SOURCE</code>表示只在源码中存在，不会在编译后的class文件存在；<code>CLASS</code>是该注解的默认选项。 即存在于源码，也存在于编译后的class文件，但不会被加载到虚拟机中去；<code>RUNTIME</code>存在于源码、class文件以及虚拟机中，通俗一点讲就是可以在运行的时候通过反射获取到。</p><h3 id="加上普通注解" tabindex="-1"><a class="header-anchor" href="#加上普通注解" aria-hidden="true">#</a> 加上普通注解</h3><p>给需要记录日志的接口加上<code>Log</code>注解。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+import spring.aop.log.demo.api.util.Log;
+
+/**
+ * HelloController
+ *
+ * @author Lunhao Hu
+ * @date 2019-01-30 15:52
+ **/
+@RestController
+public class HelloController {
+    @Log
+    @GetMapping(&quot;test/{id}&quot;)
+    public String test(@PathVariable(name = &quot;id&quot;) Integer id) {
+        return &quot;Hello&quot; + id;
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>加上之后，每一次调用<code>test/{id}</code>这个接口，都会触发拦截器中的<code>doAfterReturning</code>方法中的代码。</p><h3 id="加上带类型注解" tabindex="-1"><a class="header-anchor" href="#加上带类型注解" aria-hidden="true">#</a> 加上带类型注解</h3><p>上面介绍了记录普通日志的方法，接下来要介绍记录特定日志的方法。什么特定日志呢，就是每个接口要记录的信息不同。为了实现这个，我们需要实现一个操作类型的枚举类。代码如下。</p><h4 id="操作类型模板枚举" tabindex="-1"><a class="header-anchor" href="#操作类型模板枚举" aria-hidden="true">#</a> 操作类型模板枚举</h4><p>新建一个枚举类<code>Type</code>。代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.util;
+
+/**
+ * Type
+ *
+ * @author Lunhao Hu
+ * @date 2019-01-30 17:12
+ **/
+public enum Type {
+    /**
+     * 操作类型
+     */
+    WARNING(&quot;警告&quot;, &quot;因被其他玩家举报，警告玩家&quot;);
+
+    /**
+     * 类型
+     */
+    private String type;
+
+    /**
+     * 执行操作
+     */
+    private String operation;
+
+    Type(String type, String operation) {
+        this.type = type;
+        this.operation = operation;
+    }
+
+    public String getType() { return type; }
+
+    public String getOperation() { return operation; }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="给注解加上类型" tabindex="-1"><a class="header-anchor" href="#给注解加上类型" aria-hidden="true">#</a> 给注解加上类型</h4><p>给上面的controller中的注解加上type。代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+import spring.aop.log.demo.api.util.Log;
+
+/**
+ * HelloController
+ *
+ * @author Lunhao Hu
+ * @date 2019-01-30 15:52
+ **/
+@RestController
+public class HelloController {
+    @Log(type = &quot;WARNING&quot;)
+    @GetMapping(&quot;test/{id}&quot;)
+    public String test(@PathVariable(name = &quot;id&quot;) Integer id) {
+        return &quot;Hello&quot; + id;
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="修改aop类" tabindex="-1"><a class="header-anchor" href="#修改aop类" aria-hidden="true">#</a> 修改aop类</h4><p>将aop类中的<code>doAfterReturning</code>为如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>@AfterReturning(returning = &quot;returnValue&quot;, pointcut = &quot;operationLog() &amp;&amp; @annotation(log)&quot;)
+public void doAfterReturning(JoinPoint point, Object returnValue, Log log) {
+    // 注解中的类型
+    String enumKey = log.type();
+    System.out.println(Type.valueOf(enumKey).getOperation());
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>加上之后，每一次调用加了<code>@Log(type = &quot;WARNING&quot;)</code>这个注解的接口，都会打印这个接口所指定的日志。例如上述代码就会打印出如下代码。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>因被其他玩家举报，警告玩家
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><h4 id="获取aop拦截的请求参数" tabindex="-1"><a class="header-anchor" href="#获取aop拦截的请求参数" aria-hidden="true">#</a> 获取aop拦截的请求参数</h4><p>为每个接口指定一个日志并不困难，只需要为每个接口指定一个类型即可。但是大家应该也注意到了，一个接口日志，只记录<code>因被其他玩家举报，警告玩家</code>这样的信息没有任何意义。</p><p>记录日志的人倒不觉得，而最后去查看日志的人就要吾日三省吾身了，被谁举报了？因为什么举报了？我警告的谁？</p><p>这样的日志做了太多的无用功，根本没有办法在出现问题之后溯源。所以我们下一步的操作就是给每个接口加上特定的参数。那么大家可能会有问题，如果每个接口的参数几乎都不一样，那这个工具类岂不是要传入很多参数，要怎么实现呢，甚至还要组织参数，这样会大量的侵入业务代码，并且会大量的增加冗余代码。</p><p>大家可能会想到，实现一个记录日志的方法，在要记日志的接口中调用，把参数传进去。如果类型很多的话，参数也会随之增多，每个接口的参数都不一样。处理起来十分麻烦，而且对业务的侵入性太高。几乎每个地方都要嵌入日志相关代码。一旦涉及到修改，将会变得十分难维护。</p><p>所以我直接利用反射获取aop拦截到的请求中的所有参数，如果我的参数类（所有要记录的参数）里面有请求中的参数，那么我就将参数的值写入参数类中。最后将日志模版中参数预留字段替换成请求中的参数。</p><p>流程图如下所示。</p><figure><img src="/images/230839/request-process.jpeg" alt="img" tabindex="0" loading="lazy"><figcaption>img</figcaption></figure><h4 id="新建参数类" tabindex="-1"><a class="header-anchor" href="#新建参数类" aria-hidden="true">#</a> 新建参数类</h4><p>新建一个类<code>Param</code>，其中包含所有在操作日志中，可能会出现的参数。为什么要这么做？因为每个接口需要的参数都有可能完全不一样，与其去维护大量的判断逻辑，还不如<code>贪心</code>一点，直接传入所有的可能参数。当然后期如果有新的参数需要记录，则需要修改代码。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.util;
+
+import lombok.Data;
+
+/**
+ * Param
+ *
+ * @author Lunhao Hu
+ * @date 2019-01-30 17:14
+ **/
+@Data
+public class Param {
+    /**
+     * 所有可能参数
+     */
+    private String id;
+    private String workOrderNumber;
+    private String userId;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="修改模板" tabindex="-1"><a class="header-anchor" href="#修改模板" aria-hidden="true">#</a> 修改模板</h4><p>将模板枚举类中的<code>WARNING</code>修改为如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>WARNING(&quot;警告&quot;, &quot;因 工单号 [(%workOrderNumber)] /举报 ID [(%id)] 警告玩家 [(%userId)]&quot;);
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>其中的参数，就是要在aop拦截阶段获取并且替换掉的参数。</p><h4 id="修改controller" tabindex="-1"><a class="header-anchor" href="#修改controller" aria-hidden="true">#</a> 修改controller</h4><p>我们给之前的controller加上上述模板中国呢的参数。部分代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>@Log(type = &quot;WARNING&quot;)
+@GetMapping(&quot;test/{id}&quot;)
+public String test(
+        @PathVariable(name = &quot;id&quot;) Integer id,
+        @RequestParam(name = &quot;workOrderNumber&quot;) String workOrderNumber,
+        @RequestParam(name = &quot;userId&quot;) String userId,
+        @RequestParam(name = &quot;name&quot;) String name
+) {
+    return &quot;Hello&quot; + id;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="通过反射获取请求的参数" tabindex="-1"><a class="header-anchor" href="#通过反射获取请求的参数" aria-hidden="true">#</a> 通过反射获取请求的参数</h3><p>在此处分两种情况，一种是简单参数类型，另外一种是复杂参数类型，也就是参数中带了请求DTO的情况。</p><h3 id="获取简单参数类型" tabindex="-1"><a class="header-anchor" href="#获取简单参数类型" aria-hidden="true">#</a> 获取简单参数类型</h3><p>给aop类添加几个私有变量。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 请求中的所有参数
+ */
+private Object[] args;
+
+/**
+ * 请求中的所有参数名
+ */
+private String[] paramNames;
+
+/**
+ * 参数类
+ */
+private Param params;
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>然后将<code>doAfterReturning</code>中的代码改成如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>try {
+    // 获取请求详情
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    HttpServletRequest request = attributes.getRequest();
+    HttpServletResponse response = attributes.getResponse();
+    // 获取所有请求参数
+    Signature signature = point.getSignature();
+    MethodSignature methodSignature = (MethodSignature) signature;
+    this.paramNames = methodSignature.getParameterNames();
+    this.args = point.getArgs();
+
+    // 实例化参数类
+    this.params = new Param();
+    // 注解中的类型
+    String enumKey = log.type();
+    String logDetail = Type.valueOf(enumKey).getOperation();
+
+    // 从请求传入参数中获取数据
+    this.getRequestParam();
+} catch (Exception e) {
+    System.out.println(e.getMessage());
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>首先要做的就是拦截打上了自定义注解的请求。我们可以获取到请求的详情，以及请求中的所有的参数名，以及参数。下面我们就来实现上述代码中的<code>getRequestParam</code>方法。</p><h4 id="getrequestparam" tabindex="-1"><a class="header-anchor" href="#getrequestparam" aria-hidden="true">#</a> getRequestParam</h4><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 获取拦截的请求中的参数
+ * @param point
+ */
+private void getRequestParam() {
+    // 获取简单参数类型
+    this.getSimpleParam();
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="getsimpleparam" tabindex="-1"><a class="header-anchor" href="#getsimpleparam" aria-hidden="true">#</a> getSimpleParam</h4><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 获取简单参数类型的值
+ */
+private void getSimpleParam() {
+    // 遍历请求中的参数名
+    for (String reqParam : this.paramNames) {
+        // 判断该参数在参数类中是否存在
+        if (this.isExist(reqParam)) {
+            this.setRequestParamValueIntoParam(reqParam);
+        }
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>上述代码中，遍历请求所传入的参数名，然后我们实现<code>isExist</code>方法， 来判断这个参数在我们的<code>Param</code>类中是否存在，如果存在我们就再调用<code>setRequestParamValueIntoParam</code>方法，将这个参数名所对应的参数值写入到<code>Param</code>类的实例中。</p><h4 id="isexist" tabindex="-1"><a class="header-anchor" href="#isexist" aria-hidden="true">#</a> isExist</h4><p><code>isExist</code>的代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 判断该参数在参数类中是否存在（是否是需要记录的参数）
+ * @param targetClass
+ * @param name
+ * @param &lt;T&gt;
+ * @return
+ */
+private &lt;T&gt; Boolean isExist(String name) {
+    boolean exist = true;
+    try {
+        String key = this.setFirstLetterUpperCase(name);
+        Method targetClassGetMethod = this.params.getClass().getMethod(&quot;get&quot; + key);
+    } catch (NoSuchMethodException e) {
+        exist = false;
+    }
+    return exist;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>在上面我们也提到过，在编译的时候会加上getter和setter，所以参数名的首字母都会变成大写，所以我们需要自己实现一个<code>setFirstLetterUpperCase</code>方法，来将我们传入的参数名的首字母变成大写。</p><h4 id="setfirstletteruppercase" tabindex="-1"><a class="header-anchor" href="#setfirstletteruppercase" aria-hidden="true">#</a> setFirstLetterUpperCase</h4><p>代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 将字符串的首字母大写
+ *
+ * @param str
+ * @return
+ */
+private String setFirstLetterUpperCase(String str) {
+    if (str == null) {
+        return null;
+    }
+    return str.substring(0, 1).toUpperCase() + str.substring(1);
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="setrequestparamvalueintoparam" tabindex="-1"><a class="header-anchor" href="#setrequestparamvalueintoparam" aria-hidden="true">#</a> setRequestParamValueIntoParam</h4><p>代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 从参数中获取
+ * @param paramName
+ * @return
+ */
+private void setRequestParamValueIntoParam(String paramName) {
+    int index = ArrayUtil.indexOf(this.paramNames, paramName);
+    if (index != -1) {
+        String value = String.valueOf(this.args[index]);
+        this.setParam(this.params, paramName, value);
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><code>ArrayUtil</code>是<code>hutool</code>中的一个工具函数。用来判断在一个元素在数组中的下标。</p><h4 id="setparam" tabindex="-1"><a class="header-anchor" href="#setparam" aria-hidden="true">#</a> setParam</h4><p>代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 将数据写入参数类的实例中
+ * @param targetClass
+ * @param key
+ * @param value
+ * @param &lt;T&gt;
+ */
+private &lt;T&gt; void setParam(T targetClass, String key, String value) {
+    try {
+        Method targetClassParamSetMethod = targetClass.getClass().getMethod(&quot;set&quot; + this.setFirstLetterUpperCase(key), String.class);
+        targetClassParamSetMethod.invoke(targetClass, value);
+    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        e.printStackTrace();
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>该函数使用反射的方法，获取该参数的set方法，将<code>Param</code>类中对应的参数设置成传入的值。</p><h4 id="运行" tabindex="-1"><a class="header-anchor" href="#运行" aria-hidden="true">#</a> 运行</h4><p>启动项目，并且请求controller中的方法。并且传入定义好的参数。</p><div class="language-text line-numbers-mode" data-ext="text"><pre class="language-text"><code>http://localhost:8080/test/8?workOrderNumber=3231732&amp;userId=748327843&amp;name=testName
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>该<code>GET</code>请求总共传入了4个参数，分别是<code>id</code>,<code>workOrderNumber</code>,<code>userId</code>, <code>name</code>。大家可以看到，在<code>Param</code>类中并没有定义<code>name</code>这个字段。这是特意加了一个不需要记录的参数，来验证我们接口的健壮性的。</p><p>运行之后，可以看到控制台打印的信息如下。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>Param<span class="token punctuation">(</span>id<span class="token operator">=</span><span class="token number">8</span>, <span class="token assign-left variable">workOrderNumber</span><span class="token operator">=</span><span class="token number">3231732</span>, <span class="token assign-left variable">userId</span><span class="token operator">=</span><span class="token number">748327843</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>我们想让aop记录的参数全部记录到<code>Param</code>类中的实例中，而传入了意料之外的参数也没有让程序崩溃。接下里我们只需要将这些参数，将之前定义好的模板的参数预留字段替换掉即可。</p><h4 id="替换参数" tabindex="-1"><a class="header-anchor" href="#替换参数" aria-hidden="true">#</a> 替换参数</h4><p>在<code>doAfterReturning</code>中的<code>getRequestParam</code>函数后，加入以下代码。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>if (!logDetail.isEmpty()) {
+    // 将模板中的参数全部替换掉
+    logDetail = this.replaceParam(logDetail);
+}
+System.out.println(logDetail);
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>下面我们实现<code>replaceParam</code>方法。</p><h4 id="replaceparam" tabindex="-1"><a class="header-anchor" href="#replaceparam" aria-hidden="true">#</a> replaceParam</h4><p>代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 将模板中的预留字段全部替换为拦截到的参数
+ * @param template
+ * @return
+ */
+private String replaceParam(String template) {
+    // 将模板中的需要替换的参数转化成map
+    Map&lt;String, String&gt; paramsMap = this.convertToMap(template);
+    for (String key : paramsMap.keySet()) {
+        template = template.replace(&quot;%&quot; + key, paramsMap.get(key)).replace(&quot;(&quot;, &quot;&quot;).replace(&quot;)&quot;, &quot;&quot;);
+    }
+    return template;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><code>convertToMap</code>方法将模板中的所有预留字段全部提取出来，当作一个Map的Key。</p><h4 id="converttomap" tabindex="-1"><a class="header-anchor" href="#converttomap" aria-hidden="true">#</a> convertToMap</h4><p>代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 将模板中的参数转换成map的key-value形式
+ * @param template
+ * @return
+ */
+private Map&lt;String, String&gt; convertToMap(String template) {
+    Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+    String[] arr = template.split(&quot;\\(&quot;);
+    for (String s : arr) {
+        if (s.contains(&quot;%&quot;)) {
+            String key = s.substring(s.indexOf(&quot;%&quot;), s.indexOf(&quot;)&quot;)).replace(&quot;%&quot;, &quot;&quot;).replace(&quot;)&quot;, &quot;&quot;).replace(&quot;-&quot;, &quot;&quot;).replace(&quot;]&quot;, &quot;&quot;);
+            String value = this.getParam(this.params, key);
+            map.put(key, &quot;null&quot;.equals(value) ? &quot;(空)&quot; : value);
+        }
+    }
+    return map;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>其中的<code>getParam</code>方法，类似于<code>setParam</code>，也是利用反射的方法，通过传入的Class和Key，获取对应的值。</p><h4 id="getparam" tabindex="-1"><a class="header-anchor" href="#getparam" aria-hidden="true">#</a> getParam</h4><p>代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 通过反射获取传入的类中对应key的值
+ * @param targetClass
+ * @param key
+ * @param &lt;T&gt;
+ */
+private &lt;T&gt; String getParam(T targetClass, String key) {
+    String value = &quot;&quot;;
+    try {
+        Method targetClassParamGetMethod = targetClass.getClass().getMethod(&quot;get&quot; + this.setFirstLetterUpperCase(key));
+        value = String.valueOf(targetClassParamGetMethod.invoke(targetClass));
+    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        e.printStackTrace();
+    }
+    return value;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="再次运行" tabindex="-1"><a class="header-anchor" href="#再次运行" aria-hidden="true">#</a> 再次运行</h4><p>再次请求上述的url，则可以看到控制台的输出如下。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>因 工单号 <span class="token punctuation">[</span><span class="token number">3231732</span><span class="token punctuation">]</span> /举报 ID <span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> 警告玩家 <span class="token punctuation">[</span><span class="token number">748327843</span><span class="token punctuation">]</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>可以看到，我们需要记录的所有的参数，都被正确的替换了。而不需要记录的参数，同样也没有对程序造成影响。</p><p>让我们试试传入不传入非必选参数，会是什么样。修改controller如下，把workOrderNumber改成非必须按参数。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>@Log(type = &quot;WARNING&quot;)
+@GetMapping(&quot;test/{id}&quot;)
+public String test(
+        @PathVariable(name = &quot;id&quot;) Integer id,
+        @RequestParam(name = &quot;workOrderNumber&quot;, required = false) String workOrderNumber,
+        @RequestParam(name = &quot;userId&quot;) String userId,
+        @RequestParam(name = &quot;name&quot;) String name
+) {
+    return &quot;Hello&quot; + id;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>请求如下url。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>http://localhost:8080/test/8?userId<span class="token operator">=</span><span class="token number">748327843</span><span class="token operator">&amp;</span><span class="token assign-left variable">name</span><span class="token operator">=</span>testName
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>然后可以看到，控制台的输出如下。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>因 工单号 <span class="token punctuation">[</span>空<span class="token punctuation">]</span> /举报 ID <span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> 警告玩家 <span class="token punctuation">[</span><span class="token number">748327843</span><span class="token punctuation">]</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>并不会影响程序的正常运行。</p><h3 id="获取复杂参数类型" tabindex="-1"><a class="header-anchor" href="#获取复杂参数类型" aria-hidden="true">#</a> 获取复杂参数类型</h3><p>接下来要介绍的是如何记录复杂参数类型的日志。其实，大致的思路是不变的。我们看传入的类中的参数，有没有需要记录的。有的话就按照上面记录简单参数的方法来替换记录参数。</p><h4 id="定义测试复杂类型" tabindex="-1"><a class="header-anchor" href="#定义测试复杂类型" aria-hidden="true">#</a> 定义测试复杂类型</h4><p>新建<code>TestDTO</code>。代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.util;
+
+import lombok.Data;
+
+/**
+ * TestDto
+ *
+ * @author Lunhao Hu
+ * @date 2019-02-01 15:02
+ **/
+@Data
+public class TestDTO {
+    private String name;
+    
+    private Integer age;
+
+    private String email;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="修改param" tabindex="-1"><a class="header-anchor" href="#修改param" aria-hidden="true">#</a> 修改Param</h4><p>将上面的所有的参数全部添加到<code>Param</code>类中，全部定义成字符串类型。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.util;
+
+import lombok.Data;
+
+/**
+ * Param
+ *
+ * @author Lunhao Hu
+ * @date 2019-01-30 17:14
+ **/
+@Data
+public class Param {
+    /**
+     * 所有可能参数
+     */
+    private String id;
+    private String age;
+    private String workOrderNumber;
+    private String userId;
+    private String name;
+    private String email;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="修改模板-1" tabindex="-1"><a class="header-anchor" href="#修改模板-1" aria-hidden="true">#</a> 修改模板</h4><p>将<code>WARNING</code>模板修改如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 操作类型
+ */
+WARNING(&quot;警告&quot;, &quot;因 工单号 [(%workOrderNumber)] /举报 ID [(%id)] 警告玩家 [(%userId)], 游戏名 [(%name)], 年龄 [(%age)]&quot;);
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="修改controller-1" tabindex="-1"><a class="header-anchor" href="#修改controller-1" aria-hidden="true">#</a> 修改controller</h4><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>@Log(type = &quot;WARNING&quot;)
+@PostMapping(&quot;test/{id}&quot;)
+public String test(
+        @PathVariable(name = &quot;id&quot;) Integer id,
+        @RequestParam(name = &quot;workOrderNumber&quot;, required = false) String workOrderNumber,
+        @RequestParam(name = &quot;userId&quot;) String userId,
+        @RequestBody TestDTO testDTO
+) {
+    return &quot;Hello&quot; + id;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="修改getrequestparam" tabindex="-1"><a class="header-anchor" href="#修改getrequestparam" aria-hidden="true">#</a> 修改getRequestParam</h4><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 获取拦截的请求中的参数
+ * @param point
+ */
+private void getRequestParam() {
+    // 获取简单参数类型
+    this.getSimpleParam();
+
+    // 获取复杂参数类型
+    this.getComplexParam();
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>接下来实现<code>getComplexParam</code>方法。</p><h4 id="getcomplexparam" tabindex="-1"><a class="header-anchor" href="#getcomplexparam" aria-hidden="true">#</a> getComplexParam</h4><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 获取复杂参数类型的值
+ */
+private void getComplexParam() {
+    for (Object arg : this.args) {
+        // 跳过简单类型的值
+        if (arg != null &amp;&amp; !this.isBasicType(arg)) {
+           this.getFieldsParam(arg);
+        }
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="getfieldsparam" tabindex="-1"><a class="header-anchor" href="#getfieldsparam" aria-hidden="true">#</a> getFieldsParam</h4><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 遍历一个复杂类型，获取值并赋值给param
+ * @param target
+ * @param &lt;T&gt;
+ */
+private &lt;T&gt; void getFieldsParam(T target) {
+    Field[] fields = target.getClass().getDeclaredFields();
+    for (Field field : fields) {
+        String paramName = field.getName();
+        if (this.isExist(paramName)) {
+            String value = this.getParam(target, paramName);
+            this.setParam(this.params, paramName, value);
+        }
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="运行-1" tabindex="-1"><a class="header-anchor" href="#运行-1" aria-hidden="true">#</a> 运行</h4><p>启动项目。使用postman对上面的url发起POST请求。请求body中带上<code>TestDTO</code>中的参数。请求成功返回后就会看到控制台输出如下。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>因 工单号 <span class="token punctuation">[</span>空<span class="token punctuation">]</span> /举报 ID <span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span> 警告玩家 <span class="token punctuation">[</span><span class="token number">748327843</span><span class="token punctuation">]</span>, 游戏名 <span class="token punctuation">[</span>tom<span class="token punctuation">]</span>, 年龄 <span class="token punctuation">[</span><span class="token number">12</span><span class="token punctuation">]</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>然后就可以根据需求，将上面的日志记录到相应的地方。</p><p>到这可能有些哥们就觉得行了，万事具备，只欠东风。但其实这样的实现方式，还存在几个问题。</p><p>比如，如果请求失败了怎么办？请求失败，在需求上将，是根本不需要记录操作日志的，但是即使请求失败也会有返回值，就代表日志也会成功的记录。这就给后期查看日志带来了很大的困扰。</p><p>再比如，如果我需要的参数在返回值中怎么办？如果你没有用统一的生成唯一id的服务，就会遇到这个问题。就比如我需要往数据库中插入一条新的数据，我需要得到数据库自增id，而我们的日志拦截只拦截了请求中的参数。所以这就是我们接下来要解决的问题。</p><h3 id="判断请求是否成功" tabindex="-1"><a class="header-anchor" href="#判断请求是否成功" aria-hidden="true">#</a> 判断请求是否成功</h3><p>实现<code>success</code>函数，代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 根据http状态码判断请求是否成功
+ *
+ * @param response
+ * @return
+ */
+private Boolean success(HttpServletResponse response) {
+    return response.getStatus() == 200;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>然后将<code>getRequestParam</code>之后的所有操作，包括<code>getRequestParam</code>本身，用<code>success</code>包裹起来。如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>if (this.success(response)) {
+    // 从请求传入参数中获取数据
+    this.getRequestParam();
+    if (!logDetail.isEmpty()) {
+        // 将模板中的参数全部替换掉
+        logDetail = this.replaceParam(logDetail);
+    }
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>这样一来，就可以保证只有在请求成功的前提下，才会记录日志。</p><h3 id="通过反射获取返回的参数" tabindex="-1"><a class="header-anchor" href="#通过反射获取返回的参数" aria-hidden="true">#</a> 通过反射获取返回的参数</h3><h4 id="新建result类" tabindex="-1"><a class="header-anchor" href="#新建result类" aria-hidden="true">#</a> 新建Result类</h4><p>在一个项目中，我们用一个类来统一返回值。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>package spring.aop.log.demo.api.util;
+
+import lombok.Data;
+
+/**
+ * Result
+ *
+ * @author Lunhao Hu
+ * @date 2019-02-01 16:47
+ **/
+@Data
+public class Result {
+    private Integer id;
+
+    private String name;
+
+    private Integer age;
+
+    private String email;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="修改controller-2" tabindex="-1"><a class="header-anchor" href="#修改controller-2" aria-hidden="true">#</a> 修改controller</h4><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>@Log(type = &quot;WARNING&quot;)
+@PostMapping(&quot;test&quot;)
+public Result test(
+        @RequestParam(name = &quot;workOrderNumber&quot;, required = false) String workOrderNumber,
+        @RequestParam(name = &quot;userId&quot;) String userId,
+        @RequestBody TestDTO testDTO
+) {
+    Result result = new Result();
+    result.setId(1);
+    result.setAge(testDTO.getAge());
+    result.setName(testDTO.getName());
+    result.setEmail(testDTO.getEmail());
+    return result;
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="运行-2" tabindex="-1"><a class="header-anchor" href="#运行-2" aria-hidden="true">#</a> 运行</h4><p>启动项目，发起POST请求会发现，返回值如下。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code><span class="token punctuation">{</span>
+    <span class="token string">&quot;id&quot;</span><span class="token builtin class-name">:</span> <span class="token number">1</span>,
+    <span class="token string">&quot;name&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;tom&quot;</span>,
+    <span class="token string">&quot;age&quot;</span><span class="token builtin class-name">:</span> <span class="token number">12</span>,
+    <span class="token string">&quot;email&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;test@test.com&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>而控制台的输出如下。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>因 工单号 <span class="token punctuation">[</span><span class="token number">39424</span><span class="token punctuation">]</span> /举报 ID <span class="token punctuation">[</span>空<span class="token punctuation">]</span> 警告玩家 <span class="token punctuation">[</span><span class="token number">748327843</span><span class="token punctuation">]</span>, 游戏名 <span class="token punctuation">[</span>tom<span class="token punctuation">]</span>, 年龄 <span class="token punctuation">[</span><span class="token number">12</span><span class="token punctuation">]</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>可以看到，<code>id</code>没有被获取到。所以我们还需要添加一个函数，从返回值中获取id的数据。</p><h4 id="getresponseparam" tabindex="-1"><a class="header-anchor" href="#getresponseparam" aria-hidden="true">#</a> getResponseParam</h4><p>在<code>getRequestParam</code>后，添加方法<code>getResponseParam</code>，直接调用之前写好的函数。代码如下。</p><div class="language-Java line-numbers-mode" data-ext="Java"><pre class="language-Java"><code>/**
+ * 从返回值从获取数据
+ */
+private void getResponseParam(Object value) {
+    this.getFieldsParam(value);
+}
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="运行-3" tabindex="-1"><a class="header-anchor" href="#运行-3" aria-hidden="true">#</a> 运行</h4><p>再次发起POST请求，可以发现控制台的输出如下。</p><div class="language-bash line-numbers-mode" data-ext="sh"><pre class="language-bash"><code>因 工单号 <span class="token punctuation">[</span><span class="token number">39424</span><span class="token punctuation">]</span> /举报 ID <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> 警告玩家 <span class="token punctuation">[</span><span class="token number">748327843</span><span class="token punctuation">]</span>, 游戏名 <span class="token punctuation">[</span>tom<span class="token punctuation">]</span>, 年龄 <span class="token punctuation">[</span><span class="token number">12</span><span class="token punctuation">]</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div></div></div><p>一旦得到了这条信息，我们就可以把它记录到任何我们想记录的地方。</p><h2 id="项目源码地址" tabindex="-1"><a class="header-anchor" href="#项目源码地址" aria-hidden="true">#</a> 项目源码地址</h2><p>想要参考源码的大佬请戳 <a href="https://github.com/detectiveHLH/spring-aop-log-demo" target="_blank" rel="noopener noreferrer">-&gt;这里&lt;-<span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span></a></p></div><!----><footer class="page-meta"><!----><div class="meta-item git-info"><!----><!----></div></footer><nav class="vp-page-nav"><a class="vp-link nav-link prev" href="/posts/230837.html"><div class="hint"><span class="arrow start"></span>上一页</div><div class="link"><!---->在SpringBoot中添加Redis</div></a><!----></nav><div id="comment" class="waline-wrapper" darkmode="false" style="display:block;"><div data-waline provider="Waline"><!--v-if--><div class="wl-comment"><!--v-if--><div class="wl-panel"><div class="wl-header item3"><!--[--><div class="wl-header-item"><label for="wl-nick">昵称</label><input id="wl-nick" class="wl-input wl-nick" name="nick" type="text" value></div><div class="wl-header-item"><label for="wl-mail">邮箱</label><input id="wl-mail" class="wl-input wl-mail" name="mail" type="email" value></div><div class="wl-header-item"><label for="wl-link">网址</label><input id="wl-link" class="wl-input wl-link" name="link" type="text" value></div><!--]--></div><textarea id="wl-edit" class="wl-editor" placeholder="请留言。(填写邮箱可在被回复时收到邮件提醒)"></textarea><div class="wl-preview" style="display:none;"><hr><h4>预览:</h4><div class="wl-content"></div></div><div class="wl-footer"><div class="wl-actions"><a href="https://guides.github.com/features/mastering-markdown/" title="Markdown Guide" aria-label="Markdown is supported" class="wl-action" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" ariaHidden="true"><path d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.69C0 12.48.52 13 1.15 13h13.69c.64 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM9 11H7V8L5.5 9.92 4 8v3H2V5h2l1.5 2L7 5h2v6zm2.99.5L9.5 8H11V5h2v3h1.5l-2.51 3.5z" fill="currentColor"></path></svg></a><button type="button" class="wl-action" title="表情" style="display:none;"><svg viewBox="0 0 1024 1024" width="24" height="24"><path d="M563.2 463.3 677 540c1.7 1.2 3.7 1.8 5.8 1.8.7 0 1.4-.1 2-.2 2.7-.5 5.1-2.1 6.6-4.4l25.3-37.8c1.5-2.3 2.1-5.1 1.6-7.8s-2.1-5.1-4.4-6.6l-73.6-49.1 73.6-49.1c2.3-1.5 3.9-3.9 4.4-6.6.5-2.7 0-5.5-1.6-7.8l-25.3-37.8a10.1 10.1 0 0 0-6.6-4.4c-.7-.1-1.3-.2-2-.2-2.1 0-4.1.6-5.8 1.8l-113.8 76.6c-9.2 6.2-14.7 16.4-14.7 27.5.1 11 5.5 21.3 14.7 27.4zM387 348.8h-45.5c-5.7 0-10.4 4.7-10.4 10.4v153.3c0 5.7 4.7 10.4 10.4 10.4H387c5.7 0 10.4-4.7 10.4-10.4V359.2c0-5.7-4.7-10.4-10.4-10.4zm333.8 241.3-41-20a10.3 10.3 0 0 0-8.1-.5c-2.6.9-4.8 2.9-5.9 5.4-30.1 64.9-93.1 109.1-164.4 115.2-5.7.5-9.9 5.5-9.5 11.2l3.9 45.5c.5 5.3 5 9.5 10.3 9.5h.9c94.8-8 178.5-66.5 218.6-152.7 2.4-5 .3-11.2-4.8-13.6zm186-186.1c-11.9-42-30.5-81.4-55.2-117.1-24.1-34.9-53.5-65.6-87.5-91.2-33.9-25.6-71.5-45.5-111.6-59.2-41.2-14-84.1-21.1-127.8-21.1h-1.2c-75.4 0-148.8 21.4-212.5 61.7-63.7 40.3-114.3 97.6-146.5 165.8-32.2 68.1-44.3 143.6-35.1 218.4 9.3 74.8 39.4 145 87.3 203.3.1.2.3.3.4.5l36.2 38.4c1.1 1.2 2.5 2.1 3.9 2.6 73.3 66.7 168.2 103.5 267.5 103.5 73.3 0 145.2-20.3 207.7-58.7 37.3-22.9 70.3-51.5 98.1-85 27.1-32.7 48.7-69.5 64.2-109.1 15.5-39.7 24.4-81.3 26.6-123.8 2.4-43.6-2.5-87-14.5-129zm-60.5 181.1c-8.3 37-22.8 72-43 104-19.7 31.1-44.3 58.6-73.1 81.7-28.8 23.1-61 41-95.7 53.4-35.6 12.7-72.9 19.1-110.9 19.1-82.6 0-161.7-30.6-222.8-86.2l-34.1-35.8c-23.9-29.3-42.4-62.2-55.1-97.7-12.4-34.7-18.8-71-19.2-107.9-.4-36.9 5.4-73.3 17.1-108.2 12-35.8 30-69.2 53.4-99.1 31.7-40.4 71.1-72 117.2-94.1 44.5-21.3 94-32.6 143.4-32.6 49.3 0 97 10.8 141.8 32 34.3 16.3 65.3 38.1 92 64.8 26.1 26 47.5 56 63.6 89.2 16.2 33.2 26.6 68.5 31 105.1 4.6 37.5 2.7 75.3-5.6 112.3z" fill="currentColor"></path></svg></button><button type="button" class="wl-action" title="表情包"><svg width="24" height="24" fill="currentcolor" viewBox="0 0 24 24"><path style="transform: translateY(0.5px)" d="M18.968 10.5H15.968V11.484H17.984V12.984H15.968V15H14.468V9H18.968V10.5V10.5ZM8.984 9C9.26533 9 9.49967 9.09367 9.687 9.281C9.87433 9.46833 9.968 9.70267 9.968 9.984V10.5H6.499V13.5H8.468V12H9.968V14.016C9.968 14.2973 9.87433 14.5317 9.687 14.719C9.49967 14.9063 9.26533 15 8.984 15H5.984C5.70267 15 5.46833 14.9063 5.281 14.719C5.09367 14.5317 5 14.2973 5 14.016V9.985C5 9.70367 5.09367 9.46933 5.281 9.282C5.46833 9.09467 5.70267 9.001 5.984 9.001H8.984V9ZM11.468 9H12.968V15H11.468V9V9Z"></path><path d="M18.5 3H5.75C3.6875 3 2 4.6875 2 6.75V18C2 20.0625 3.6875 21.75 5.75 21.75H18.5C20.5625 21.75 22.25 20.0625 22.25 18V6.75C22.25 4.6875 20.5625 3 18.5 3ZM20.75 18C20.75 19.2375 19.7375 20.25 18.5 20.25H5.75C4.5125 20.25 3.5 19.2375 3.5 18V6.75C3.5 5.5125 4.5125 4.5 5.75 4.5H18.5C19.7375 4.5 20.75 5.5125 20.75 6.75V18Z"></path></svg></button><input id="wl-image-upload" class="upload" type="file" accept=".png,.jpg,.jpeg,.webp,.bmp,.gif"><label for="wl-image-upload" class="wl-action" title="上传图片"><svg viewBox="0 0 1024 1024" width="24" height="24"><path d="M784 112H240c-88 0-160 72-160 160v480c0 88 72 160 160 160h544c88 0 160-72 160-160V272c0-88-72-160-160-160zm96 640c0 52.8-43.2 96-96 96H240c-52.8 0-96-43.2-96-96V272c0-52.8 43.2-96 96-96h544c52.8 0 96 43.2 96 96v480z" fill="currentColor"></path><path d="M352 480c52.8 0 96-43.2 96-96s-43.2-96-96-96-96 43.2-96 96 43.2 96 96 96zm0-128c17.6 0 32 14.4 32 32s-14.4 32-32 32-32-14.4-32-32 14.4-32 32-32zm462.4 379.2-3.2-3.2-177.6-177.6c-25.6-25.6-65.6-25.6-91.2 0l-80 80-36.8-36.8c-25.6-25.6-65.6-25.6-91.2 0L200 728c-4.8 6.4-8 14.4-8 24 0 17.6 14.4 32 32 32 9.6 0 16-3.2 22.4-9.6L380.8 640l134.4 134.4c6.4 6.4 14.4 9.6 24 9.6 17.6 0 32-14.4 32-32 0-9.6-4.8-17.6-9.6-24l-52.8-52.8 80-80L769.6 776c6.4 4.8 12.8 8 20.8 8 17.6 0 32-14.4 32-32 0-8-3.2-16-8-20.8z" fill="currentColor"></path></svg></label><button type="button" class="wl-action" title="预览"><svg viewBox="0 0 1024 1024" width="24" height="24"><path d="M710.816 654.301c70.323-96.639 61.084-230.578-23.705-314.843-46.098-46.098-107.183-71.109-172.28-71.109-65.008 0-126.092 25.444-172.28 71.109-45.227 46.098-70.756 107.183-70.756 172.106 0 64.923 25.444 126.007 71.194 172.106 46.099 46.098 107.184 71.109 172.28 71.109 51.414 0 100.648-16.212 142.824-47.404l126.53 126.006c7.058 7.06 16.297 10.979 26.406 10.979 10.105 0 19.343-3.919 26.402-10.979 14.467-14.467 14.467-38.172 0-52.723L710.816 654.301zm-315.107-23.265c-65.88-65.88-65.88-172.54 0-238.42 32.069-32.07 74.245-49.149 119.471-49.149 45.227 0 87.407 17.603 119.472 49.149 65.88 65.879 65.88 172.539 0 238.42-63.612 63.178-175.242 63.178-238.943 0zm0 0" fill="currentColor"></path><path d="M703.319 121.603H321.03c-109.8 0-199.469 89.146-199.469 199.38v382.034c0 109.796 89.236 199.38 199.469 199.38h207.397c20.653 0 37.384-16.645 37.384-37.299 0-20.649-16.731-37.296-37.384-37.296H321.03c-68.582 0-124.352-55.77-124.352-124.267V321.421c0-68.496 55.77-124.267 124.352-124.267h382.289c68.582 0 124.352 55.771 124.352 124.267V524.72c0 20.654 16.736 37.299 37.385 37.299 20.654 0 37.384-16.645 37.384-37.299V320.549c-.085-109.8-89.321-198.946-199.121-198.946zm0 0" fill="currentColor"></path></svg></button></div><div class="wl-info"><div class="wl-captcha-container"></div><div class="wl-text-number">0 <!--v-if-->  字</div><button type="button" class="wl-btn">登录</button><button type="submit" class="primary wl-btn" title="Cmd|Ctrl + Enter"><!--[-->提交<!--]--></button></div><div class="wl-gif-popup"><input type="text" placeholder="搜索表情包"><!--v-if--><div class="wl-loading"><svg width="30" height="30" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><circle cx="50" cy="50" fill="none" stroke="currentColor" strokeWidth="4" r="40" stroke-dasharray="85 30"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform></circle></svg></div></div><div class="wl-emoji-popup"><!--[--><!--]--><!--v-if--></div></div></div><!--v-if--></div><div class="wl-meta-head"><div class="wl-count"><!--v-if--> 评论</div><ul class="wl-sort"><!--[--><li class="active">按正序</li><li class="">按倒序</li><li class="">按热度</li><!--]--></ul></div><div class="wl-cards"><!--[--><!--]--></div><!--[--><div class="wl-loading"><svg width="30" height="30" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><circle cx="50" cy="50" fill="none" stroke="currentColor" strokeWidth="4" r="40" stroke-dasharray="85 30"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform></circle></svg></div><!--]--><div class="wl-power"> Powered by <a href="https://github.com/walinejs/waline" target="_blank" rel="noopener noreferrer"> Waline </a> v2.15.5</div></div></div><!----><!--]--></main><!--]--><footer class="vp-footer-wrapper"><div class="vp-footer"><a href='https://beian.miit.gov.cn'>蜀ICP备2023013691号</a></div><div class="vp-copyright">Copyright © 2023 LeonSH</div></footer></div><!--]--><!----><!--]--></div>
+    <script type="module" src="/assets/app-4842716a.js" defer></script>
+  </body>
+</html>
