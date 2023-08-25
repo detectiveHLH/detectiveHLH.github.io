@@ -6,6 +6,15 @@ cover: /assets/images/cover3.jpg
 
 # 关于我
 
+[//]: # (<MyComponent />)
+
+[//]: # ()
+[//]: # (<script setup lang="ts">)
+
+[//]: # (import MyComponent from "@MyComponent";)
+
+[//]: # (</script>)
+
 ## 小册介绍
 
 小册地址：[RocketMQ 核心原理解析](https://juejin.cn/book/7138560870908428320)
